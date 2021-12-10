@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/clock_icon.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/history_icon_clock_white.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/history_icon_white.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/home_icon_glass_white.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_water_glass_with_bg_2.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/notification_bell.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/reset_button.xml" value="0.1259259259259259" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/settings_icon_white.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/soda_bottle_5.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/undo_button.xml" value="0.1259259259259259" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_100.xml" value="0.12777777777777777" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_30.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_30_to_40_animation.xml" value="0.12777777777777777" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_40.xml" value="0.1259259259259259" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_with_bg.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_with_bg_3.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/weather_button.xml" value="0.1259259259259259" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/workout_button.xml" value="0.1259259259259259" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/workout_button_white.xml" value="0.1259259259259259" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

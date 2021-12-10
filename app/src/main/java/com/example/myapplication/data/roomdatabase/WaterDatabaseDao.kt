@@ -1,0 +1,42 @@
+package com.example.myapplication.data.roomdatabase
+
+import androidx.room.*
+import com.example.myapplication.data.models.DailyWaterRecord
+import com.example.myapplication.data.models.DrinkLogs
+import com.example.myapplication.data.models.DrinkLogsAndDailyWaterRecord
+import com.example.myapplication.utils.DateString
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface WaterDatabaseDao {
+
+    @Query("SELECT * FROM daily_water_record WHERE date = :date")
+    fun getDailyWaterRecord(date:String = DateString.getTodaysDate()):Flow<DailyWaterRecord>
+
+    @Query("SELECT * FROM drink_logs WHERE date = :date")
+    fun getDrinkLogs(date:String = DateString.getTodaysDate()): Flow<List<DrinkLogs>>
+
+
+//    @Query("SELECT curr_water_amount FROM daily_water_record WHERE date = :date")
+//    fun getTodaysCurrWaterAmount(date:String = DateString.getTodaysDate()):Flow<Int>
+//
+//    @Query("SELECT is_goal_achieved FROM daily_water_record WHERE date = :date")
+//    fun getTodaysIsGoalAchieved(date:String = DateString.getTodaysDate()):Flow<Boolean>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDailyWaterRecord(dailyWaterRecord: DailyWaterRecord):Long
+    //Long Return value is the row count of database where the object was inserted
+    //If insertion failed then returns -1
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDrinkLog(drinkLog: DrinkLogs): Long
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateDailyWaterRecord(dailyWaterRecord: DailyWaterRecord)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateDrinkLog(drinkLog: DrinkLogs)
+
+    @Delete
+    suspend fun deleteDrinkLog(drinkLog: DrinkLogs)
+}
