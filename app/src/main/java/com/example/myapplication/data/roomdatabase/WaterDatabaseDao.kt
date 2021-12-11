@@ -17,6 +17,9 @@ interface WaterDatabaseDao {
     @Query("SELECT * FROM drink_logs WHERE date = :date")
     fun getDrinkLogs(date:String = DateString.getTodaysDate()): Flow<List<DrinkLogs>>
 
+    @Query("SELECT * FROM reminder_timings")
+    fun getReminderTimings(): Flow<List<ReminderTimings>>
+
 
 //    @Query("SELECT curr_water_amount FROM daily_water_record WHERE date = :date")
 //    fun getTodaysCurrWaterAmount(date:String = DateString.getTodaysDate()):Flow<Int>
