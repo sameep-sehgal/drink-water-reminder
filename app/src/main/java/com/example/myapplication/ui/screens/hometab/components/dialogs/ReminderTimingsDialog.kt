@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -34,8 +33,6 @@ fun ReminderTimingsDialog(setShowReminderTimingsDialog: (Boolean)->Unit){
       ReminderTimingsDialogContent()
     }
   }
-
-//  ShowDialog(title = title,content = { ReminderTimingsDialogContent() }, setShowDialog = setShowReminderTimingsDialog)
 }
 
 @Composable
@@ -56,93 +53,89 @@ fun ReminderTimingsDialogContent(){
   }
 
   Column {
-    Text(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 0.dp, vertical = 8.dp)
-        .zIndex(2f),
-      text = title,
-      textAlign = TextAlign.Center
-    )
+    Title(title)
+
     Divider(thickness = 4.dp)
 
-    LazyColumn(
-      modifier = Modifier.weight(1f,false)
-    ){
-      items(reminderTimings.value){
-        Row {
-          Text(modifier = Modifier
-            .weight(1f)
-            .clickable {
-              selectedReminderTiming.value = it
-              setShowTimePicker(true)
-            },
-            text = it.time,
-            style = Typography.body1
-          )
-          Switch(
-            checked = it.active,
-            onCheckedChange = { currValue ->
-              it.active = currValue
-              reminderTimingsDialogViewModel.updateReminderTiming(it)
-  //           TODO("Delete Repeating notification for this time")
-            }
-          )
-          IconButton(
-            onClick = {
-              reminderTimingsDialogViewModel.deleteReminderTiming(it)
-  //            TODO("Delete Repeating notification for this time")
-            }
-          ) {
-            Icon(
-              painter = painterResource(id = R.drawable.delete_icon),
-              contentDescription = "Delete Reminder"
-            )
+    ReminderTimingsList(
+      reminderTimings = reminderTimings.value,
+      reminderTimingsDialogViewModel = reminderTimingsDialogViewModel,
+      modifier = Modifier.weight(1f,false),
+      selectedReminderTiming = selectedReminderTiming,
+      setShowTimePicker = setShowTimePicker
+    )
+
+    BottomBar(
+      selectedReminderTiming = selectedReminderTiming,
+      setShowTimePicker = setShowTimePicker
+    )
+  }
+}
+
+
+@Composable
+fun Title(title:String){
+  Text(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 0.dp, vertical = 8.dp)
+      .zIndex(2f),
+    text = title,
+    textAlign = TextAlign.Center
+  )
+}
+
+@Composable
+fun ReminderTimingsList(
+  reminderTimings: List<ReminderTimings>,
+  reminderTimingsDialogViewModel:ReminderTimingsDialogViewModel,
+  modifier:Modifier,
+  selectedReminderTiming:MutableState<ReminderTimings?>,
+  setShowTimePicker:(Boolean) -> Unit
+){
+  LazyColumn(
+    modifier = modifier
+  ){
+    items(reminderTimings){
+      Row {
+        Text(modifier = Modifier
+          .weight(1f)
+          .clickable {
+            selectedReminderTiming.value = it
+            setShowTimePicker(true)
+          },
+          text = it.time,
+          style = Typography.body1
+        )
+        Switch(
+          checked = it.active,
+          onCheckedChange = { currValue ->
+            it.active = currValue
+            reminderTimingsDialogViewModel.updateReminderTiming(it)
+            //TODO("Delete Repeating notification for this time")
           }
+        )
+        IconButton(
+          onClick = {
+            reminderTimingsDialogViewModel.deleteReminderTiming(it)
+            //TODO("Delete Repeating notification for this time")
+          }
+        ) {
+          Icon(
+            painter = painterResource(id = R.drawable.delete_icon),
+            contentDescription = "Delete Reminder"
+          )
         }
       }
     }
+  }
+}
 
-//  Column(
-//    modifier = Modifier
-//      .background(MaterialTheme.colors.background)
-//      .verticalScroll(scrollState)
-//      .heightIn(300.dp, 500.dp)
-//      .weight(1f, false)
-//  ) {
-//    reminderTimings.value.forEach {
-//      Row {
-//        Text(modifier = Modifier
-//          .weight(1f)
-//          .clickable {
-//            selectedReminderTiming.value = it
-//            setShowTimePicker(true)
-//          },
-//          text = it.time,
-//          style = Typography.body1
-//        )
-//        Switch(
-//          checked = it.active,
-//          onCheckedChange = { currValue ->
-//            it.active = currValue
-//            reminderTimingsDialogViewModel.updateReminderTiming(it)
-////           TODO("Delete Repeating notification for this time")
-//          }
-//        )
-//        IconButton(
-//          onClick = {
-//            reminderTimingsDialogViewModel.deleteReminderTiming(it)
-////            TODO("Delete Repeating notification for this time")
-//          }
-//        ) {
-//          Icon(
-//            painter = painterResource(id = R.drawable.delete_icon),
-//            contentDescription = "Delete Reminder"
-//          )
-//        }
-//      }
-//    }
-//  }
+@Composable
+fun BottomBar(
+  selectedReminderTiming:MutableState<ReminderTimings?>,
+  setShowTimePicker:(Boolean) -> Unit
+){
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -160,6 +153,5 @@ fun ReminderTimingsDialogContent(){
         contentDescription = "Add new Reminder"
       )
     }
-  }
   }
 }
