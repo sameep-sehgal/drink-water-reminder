@@ -4,6 +4,7 @@ import androidx.room.*
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.data.models.DrinkLogsAndDailyWaterRecord
+import com.example.myapplication.data.models.ReminderTimings
 import com.example.myapplication.utils.DateString
 import kotlinx.coroutines.flow.Flow
 
@@ -31,12 +32,22 @@ interface WaterDatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDrinkLog(drinkLog: DrinkLogs): Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertReminderTiming(reminderTiming: ReminderTimings): Long
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateDailyWaterRecord(dailyWaterRecord: DailyWaterRecord)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateDrinkLog(drinkLog: DrinkLogs)
 
+    //Used only to update active status of the reminder
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateReminderTiming(reminderTiming: ReminderTimings)
+
     @Delete
     suspend fun deleteDrinkLog(drinkLog: DrinkLogs)
+
+    @Delete
+    suspend fun deleteReminderTiming(reminderTiming: ReminderTimings)
 }
