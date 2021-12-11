@@ -13,13 +13,14 @@ fun TimePicker(
   setShowTimePicker: (Boolean) -> Unit,
   reminderReminderTimingsDialogViewModel: ReminderTimingsDialogViewModel
 ){
+  val TAG = "TimePicker"
   val context = LocalContext.current
   val timePickerDialogListener: TimePickerDialog.OnTimeSetListener =
     TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute -> // logic to properly handle
       //Change in UI
       setShowTimePicker(false)
 
-      Log.d("Time Picker", "reminderTiming -> $reminderTiming")
+      Log.d(TAG, "Reminder Time Set")
 
       //Delete old Reminder -- deleted only when update existing reminders
       if(reminderTiming != null){
@@ -32,6 +33,7 @@ fun TimePicker(
 
   val onTimePickerDialogDismiss = DialogInterface.OnDismissListener {
     setShowTimePicker(false)
+    Log.d(TAG, "Time Picker Dismissed")
   }
 
   //Create and show time Picker
