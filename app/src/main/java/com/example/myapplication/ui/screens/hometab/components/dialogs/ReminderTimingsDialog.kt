@@ -2,15 +2,18 @@ package com.example.myapplication.ui.screens.hometab.components.dialogs
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.data.models.ReminderTimings
 import com.example.myapplication.ui.components.ShowDialog
@@ -26,16 +29,27 @@ fun ReminderTimingsDialog(setShowReminderTimingsDialog: (Boolean)->Unit){
 fun ReminderTimingsDialogContent(){
   val reminderTimings: List<ReminderTimings> = emptyList()
   val (showTimePicker, setShowTimePicker) =  remember { mutableStateOf(false) }
+  val reminderTimingsDialogViewModel = viewModel<ReminderTimingsDialogViewModel>()
+  val selectedReminderTiming:MutableState<ReminderTimings?> =  remember { mutableStateOf(null) }
+
+  if(showTimePicker){
+    Log.d("$showTimePicker", "ReminderTimingsDialogContent: Show Time Picker")
+    TimePicker(
+      reminderTiming = selectedReminderTiming.component1(),
+      setShowTimePicker = setShowTimePicker,
+      reminderReminderTimingsDialogViewModel = reminderTimingsDialogViewModel
+    )
+  }
 
   Column(
       modifier = Modifier.background(MaterialTheme.colors.background)
   ) {
     reminderTimings.forEach {
-      if(showTimePicker){
-        TimePicker(reminderTiming = it, setShowTimePicker = setShowTimePicker)
-      }
       Row {
-       Text(modifier = Modifier.weight(1f),
+       Text(modifier = Modifier.weight(1f)
+           .clickable {
+             selectedReminderTiming.value = it
+           },
          text = it.time,
          style = Typography.body1
        )
@@ -59,6 +73,7 @@ fun ReminderTimingsDialogContent(){
   ) {
      FloatingActionButton(
        onClick = {
+         selectedReminderTiming.value = null
          Log.d("Add Reminder", "Reminder On Click")
          setShowTimePicker(true)
        }

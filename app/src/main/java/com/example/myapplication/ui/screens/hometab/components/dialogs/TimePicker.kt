@@ -6,11 +6,10 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.data.models.ReminderTimings
-import java.util.*
 
 @Composable
 fun TimePicker(
-  reminderTiming: ReminderTimings? = null,
+  reminderTiming: ReminderTimings?,
   setShowTimePicker: (Boolean) -> Unit,
   reminderReminderTimingsDialogViewModel: ReminderTimingsDialogViewModel
 ){
@@ -19,6 +18,8 @@ fun TimePicker(
     TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute -> // logic to properly handle
       //Change in UI
       setShowTimePicker(false)
+
+      Log.d("Time Picker", "reminderTiming -> $reminderTiming")
 
       //Delete old Reminder -- deleted only when update existing reminders
       if(reminderTiming != null){
