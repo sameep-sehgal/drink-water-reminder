@@ -19,9 +19,9 @@ class ReminderRepository @Inject constructor(
     = waterDatabaseDao.updateReminderTiming(reminderTiming)
 
   suspend fun deleteReminderTiming(reminderTiming: ReminderTimings)
-          = waterDatabaseDao.deleteReminderTiming(reminderTiming)
+    = waterDatabaseDao.deleteReminderTiming(reminderTiming)
 
   suspend fun insertReminderTiming(reminderTiming: ReminderTimings)
-          = waterDatabaseDao.insertReminderTiming(reminderTiming)
-  
+    = waterDatabaseDao.insertReminderTiming(reminderTiming)
+
 }

@@ -5,8 +5,8 @@ import androidx.room.Room
 import com.example.myapplication.data.preferencedatastore.PreferenceDataStore
 import com.example.myapplication.data.roomdatabase.WaterDatabaseDao
 import com.example.myapplication.data.roomdatabase.WaterDatabase
+import com.example.myapplication.repository.ReminderRepository
 import com.example.myapplication.repository.WaterDataRepository
-import com.example.myapplication.ui.screens.hometab.HomeTabViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,6 +36,11 @@ object AppModule {
     @Provides
     fun provideWaterDataRepository(waterDatabaseDao: WaterDatabaseDao,preferenceDataStore: PreferenceDataStore):WaterDataRepository
         = WaterDataRepository(waterDatabaseDao = waterDatabaseDao, preferenceDataStore = preferenceDataStore)
+
+    @Singleton
+    @Provides
+    fun provideReminderRepository(waterDatabaseDao: WaterDatabaseDao,preferenceDataStore: PreferenceDataStore):ReminderRepository
+        = ReminderRepository(waterDatabaseDao = waterDatabaseDao, preferenceDataStore = preferenceDataStore)
 
     //Not reqd viewmodels are already annotated by HiltViewModel
 //    @Singleton

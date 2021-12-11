@@ -1,46 +1,47 @@
 package com.example.myapplication.ui.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.window.Dialog
 
 @Composable
 fun ShowDialog(
-    title:String,
-    content:@Composable()()->Unit,
-    setShowDialog:(Boolean)->Unit
-):Unit{
-    AlertDialog(onDismissRequest = { setShowDialog(false) },
-        title = {
-            Text(title)
+  title:String,
+  content:@Composable()()->Unit,
+  setShowDialog:(Boolean)->Unit
+) {
+
+  AlertDialog(
+    onDismissRequest = { onDialogDismiss(setShowDialog) },
+    title = {
+      Text(title)
+    },
+    confirmButton = {
+      Button(
+        onClick = {
+          // Change the state to close the dialog
+          onDialogDismiss(setShowDialog)
         },
-        confirmButton = {
-            Button(
-                onClick = {
-                    // Change the state to close the dialog
-                    setShowDialog(false)
-                },
-            ) {
-                Text("Confirm")
-            }
+      ) {
+        Text("Confirm")
+      }
+    },
+    dismissButton = {
+      Button(
+        onClick = {
+          // Change the state to close the dialog
+          setShowDialog(false)
         },
-        dismissButton = {
-            Button(
-                onClick = {
-                    // Change the state to close the dialog
-                    setShowDialog(false)
-                },
-            ) {
-                Text("Dismiss")
-            }
-        },
-        text = {
-            content()
-        },)
+      ) {
+        Text("Dismiss")
+      }
+    },
+    text = {
+      content()
+    },
+  )
+}
+
+
+fun onDialogDismiss(setShowDialog: (Boolean) -> Unit){
+  setShowDialog(false)
 }

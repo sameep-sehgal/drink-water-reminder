@@ -13,5 +13,16 @@ class TimeString {
             Log.d("TAG23", "longToString: ${dateFormat.format(time)}")
             return dateFormat.format(time)
         }
+
+        fun HHMMIntToString(hourOfDay:Int, minute:Int):String{
+            val HH:String
+            if(hourOfDay<10) HH = "0$hourOfDay"
+            else HH = "$hourOfDay"
+            val MM:String
+            if(minute < 10) MM = "0$minute"
+            else MM = "$minute"
+
+            return "$HH:$MM"
+        }
     }
 }
