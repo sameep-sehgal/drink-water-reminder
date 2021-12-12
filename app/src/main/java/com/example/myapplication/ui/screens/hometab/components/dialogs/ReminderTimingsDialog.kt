@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.screens.hometab.components.dialogs
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,12 +14,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.data.models.ReminderTimings
 import com.example.myapplication.ui.theme.Typography
 
+@ExperimentalFoundationApi
 @Composable
 fun ReminderTimingsDialog(setShowReminderTimingsDialog: (Boolean)->Unit){
   Dialog(
@@ -27,16 +28,16 @@ fun ReminderTimingsDialog(setShowReminderTimingsDialog: (Boolean)->Unit){
     Box(
       modifier = Modifier
         .background(MaterialTheme.colors.background)
-        .fillMaxHeight(0.85f)
-        .padding(8.dp)
+        .fillMaxHeight(0.87f)
     ) {
-      ReminderTimingsDialogContent()
+      ReminderTimingsDialogContent(setShowReminderTimingsDialog)
     }
   }
 }
 
+@ExperimentalFoundationApi
 @Composable
-fun ReminderTimingsDialogContent(){
+fun ReminderTimingsDialogContent(setShowReminderTimingsDialog: (Boolean)->Unit){
   val (showTimePicker, setShowTimePicker) =  remember { mutableStateOf(false) }
   val reminderTimingsDialogViewModel = viewModel<ReminderTimingsDialogViewModel>()
   val selectedReminderTiming:MutableState<ReminderTimings?> =  remember { mutableStateOf(null) }
@@ -53,9 +54,7 @@ fun ReminderTimingsDialogContent(){
   }
 
   Column {
-    Title(title)
-
-    Divider(thickness = 4.dp)
+    Title(title, setShowReminderTimingsDialog)
 
     ReminderTimingsList(
       reminderTimings = reminderTimings.value,
@@ -74,17 +73,29 @@ fun ReminderTimingsDialogContent(){
 
 
 @Composable
-fun Title(title:String){
-  Text(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(horizontal = 0.dp, vertical = 8.dp)
-      .zIndex(2f),
-    text = title,
-    textAlign = TextAlign.Center
-  )
+fun Title(
+  title:String,
+  setShowReminderTimingsDialog: (Boolean)->Unit
+){
+  Row(
+    modifier = Modifier.clickable {
+      //Added because Dialog became unresponsive on clicking in unclickable areas
+      setShowReminderTimingsDialog(false)
+      setShowReminderTimingsDialog(true)
+    }
+  ){
+    Text(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 0.dp, vertical = 8.dp),
+      text = title,
+      textAlign = TextAlign.Center
+    )
+    Divider(thickness = 4.dp)
+  }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun ReminderTimingsList(
   reminderTimings: List<ReminderTimings>,
@@ -99,7 +110,7 @@ fun ReminderTimingsList(
     items(reminderTimings){
       Row {
         Text(modifier = Modifier
-          .weight(1f)
+          .weight(1f).animateItemPlacement()
           .clickable {
             selectedReminderTiming.value = it
             setShowTimePicker(true)
@@ -140,19 +151,17 @@ fun BottomBar(
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .zIndex(2f),
-    horizontalArrangement = Arrangement.Center,
-  ) {
-    IconButton(
-      onClick = {
+      .padding(0.dp)
+      .clickable {
         selectedReminderTiming.value = null
         setShowTimePicker(true)
-      }
-    ) {
-      Icon(
-        painter = painterResource(id = R.drawable.add_icon),
-        contentDescription = "Add new Reminder"
-      )
-    }
+      },
+    horizontalArrangement = Arrangement.Center,
+  ) {
+    Icon(
+      modifier = Modifier.padding(8.dp,16.dp),
+      painter = painterResource(id = R.drawable.add_icon),
+      contentDescription = "Add new Reminder"
+    )
   }
 }
