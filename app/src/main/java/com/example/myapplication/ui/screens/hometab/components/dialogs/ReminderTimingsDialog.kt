@@ -110,8 +110,9 @@ fun ReminderTimingsList(
         Switch(
           checked = it.active,
           onCheckedChange = { currValue ->
-            it.active = currValue
-            reminderTimingsDialogViewModel.updateReminderTiming(it)
+            //Create a new instance of reminder timing for flow to recognize update in data
+            val updatedReminderTiming = it.copy(active = currValue)
+            reminderTimingsDialogViewModel.updateReminderTiming(updatedReminderTiming)
             //TODO("Delete Repeating notification for this time")
           }
         )
