@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowBooleanValue
+import com.example.myapplication.ui.screens.settingstab.components.SettingsRowNoValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowSelectValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsSubheading
 import com.example.myapplication.ui.theme.Typography
@@ -101,25 +102,21 @@ fun MainSettings(){
     value = "Default",
     onSettingsRowClick = { /*TODO()*/ }
   )
-  Row(
-    modifier = Modifier.padding(horizontal = horizontalPaddingSettings, vertical = verticalPaddingSettings)
-  ) {
-    Text(text = "Reset Data", style = Typography.subtitle1)
-  }
-  Row(
-    modifier = Modifier.padding(horizontal = horizontalPaddingSettings, vertical = verticalPaddingSettings)
-  ) {
-    Text(text = "Rate Us", style = Typography.subtitle1)
-  }
-  Row(
-    modifier = Modifier.padding(horizontal = horizontalPaddingSettings, vertical = verticalPaddingSettings)
-  ) {
-    Text(text = "Share", style = Typography.subtitle1)
-  }
-  Row(
-    modifier = Modifier.padding(horizontal = horizontalPaddingSettings, vertical = verticalPaddingSettings)
-  ) {
-    Text(text = "Contact Developers", style = Typography.subtitle1)
-  }
+  SettingsRowNoValue(
+    text = "Reset Data",
+    onSettingsRowClick = {/*TODO()*/}
+  )
+  SettingsRowNoValue(
+    text = "Rate Us",
+    onSettingsRowClick = {/*TODO()*/}
+  )
+  SettingsRowNoValue(
+    text = "Share",
+    onSettingsRowClick = {/*TODO()*/}
+  )
+  SettingsRowNoValue(
+    text = "Contact Developers",
+    onSettingsRowClick = {/*TODO()*/}
+  )
   Divider()
 }
