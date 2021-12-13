@@ -1,7 +1,6 @@
 package com.example.myapplication.ui.screens.hometab.components.dialogs
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,7 +18,6 @@ import com.example.myapplication.R
 import com.example.myapplication.data.models.ReminderTimings
 import com.example.myapplication.ui.theme.Typography
 
-@ExperimentalFoundationApi
 @Composable
 fun ReminderTimingsDialog(setShowReminderTimingsDialog: (Boolean)->Unit){
   Dialog(
@@ -35,7 +33,6 @@ fun ReminderTimingsDialog(setShowReminderTimingsDialog: (Boolean)->Unit){
   }
 }
 
-@ExperimentalFoundationApi
 @Composable
 fun ReminderTimingsDialogContent(setShowReminderTimingsDialog: (Boolean)->Unit){
   val (showTimePicker, setShowTimePicker) =  remember { mutableStateOf(false) }
@@ -95,7 +92,6 @@ fun Title(
   }
 }
 
-@ExperimentalFoundationApi
 @Composable
 fun ReminderTimingsList(
   reminderTimings: List<ReminderTimings>,
@@ -110,7 +106,7 @@ fun ReminderTimingsList(
     items(reminderTimings){
       Row {
         Text(modifier = Modifier
-          .weight(1f).animateItemPlacement()
+          .weight(1f)
           .clickable {
             selectedReminderTiming.value = it
             setShowTimePicker(true)

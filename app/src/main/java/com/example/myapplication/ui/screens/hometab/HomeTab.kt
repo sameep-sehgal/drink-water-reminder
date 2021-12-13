@@ -35,16 +35,12 @@ fun HomeTab():Unit{
     val (showWorkoutDialog, setShowWorkoutDialog) =  remember { mutableStateOf(false) }
     val (showWeatherDialog, setShowWeatherDialog) =  remember { mutableStateOf(false) }
     val (showResetDialog, setShowResetDialog) =  remember { mutableStateOf(false) }
-    val (showReminderTimingsDialog, setShowReminderTimingsDialog) =  remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
 
     Scaffold(
         floatingActionButton = {
             Column(horizontalAlignment = Alignment.CenterHorizontally){
                 BackToTopButton(scrollState)
-                FloatingAlarmButton(
-                    setShowReminderTimingsDialog = setShowReminderTimingsDialog
-                )
             }
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -111,9 +107,6 @@ fun HomeTab():Unit{
             }
             if(showResetDialog){
                 ResetDialog(setShowResetDialog = setShowResetDialog)
-            }
-            if(showReminderTimingsDialog){
-                ReminderTimingsDialog(setShowReminderTimingsDialog = setShowReminderTimingsDialog)
             }
         }
     }
