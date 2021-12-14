@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi
 @Composable
-fun HomeTab():Unit{
+fun HomeTab(){
     val homeTabViewModel = viewModel<HomeTabViewModel>()
     val key = homeTabViewModel.savedKey.collectAsState()
     val drinkLogsList = homeTabViewModel.drinkLogs.collectAsState()

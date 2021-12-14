@@ -28,13 +28,7 @@ class HomeTabViewModel @Inject constructor(
 
     //Initialize state required for app to run in the constructor
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            preferenceDataStore.recommendedWaterIntake().distinctUntilChanged()
-                .collect {
-                    _savedKey.value = it
-                }
-        }
-
+        getSavedKey()
         getDailyWaterRecord()
         getTodaysDrinkLogs()
     }
