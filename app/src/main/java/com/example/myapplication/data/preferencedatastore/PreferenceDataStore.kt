@@ -2,13 +2,10 @@ package com.example.myapplication.data.preferencedatastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.intPreferencesKey
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
@@ -23,7 +20,22 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
 
     //preference keys
     private object PreferencesKeys {
-        val RECOMMENDED_WATER_INTAKE = intPreferencesKey("recommended_water_intake")
+      //Personal Settings
+      val GENDER = stringPreferencesKey("gender")
+      val WEIGHT = intPreferencesKey("weight")
+      val UNITS = stringPreferencesKey("units")
+      val RECOMMENDED_WATER_INTAKE = intPreferencesKey("recommended_water_intake")
+      val DAILY_WATER_GOAL = intPreferencesKey("daily_water_goal")
+
+      //Reminder Settings
+      val REMINDER_PERIOD_START = stringPreferencesKey("reminder_period_start")
+      val REMINDER_PERIOD_END = stringPreferencesKey("reminder_period_end")
+      val REMINDER_GAP = intPreferencesKey("reminder_gap")
+      val REMINDER_AFTER_GOAL_ACHIEVED = booleanPreferencesKey("reminder_after_goal_achieved")
+      val REMINDER_SOUND = stringPreferencesKey("reminder_sound")
+      
+      //Main Settings
+      val APP_THEME = stringPreferencesKey("app_theme")
     }
 
     override fun recommendedWaterIntake() =
