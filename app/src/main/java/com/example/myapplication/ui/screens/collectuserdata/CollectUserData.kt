@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.ui.screens.collectuserdata.components.GetWaterUnit
 import com.example.myapplication.ui.screens.collectuserdata.components.GetWeight
 import com.example.myapplication.utils.Gender
 import com.example.myapplication.utils.Units
@@ -17,20 +18,18 @@ fun CollectUserData(
     selectedGender = gender
   }
 
-  val (selectedReminderTimingStart, setSelectedReminderTimingStart) =  remember { mutableStateOf(Gender.NOT_SET) }
-  val (selectedReminderTimingEnd, setSelectedReminderTimingEnd) =  remember { mutableStateOf(Gender.NOT_SET) }
   val (selectedReminderGap, setSelectedReminderGap) =  remember { mutableStateOf(Gender.NOT_SET) }
 
   Column() {
-    Text(text = "Collect User Data")
-    IntroScreen()
+//    IntroScreen()
 //    GetGender(
 //      selectedGender,
 //      setSelectedGender,
 //      preferenceDataStoreViewModel
 //    )
-    GetWeight(preferenceDataStoreViewModel)
+//    GetWeight(preferenceDataStoreViewModel)
+//    GetWaterUnit(preferenceDataStoreViewModel)
 //    GetReminderPeriod(preferenceDataStoreViewModel)
-//    GetReminderFrequency(preferenceDataStoreViewModel)
+    GetReminderFrequency(preferenceDataStoreViewModel)
   }
 }

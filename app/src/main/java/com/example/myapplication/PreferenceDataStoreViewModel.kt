@@ -39,11 +39,19 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val units = preferenceDataStore.weight_unit().asLiveData()
+  val weightUnit = preferenceDataStore.weightUnit().asLiveData()
 
-  fun setUnits(units: String) {
+  fun setWeightUnit(unit: String) {
     viewModelScope.launch {
-      preferenceDataStore.setWeightUnit(units)
+      preferenceDataStore.setWeightUnit(unit)
+    }
+  }
+
+  val waterUnit = preferenceDataStore.waterUnit().asLiveData()
+
+  fun setWaterUnit(unit: String) {
+    viewModelScope.launch {
+      preferenceDataStore.setWaterUnit(unit)
     }
   }
 

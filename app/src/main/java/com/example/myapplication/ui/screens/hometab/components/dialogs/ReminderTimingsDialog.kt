@@ -16,6 +16,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.data.models.ReminderTimings
+import com.example.myapplication.ui.components.TimePicker
 import com.example.myapplication.ui.theme.Typography
 
 @Composable
@@ -41,14 +42,14 @@ fun ReminderTimingsDialogContent(setShowReminderTimingsDialog: (Boolean)->Unit){
   val reminderTimings = reminderTimingsDialogViewModel.reminderTimings.collectAsState()
   val title = "Reminder Timings"
   
-  if(showTimePicker){
-    Log.d("$showTimePicker", "ReminderTimingsDialogContent: Show Time Picker")
-    TimePicker(
-      reminderTiming = selectedReminderTiming.component1(),
-      setShowTimePicker = setShowTimePicker,
-      reminderReminderTimingsDialogViewModel = reminderTimingsDialogViewModel
-    )
-  }
+//  if(showTimePicker){
+//    Log.d("$showTimePicker", "ReminderTimingsDialogContent: Show Time Picker")
+//    TimePicker(
+//      reminderTiming = selectedReminderTiming.component1(),
+//      setShowTimePicker = setShowTimePicker,
+//      reminderReminderTimingsDialogViewModel = reminderTimingsDialogViewModel
+//    )
+//  }
 
   Column {
     Title(title, setShowReminderTimingsDialog)
