@@ -9,8 +9,10 @@ interface PreferenceDataStoreInterface {
     suspend fun setIsUserInfoCollected(value:Boolean)
 
     //Personal Settings
-    fun units() :Flow<String>
-    suspend fun setUnits(units:String)
+    fun weightUnit() :Flow<String>
+    suspend fun setWeightUnit(units:String)
+    fun waterUnit() :Flow<String>
+    suspend fun setWaterUnit(unit:String)
     fun gender() :Flow<String>
     suspend fun setGender(gender:String)
     fun weight() :Flow<Int>

@@ -26,7 +26,8 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     //Personal Settings
     val GENDER = stringPreferencesKey("gender")
     val WEIGHT = intPreferencesKey("weight")
-    val UNITS = stringPreferencesKey("units")
+    val WEIGHT_UNIT = stringPreferencesKey("weight_unit")
+    val WATER_UNIT = stringPreferencesKey("water_unit")
     val RECOMMENDED_WATER_INTAKE = intPreferencesKey("recommended_water_intake")
     val DAILY_WATER_GOAL = intPreferencesKey("daily_water_goal")
 
@@ -94,7 +95,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     }
   }
 
-  override fun units(): Flow<String> =
+  override fun weightUnit(): Flow<String> =
     dataStore.data.catch {
       if (it is IOException) {
         emit(emptyPreferences())
@@ -102,12 +103,29 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.UNITS] ?: Units.KG_ML
+      it[PreferencesKeys.WEIGHT_UNIT] ?: Units.KG
     }
 
-  override suspend fun setUnits(units: String) {
+  override suspend fun setWeightUnit(unit: String) {
     dataStore.edit {
-      it[PreferencesKeys.UNITS] = units
+      it[PreferencesKeys.WEIGHT_UNIT] = unit
+    }
+  }
+
+  override fun waterUnit(): Flow<String> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.WATER_UNIT] ?: Units.ML
+    }
+
+  override suspend fun setWaterUnit(unit: String)  {
+    dataStore.edit {
+      it[PreferencesKeys.WATER_UNIT] = unit
     }
   }
 
