@@ -23,7 +23,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
 
   //Personal Settings
 
-  val gender = preferenceDataStore.gender().asLiveData()
+  val gender = preferenceDataStore.gender()
 
   fun setGender(gender: String) {
     viewModelScope.launch {
@@ -31,7 +31,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val weight = preferenceDataStore.weight().asLiveData()
+  val weight = preferenceDataStore.weight()
 
   fun setWeight(weight: Int) {
     viewModelScope.launch {
@@ -39,7 +39,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val weightUnit = preferenceDataStore.weightUnit().asLiveData()
+  val weightUnit = preferenceDataStore.weightUnit()
 
   fun setWeightUnit(unit: String) {
     viewModelScope.launch {
@@ -47,7 +47,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val waterUnit = preferenceDataStore.waterUnit().asLiveData()
+  val waterUnit = preferenceDataStore.waterUnit()
 
   fun setWaterUnit(unit: String) {
     viewModelScope.launch {
@@ -63,7 +63,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val dailyWaterGoal = preferenceDataStore.dailyWaterGoal().asLiveData()
+  val dailyWaterGoal = preferenceDataStore.dailyWaterGoal()
 
   fun setDailyWaterGoal(amount: Int) {
     viewModelScope.launch {
@@ -73,7 +73,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
 
   //Reminder Settings
 
-  val reminderPeriodStart = preferenceDataStore.reminderPeriodStart().asLiveData()
+  val reminderPeriodStart = preferenceDataStore.reminderPeriodStart()
 
   fun setReminderPeriodStart(value: String) {
     viewModelScope.launch {
@@ -81,7 +81,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val reminderPeriodEnd = preferenceDataStore.reminderPeriodEnd().asLiveData()
+  val reminderPeriodEnd = preferenceDataStore.reminderPeriodEnd()
 
   fun setReminderPeriodEnd(value: String) {
     viewModelScope.launch {
@@ -89,7 +89,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val reminderGap = preferenceDataStore.reminderGap().asLiveData()
+  val reminderGap = preferenceDataStore.reminderGap()
 
   fun setReminderGap(gapTime: Int) {
     viewModelScope.launch {
@@ -105,7 +105,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val reminderSound = preferenceDataStore.reminderSound().asLiveData()
+  val reminderSound = preferenceDataStore.reminderSound()
 
   fun setReminderSound(sound: String) {
     viewModelScope.launch {
@@ -115,7 +115,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
 
   //Main Settings
 
-  val appTheme = preferenceDataStore.appTheme().asLiveData()
+  val appTheme = preferenceDataStore.appTheme()
 
   fun setAppTheme(theme: String) {
     viewModelScope.launch {

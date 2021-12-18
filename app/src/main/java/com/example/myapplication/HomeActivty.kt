@@ -12,7 +12,7 @@ import com.example.myapplication.ui.components.DisplayTabLayout
 
 @ExperimentalPagerApi
 @AndroidEntryPoint
-class HomeActivty : ComponentActivity(){
+class HomeActivity : ComponentActivity(){
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {

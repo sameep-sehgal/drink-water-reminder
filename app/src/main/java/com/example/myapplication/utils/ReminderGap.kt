@@ -8,9 +8,21 @@ class ReminderGap {
     const val THIRTY_MINUTES = 30*60
     const val FORTY_FIVE_MINUTES = 45*60
     const val ONE_HOUR = 1*60*60
-    const val TWO_HOURS = 2*ReminderGap.ONE_HOUR
-    const val THREE_HOURS = 3*ReminderGap.ONE_HOUR
-    const val ONE_AND_HALF_HOUR = ReminderGap.ONE_HOUR + ReminderGap.THIRTY_MINUTES
-    const val TWO_AND_HALF_HOURS = ReminderGap.TWO_HOURS + ReminderGap.THIRTY_MINUTES
+    const val TWO_HOURS = 2* ONE_HOUR
+    const val THREE_HOURS = 3* ONE_HOUR
+    const val ONE_AND_HALF_HOUR = ONE_HOUR + THIRTY_MINUTES
+    const val TWO_AND_HALF_HOURS = TWO_HOURS + THIRTY_MINUTES
+
+    val GAP_OPTION_TEXT_MAPPER = hashMapOf<Int,String>(
+      DONT_REMIND to ReminderFrequencyOptions.DONT_REMIND,
+      FIFTEEN_MINUTES to ReminderFrequencyOptions.FIFTEEN_MINUTES,
+      THIRTY_MINUTES to ReminderFrequencyOptions.THIRTY_MINUTES,
+      FORTY_FIVE_MINUTES to ReminderFrequencyOptions.FORTY_FIVE_MINUTES,
+      ONE_HOUR to ReminderFrequencyOptions.ONE_HOUR,
+      TWO_HOURS to ReminderFrequencyOptions.TWO_HOURS,
+      THREE_HOURS to ReminderFrequencyOptions.THREE_HOURS,
+      ONE_AND_HALF_HOUR to ReminderFrequencyOptions.ONE_AND_HALF_HOURS,
+      TWO_AND_HALF_HOURS to ReminderFrequencyOptions.TWO_AND_HALF_HOURS,
+    )
   }
 }

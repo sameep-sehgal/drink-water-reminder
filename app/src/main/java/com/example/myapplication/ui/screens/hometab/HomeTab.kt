@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.R
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.screens.hometab.components.*
@@ -29,7 +30,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeTab(){
     val homeTabViewModel = viewModel<HomeTabViewModel>()
-    val key = homeTabViewModel.savedKey.collectAsState()
+    val preferenceDataStoreViewModel = viewModel<PreferenceDataStoreViewModel>()
     val drinkLogsList = homeTabViewModel.drinkLogs.collectAsState()
     val todaysWaterRecord = homeTabViewModel.waterRecord.collectAsState()
     val (showWorkoutDialog, setShowWorkoutDialog) =  remember { mutableStateOf(false) }
@@ -59,7 +60,6 @@ fun HomeTab(){
                     UndoButton(modifier = Modifier
                         .weight(1f)
                         .clickable(enabled = true) {
-                            Log.d("TAG11", "onCreate: ${key.value}")
                         })
 
                     ResetButton(modifier = Modifier.weight(1f), setShowResetDialog = setShowResetDialog)

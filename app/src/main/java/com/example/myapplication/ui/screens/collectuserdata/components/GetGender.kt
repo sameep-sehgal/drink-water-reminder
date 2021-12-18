@@ -1,67 +1,101 @@
 package com.example.myapplication.ui.screens.collectuserdata
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.LightGray
-import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.ui.theme.VeryLightGray
 import com.example.myapplication.utils.Gender
 
 @Composable
 fun GetGender(
-  selectedGender: String,
-  setSelectedGender:(String)->Unit,
-  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
+  currentScreen:Int,
+  setCurrentScreen:(Int) -> Unit
 ) {
+  var selectedGender by  remember { mutableStateOf(Gender.NOT_SET) }
+  val setSelectedGender = {gender:String ->
+    selectedGender = gender
+  }
+  val context = LocalContext.current
 
   Column(
     modifier = Modifier.fillMaxSize(),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Text(
-      text = "Select Gender",
-      fontWeight = FontWeight.Bold
-    )
-    Row(
-      verticalAlignment = Alignment.CenterVertically,
-      modifier = Modifier.weight(1f)
+    Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier.weight(1f),
+      verticalArrangement = Arrangement.Center
     ) {
-      FemaleButton(selectedGender = selectedGender, setSelectedGender = setSelectedGender)
-      MaleButton(selectedGender = selectedGender, setSelectedGender = setSelectedGender)
+      Text(
+        modifier = Modifier.padding(0.dp,16.dp),
+        text = "Select Gender",
+        fontWeight = FontWeight.Bold
+      )
+      Row(
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        FemaleButton(selectedGender = selectedGender, setSelectedGender = setSelectedGender)
+        MaleButton(selectedGender = selectedGender, setSelectedGender = setSelectedGender)
+      }
     }
+
+    LinearProgressIndicator(currentScreen/6f)
+
     Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(0.dp, 16.dp),
       verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.SpaceAround
     ) {
-      IconButton(onClick = { /*TODO*/ }) {
+      Button(
+        onClick = {
+          setCurrentScreen(currentScreen - 1)
+        },
+        shape = CircleShape
+      ) {
        Text(
-         text = "<",
-         fontWeight = FontWeight.ExtraBold
+         text = "Back",
+         fontWeight = FontWeight.ExtraBold,
+         fontSize = 21.sp
        )
       }
-      IconButton(onClick = { /*TODO*/ }) {
+      Button(
+        onClick = {
+          if(selectedGender == Gender.NOT_SET){
+            val toast = Toast(context)
+            toast.setText("Please Select your gender")
+            toast.duration = Toast.LENGTH_SHORT
+            toast.show()
+          }
+          else {
+            preferenceDataStoreViewModel.setGender(selectedGender)
+            setCurrentScreen(currentScreen + 1)
+          }
+        },
+        shape = CircleShape
+      ) {
         Text(
-          text = ">",
+          fontSize = 21.sp,
+          text = "Next",
           fontWeight = FontWeight.ExtraBold
         )
       }
@@ -87,6 +121,7 @@ fun FemaleButton(
             if (selectedGender != Gender.FEMALE)
               setSelectedGender(Gender.FEMALE)
             else setSelectedGender(Gender.NOT_SET)
+            Log.d("TAG", "FemaleButton: $selectedGender")
           })
         .padding(4.dp)
         .shadow(elevation = 0.dp, CircleShape, clip = true)

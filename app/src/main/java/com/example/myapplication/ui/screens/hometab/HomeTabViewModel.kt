@@ -9,6 +9,7 @@ import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.data.preferencedatastore.PreferenceDataStore
 import com.example.myapplication.repository.WaterDataRepository
 import com.example.myapplication.utils.DateString
+import com.example.myapplication.utils.RecommendedWaterIntake
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -28,7 +29,7 @@ class HomeTabViewModel @Inject constructor(
 
     //Initialize state required for app to run in the constructor
     init {
-        getSavedKey()
+//        getSavedKey()
         getDailyWaterRecord()
         getTodaysDrinkLogs()
     }
@@ -69,7 +70,7 @@ class HomeTabViewModel @Inject constructor(
         }
     }
 
-    private val _waterRecord = MutableStateFlow<DailyWaterRecord>(DailyWaterRecord(goal = 2900, currWaterAmount = 1400))
+    private val _waterRecord = MutableStateFlow<DailyWaterRecord>(DailyWaterRecord(goal = 0, currWaterAmount = 0))
     val waterRecord : StateFlow<DailyWaterRecord> = _waterRecord.asStateFlow()
     fun getDailyWaterRecord(date:String = DateString.getTodaysDate()){
         viewModelScope.launch (Dispatchers.IO){
@@ -77,7 +78,7 @@ class HomeTabViewModel @Inject constructor(
                 Log.d(TAG, "getDailyWaterRecord $it")
                 if(it === null) {
                     Log.d(TAG, "getDailyWaterRecord $it")
-                    insertDailyWaterRecord(DailyWaterRecord(goal = savedKey.value))
+                    insertDailyWaterRecord(DailyWaterRecord(goal = RecommendedWaterIntake.NOT_SET))
                     getDailyWaterRecord()
                 }else {
                     _waterRecord.value = it

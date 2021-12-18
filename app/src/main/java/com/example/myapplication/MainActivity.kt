@@ -8,44 +8,62 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.remindernotification.CHANNEL_ID
 import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.components.DisplayTabLayout
-import com.example.myapplication.ui.screens.loadingscreen.LoadingScreen
+import com.example.myapplication.ui.screens.collectuserdata.CollectUserData
+import com.example.myapplication.ui.screens.hometab.HomeTabViewModel
 import com.example.myapplication.ui.theme.ApplicationTheme
+import com.example.myapplication.utils.RecommendedWaterIntake
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalPagerApi
 @AndroidEntryPoint //This annotation gives access to Hilt dependencies in the composables
 class MainActivity : ComponentActivity() {
     private val TAG = MainActivity::class.java.simpleName
     private val preferenceDataStoreViewModel: PreferenceDataStoreViewModel by viewModels()
+    private val homeTabViewModel: HomeTabViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
-      setContent {
-        ApplicationTheme {
-          Surface(color = MaterialTheme.colors.background) {
-//                    createNotificationChannel()
-            LoadingScreen()
-          }
-        }
-      }
+      createNotificationChannel()
       preferenceDataStoreViewModel.isUserInfoCollected.observe(this){
         if(it == true){
-          val i = Intent(this, HomeActivty::class.java)
-          startActivity(i)
+          setContent{
+            val setGoal = homeTabViewModel.waterRecord.collectAsState().value.goal
+            val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
+            if(setGoal == RecommendedWaterIntake.NOT_SET){
+              homeTabViewModel.updateDailyWaterRecord(
+                DailyWaterRecord(goal = goal.value)
+              )
+            }
+            ApplicationTheme {
+              Surface() {
+                DisplayTabLayout()
+              }
+            }
+          }
         }else{
-          val i = Intent(this, CollectUserDataActivity::class.java)
-          startActivity(i)
+          setContent {
+            ApplicationTheme {
+              Surface {
+                Log.d(TAG, "onCreate: $TAG")
+                CollectUserData(preferenceDataStoreViewModel)
+              }
+            }
+          }
         }
       }
     }

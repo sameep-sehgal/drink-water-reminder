@@ -11,5 +11,26 @@ class ReminderFrequencyOptions {
     const val TWO_AND_HALF_HOURS = "Every 2.5 Hours"
     const val THREE_HOURS = "Every 3 Hours"
     const val DONT_REMIND = "Don't Remind"
+
+    val OPTIONS = listOf(
+      hashMapOf<String,Any> ("text" to ReminderFrequencyOptions.FIFTEEN_MINUTES,
+      "gap" to ReminderGap.FIFTEEN_MINUTES),
+      hashMapOf<String,Any>("text" to ReminderFrequencyOptions.THIRTY_MINUTES,
+            "gap" to ReminderGap.THIRTY_MINUTES),
+      hashMapOf<String,Any>("text" to ReminderFrequencyOptions.FORTY_FIVE_MINUTES,
+            "gap" to ReminderGap.FORTY_FIVE_MINUTES),
+      hashMapOf<String,Any>("text" to ReminderFrequencyOptions.ONE_HOUR,
+            "gap" to ReminderGap.ONE_HOUR),
+      hashMapOf<String,Any>("text" to ReminderFrequencyOptions.ONE_AND_HALF_HOURS,
+            "gap" to ReminderGap.ONE_AND_HALF_HOUR),
+      hashMapOf<String,Any>("text" to ReminderFrequencyOptions.TWO_HOURS,
+            "gap" to ReminderGap.TWO_HOURS),
+      hashMapOf<String,Any>("text" to ReminderFrequencyOptions.TWO_AND_HALF_HOURS,
+            "gap" to ReminderGap.TWO_AND_HALF_HOURS),
+      hashMapOf<String,Any>("text" to ReminderFrequencyOptions.THREE_HOURS,
+            "gap" to ReminderGap.THREE_HOURS),
+      hashMapOf<String,Any>("text" to ReminderFrequencyOptions.DONT_REMIND,
+            "gap" to ReminderGap.DONT_REMIND),
+    )
   }
 }

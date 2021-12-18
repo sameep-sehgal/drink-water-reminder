@@ -10,6 +10,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import com.example.myapplication.ui.screens.collectuserdata.CollectUserData
 import com.example.myapplication.ui.theme.ApplicationTheme
+import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,6 +18,7 @@ class CollectUserDataActivity : ComponentActivity(){
   
   private val TAG = CollectUserDataActivity::class.java.simpleName
 
+  @ExperimentalPagerApi
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
