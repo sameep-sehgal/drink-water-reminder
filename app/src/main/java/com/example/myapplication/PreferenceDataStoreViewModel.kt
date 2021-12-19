@@ -55,7 +55,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val recommendedWaterIntake = preferenceDataStore.recommendedWaterIntake().asLiveData()
+  val recommendedWaterIntake = preferenceDataStore.recommendedWaterIntake()
 
   fun setRecommendedWaterIntake(amount: Int) {
     viewModelScope.launch {
@@ -97,7 +97,7 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val reminderAfterGoalAchieved = preferenceDataStore.reminderAfterGoalAchieved().asLiveData()
+  val reminderAfterGoalAchieved = preferenceDataStore.reminderAfterGoalAchieved()
 
   fun setReminderAfterGoalAchieved(value: Boolean) {
     viewModelScope.launch {

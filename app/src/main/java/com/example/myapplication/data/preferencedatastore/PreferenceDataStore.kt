@@ -42,6 +42,22 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     val APP_THEME = stringPreferencesKey("app_theme")
   }
 
+  fun reminderPeriodStartWithoutFlow() : String {
+    var res:String = ""
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.REMINDER_PERIOD_START] ?: ReminderPeriod.NOT_SET
+    }.map {
+      res = it
+    }
+    return res
+  }
+
   override fun isUserInfoCollected(): Flow<Boolean> =
     dataStore.data.catch {
       if (it is IOException) {

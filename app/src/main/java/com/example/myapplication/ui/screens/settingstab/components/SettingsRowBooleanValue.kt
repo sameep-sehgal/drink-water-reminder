@@ -7,9 +7,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.myapplication.horizontalPaddingSettings
+import com.example.myapplication.ui.screens.settingstab.horizontalPaddingSettings
 import com.example.myapplication.ui.theme.Typography
-import com.example.myapplication.verticalPaddingSettings
+import com.example.myapplication.ui.screens.settingstab.verticalPaddingSettings
 
 @Composable
 fun SettingsRowBooleanValue(text: String, value:Boolean, onCheckedChange: (Boolean) -> Unit) {

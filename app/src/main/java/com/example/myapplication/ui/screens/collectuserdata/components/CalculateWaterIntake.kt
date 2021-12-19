@@ -18,8 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.HomeActivity
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.utils.*
 import com.google.accompanist.pager.ExperimentalPagerApi
+import java.util.*
 
 @ExperimentalPagerApi
 @Composable
@@ -116,6 +118,19 @@ fun CalculateWaterIntake(
         onClick = {
           preferenceDataStoreViewModel.setRecommendedWaterIntake(recommendedWaterIntake)
           preferenceDataStoreViewModel.setDailyWaterGoal(recommendedWaterIntake)
+
+          //Set Repeating Reminder
+          val calendar = Calendar.getInstance()
+          calendar.add(Calendar.MILLISECOND, reminderGap.value)
+          ReminderReceiver.setReminder(
+            calendar.timeInMillis,
+            reminderPeriodStart.value,
+            reminderPeriodEnd.value,
+            reminderGap.value,
+            context
+          )
+
+          //User Data stored now switch to TabLayout HomeScreen
           preferenceDataStoreViewModel.setIsUserInfoCollected(true)
         },
         shape = CircleShape
