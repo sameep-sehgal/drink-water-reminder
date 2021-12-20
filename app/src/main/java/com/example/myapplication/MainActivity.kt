@@ -9,25 +9,42 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Adapter
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.viewpager2.adapter.StatefulAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.remindernotification.CHANNEL_ID
 import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.components.DisplayTabLayout
+import com.example.myapplication.ui.components.Tabs
 import com.example.myapplication.ui.screens.collectuserdata.CollectUserData
+import com.example.myapplication.ui.screens.hometab.HomeTab
 import com.example.myapplication.ui.screens.hometab.HomeTabViewModel
+import com.example.myapplication.ui.screens.settingstab.SettingsTab
 import com.example.myapplication.ui.theme.ApplicationTheme
 import com.example.myapplication.utils.RecommendedWaterIntake
 import com.example.myapplication.utils.ReminderGap
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.*
 
 @ExperimentalPagerApi
@@ -38,6 +55,7 @@ class MainActivity : ComponentActivity() {
   private val homeTabViewModel: HomeTabViewModel by viewModels()
   private var notificationManager: NotificationManager? = null
 
+  @ExperimentalFoundationApi
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -48,36 +66,32 @@ class MainActivity : ComponentActivity() {
         setContent{
           val setGoal = homeTabViewModel.waterRecord.collectAsState().value.goal
           val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
-          val reminderPeriodStart = preferenceDataStoreViewModel.reminderPeriodStart.collectAsState(
-            initial = "Empty"
-          )
-          val reminderPeriodEnd = preferenceDataStoreViewModel.reminderPeriodEnd.collectAsState(
-            initial = "Empty"
-          )
-          val reminderGap = preferenceDataStoreViewModel.reminderGap.collectAsState(
-            initial = ReminderGap.NOT_SET
-          )
           if(setGoal == RecommendedWaterIntake.NOT_SET){
             homeTabViewModel.updateDailyWaterRecord(
               DailyWaterRecord(goal = goal.value)
             )
           }
           ApplicationTheme {
-            Column() {
-              Button(onClick = {
-                val calendar = Calendar.getInstance()
-                calendar.add(Calendar.SECOND,10)
-                ReminderReceiver.setReminder(
-                  calendar.timeInMillis,
-                  reminderPeriodStart.value,
-                  reminderPeriodEnd.value,
-                  reminderGap.value,
-                  applicationContext
-                )
-              }) {
-                Text(text = "Set Reminder")
+            Surface {
+              val pagerState = rememberPagerState()
+              Column {
+                DisplayTabLayout(pagerState)
+                //Pager used to swipe between different tabs
+                HorizontalPager(
+                  count = Tabs.values().size,
+                  state = pagerState,
+                  verticalAlignment = Alignment.Top
+                ) { index->
+                  Log.d(TAG, "onCreateTabLayout: $index  ${pagerState.currentPage}")
+                  Column(modifier = Modifier.fillMaxSize()) {
+                    when(index) {
+                      0 -> HomeTab()
+                      1 -> HistoryTab()
+                      2 -> SettingsTab(preferenceDataStoreViewModel)
+                    }
+                  }
+                }
               }
-              DisplayTabLayout()
             }
           }
         }
