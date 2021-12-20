@@ -9,28 +9,18 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Adapter
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.viewpager2.adapter.StatefulAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.remindernotification.CHANNEL_ID
-import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.components.DisplayTabLayout
 import com.example.myapplication.ui.components.Tabs
 import com.example.myapplication.ui.screens.collectuserdata.CollectUserData
@@ -39,13 +29,10 @@ import com.example.myapplication.ui.screens.hometab.HomeTabViewModel
 import com.example.myapplication.ui.screens.settingstab.SettingsTab
 import com.example.myapplication.ui.theme.ApplicationTheme
 import com.example.myapplication.utils.RecommendedWaterIntake
-import com.example.myapplication.utils.ReminderGap
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import java.util.*
 
 @ExperimentalPagerApi
 @AndroidEntryPoint //This annotation gives access to Hilt dependencies in the composables
