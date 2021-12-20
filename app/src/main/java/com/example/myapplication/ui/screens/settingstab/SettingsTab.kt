@@ -6,9 +6,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowBooleanValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowNoValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowSelectValue
@@ -35,10 +38,20 @@ fun SettingsTab(
   val reminderSound = preferenceDataStoreViewModel.reminderSound.collectAsState(initial = ReminderSound.WATER_DROP)
   val appTheme = preferenceDataStoreViewModel.appTheme.collectAsState(initial = ReminderSound.WATER_DROP)
   val reminderAfterGoalAchieved = preferenceDataStoreViewModel.reminderAfterGoalAchieved.collectAsState(initial = false)
+  val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
+  val (dialogToShow, setDialogToShow) =  remember { mutableStateOf(0) }
+
 
   Column(
     modifier = Modifier.verticalScroll(scrollState)
   ) {
+//    if(showDialog){
+//      ShowDialog(
+//        title = ,
+//        content = { /*TODO*/ },
+//        setShowDialog = setShowDialog
+//      )
+//    }
     ReminderSettings(
       reminderPeriodStart.value,
       reminderPeriodEnd.value,
@@ -72,22 +85,22 @@ fun ReminderSettings(
   Divider()
   Column {
     SettingsRowSelectValue(
-      text = "Reminder Period",
+      text = Settings.REMINDER_PERIOD,
       value = "$reminderPeriodStart-$reminderPeriodEnd",
       onSettingsRowClick = { /*TODO()*/ }
     )
     SettingsRowSelectValue(
-      text = "Reminder Frequency",
+      text = Settings.REMINDER_FREQUENCY,
       value = "${ReminderGap.GAP_OPTION_TEXT_MAPPER[reminderGap]}",
       onSettingsRowClick = { /*TODO()*/ }
     )
     SettingsRowBooleanValue(
-      text = "Remind after goal is achieved?",
+      text = Settings.REMINDER_AFTER_GOAL_ACHEIVED,
       value = reminderAfterGoalAchieved,
       onCheckedChange = {}
     )
     SettingsRowSelectValue(
-      text = "Reminder Sound",
+      text = Settings.REMINDER_SOUND,
       value = reminderSound,
       onSettingsRowClick = { /*TODO()*/ }
     )
@@ -108,12 +121,12 @@ fun PersonalSettings(
   Divider()
   Column {
     SettingsRowSelectValue(
-      text = "Gender",
+      text = Settings.GENDER,
       value = gender,
       onSettingsRowClick = { /*TODO()*/ }
     )
     SettingsRowSelectValue(
-      text = "Weight",
+      text = Settings.WEIGHT,
       value = "$weight$weightUnit",
       onSettingsRowClick = { /*TODO()*/ }
     )
@@ -123,12 +136,12 @@ fun PersonalSettings(
 //      onSettingsRowClick = { /*TODO()*/ }
 //    )
     SettingsRowSelectValue(
-      text = "Recommended Water Intake",
+      text = Settings.RECOMMENDED_WATER_INTAKE,
       value = "$recommendedWaterIntake$waterUnit",
       onSettingsRowClick = { /*TODO()*/ }
     )
     SettingsRowSelectValue(
-      text = "Daily Water Goal",
+      text = Settings.DAILY_WATER_GOAL,
       value = "$dailyWaterGoal$waterUnit",
       onSettingsRowClick = { /*TODO()*/ }
     )
@@ -143,24 +156,24 @@ fun MainSettings(
   SettingsSubheading(text = "Main Settings")
   Divider()
   SettingsRowSelectValue(
-    text = "App Theme",
+    text = Settings.APP_THEME,
     value = appTheme,
     onSettingsRowClick = { /*TODO()*/ }
   )
   SettingsRowNoValue(
-    text = "Reset Data",
+    text = Settings.RESET_DATA,
     onSettingsRowClick = {/*TODO()*/}
   )
   SettingsRowNoValue(
-    text = "Rate Us",
+    text = Settings.RATE_US,
     onSettingsRowClick = {/*TODO()*/}
   )
   SettingsRowNoValue(
-    text = "Share",
+    text = Settings.SHARE,
     onSettingsRowClick = {/*TODO()*/}
   )
   SettingsRowNoValue(
-    text = "Contact Developers",
+    text = Settings.CONTACT_DEVELOPERS,
     onSettingsRowClick = {/*TODO()*/}
   )
   Divider()
