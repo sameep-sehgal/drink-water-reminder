@@ -1,12 +1,7 @@
 package com.example.myapplication.ui.screens.hometab
 
-import android.util.Log
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Button
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -20,11 +15,9 @@ import com.example.myapplication.R
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.screens.hometab.components.*
 import com.example.myapplication.ui.screens.hometab.components.buttons.BackToTopButton
-import com.example.myapplication.ui.screens.hometab.components.buttons.FloatingAlarmButton
-import com.example.myapplication.ui.screens.hometab.components.dialogs.ReminderTimingsDialog
+import com.example.myapplication.ui.screens.hometab.components.dialogs.ResetDialog
 import com.example.myapplication.ui.screens.hometab.screens.*
 import com.example.myapplication.ui.theme.Typography
-import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi
 @Composable

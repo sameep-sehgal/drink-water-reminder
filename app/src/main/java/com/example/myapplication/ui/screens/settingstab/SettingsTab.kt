@@ -1,21 +1,25 @@
 package com.example.myapplication.ui.screens.settingstab
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowBooleanValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowNoValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowSelectValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsSubheading
+import com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent.*
 import com.example.myapplication.utils.*
 
 val horizontalPaddingSettings = 8.dp
@@ -39,25 +43,20 @@ fun SettingsTab(
   val appTheme = preferenceDataStoreViewModel.appTheme.collectAsState(initial = ReminderSound.WATER_DROP)
   val reminderAfterGoalAchieved = preferenceDataStoreViewModel.reminderAfterGoalAchieved.collectAsState(initial = false)
   val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
-  val (dialogToShow, setDialogToShow) =  remember { mutableStateOf(0) }
-
+  val (dialogToShow, setDialogToShow) =  remember { mutableStateOf("") }
 
   Column(
     modifier = Modifier.verticalScroll(scrollState)
   ) {
-//    if(showDialog){
-//      ShowDialog(
-//        title = ,
-//        content = { /*TODO*/ },
-//        setShowDialog = setShowDialog
-//      )
-//    }
     ReminderSettings(
       reminderPeriodStart.value,
       reminderPeriodEnd.value,
       reminderGap.value,
       reminderSound.value,
-      reminderAfterGoalAchieved.value
+      reminderAfterGoalAchieved.value,
+      setShowDialog,
+      setDialogToShow,
+      preferenceDataStoreViewModel
     )
     PersonalSettings(
       gender.value,
@@ -65,11 +64,85 @@ fun SettingsTab(
       weightUnit.value,
       recommendedWaterIntake.value,
       waterUnit.value,
-      dailyWaterGoal.value
+      dailyWaterGoal.value,
+      setShowDialog,
+      setDialogToShow
     )
     MainSettings(
-      appTheme.value
+      appTheme.value,
+      setShowDialog,
+      setDialogToShow
     )
+
+    if(showDialog && dialogToShow != Settings.GENDER){
+      ShowDialog(
+        title = "Set $dialogToShow",
+        content = { /*TODO*/ },
+        setShowDialog = setShowDialog,
+        onConfirmButtonClick = { /*TODO*/ }
+      )
+    }
+    if(showDialog && dialogToShow == Settings.REMINDER_PERIOD){
+      SetReminderPeriodSettingDialog(
+        reminderGap = reminderGap.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog,
+        reminderPeriodStart = reminderPeriodStart.value,
+        reminderPeriodEnd = reminderPeriodEnd.value
+      )
+    }
+    if(showDialog && dialogToShow == Settings.REMINDER_FREQUENCY){
+      SetReminderFrequencySettingDialog(
+        reminderGap = reminderGap.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog,
+        reminderPeriodStart = reminderPeriodStart.value,
+        reminderPeriodEnd = reminderPeriodEnd.value
+      )
+    }
+    if(showDialog && dialogToShow == Settings.REMINDER_SOUND){
+      SetReminderSoundSettingDialog(
+        reminderSound = reminderSound.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog
+      )
+    }
+    if(showDialog && dialogToShow == Settings.GENDER){
+      SetGenderSettingDialog(
+        gender = gender.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog,
+        weight = weight.value,
+        weightUnit = weightUnit.value,
+        waterUnit = waterUnit.value
+      )
+    }
+    if(showDialog && dialogToShow == Settings.WEIGHT){
+      SetWeightSettingDialog(
+        gender = gender.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog,
+        weight = weight.value,
+        weightUnit = weightUnit.value,
+        waterUnit = waterUnit.value
+      )
+    }
+    if(showDialog && dialogToShow == Settings.DAILY_WATER_GOAL){
+      SetDailyWaterGoalSettingDialog(
+        dailyWaterGoal = dailyWaterGoal.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog,
+        recommendedWaterIntake = recommendedWaterIntake.value,
+        waterUnit = waterUnit.value
+      )
+    }
+    if(showDialog && dialogToShow == Settings.APP_THEME){
+      SetAppThemeSettingDialog(
+        appTheme = appTheme.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog
+      )
+    }
   }
 }
 
@@ -79,7 +152,10 @@ fun ReminderSettings(
   reminderPeriodEnd:String,
   reminderGap:Int,
   reminderSound:String,
-  reminderAfterGoalAchieved:Boolean
+  reminderAfterGoalAchieved:Boolean,
+  setShowDialog :(Boolean) -> Unit,
+  setDialogToShow: (String) -> Unit,
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ){
   SettingsSubheading(text = "Reminder Settings")
   Divider()
@@ -87,22 +163,33 @@ fun ReminderSettings(
     SettingsRowSelectValue(
       text = Settings.REMINDER_PERIOD,
       value = "$reminderPeriodStart-$reminderPeriodEnd",
-      onSettingsRowClick = { /*TODO()*/ }
+      onSettingsRowClick = {
+        setShowDialog(true)
+        setDialogToShow(Settings.REMINDER_PERIOD)
+      }
     )
     SettingsRowSelectValue(
       text = Settings.REMINDER_FREQUENCY,
       value = "${ReminderGap.GAP_OPTION_TEXT_MAPPER[reminderGap]}",
-      onSettingsRowClick = { /*TODO()*/ }
+      onSettingsRowClick = {
+        setShowDialog(true)
+        setDialogToShow(Settings.REMINDER_FREQUENCY)
+      }
     )
     SettingsRowBooleanValue(
       text = Settings.REMINDER_AFTER_GOAL_ACHEIVED,
       value = reminderAfterGoalAchieved,
-      onCheckedChange = {}
+      onCheckedChange = {
+        preferenceDataStoreViewModel.setReminderAfterGoalAchieved(it)
+      }
     )
     SettingsRowSelectValue(
       text = Settings.REMINDER_SOUND,
       value = reminderSound,
-      onSettingsRowClick = { /*TODO()*/ }
+      onSettingsRowClick = {
+        setShowDialog(true)
+        setDialogToShow(Settings.REMINDER_SOUND)
+      }
     )
   }
   Divider()
@@ -115,7 +202,9 @@ fun PersonalSettings(
   weightUnit:String,
   recommendedWaterIntake:Int,
   waterUnit:String,
-  dailyWaterGoal:Int
+  dailyWaterGoal:Int,
+  setShowDialog :(Boolean) -> Unit,
+  setDialogToShow: (String) -> Unit
 ){
   SettingsSubheading(text = "Personal Settings")
   Divider()
@@ -123,12 +212,18 @@ fun PersonalSettings(
     SettingsRowSelectValue(
       text = Settings.GENDER,
       value = gender,
-      onSettingsRowClick = { /*TODO()*/ }
+      onSettingsRowClick = {
+        setShowDialog(true)
+        setDialogToShow(Settings.GENDER)
+      }
     )
     SettingsRowSelectValue(
       text = Settings.WEIGHT,
       value = "$weight$weightUnit",
-      onSettingsRowClick = { /*TODO()*/ }
+      onSettingsRowClick = {
+        setShowDialog(true)
+        setDialogToShow(Settings.WEIGHT)
+      }
     )
 //    SettingsRowSelectValue(
 //      text = "Units",
@@ -138,12 +233,18 @@ fun PersonalSettings(
     SettingsRowSelectValue(
       text = Settings.RECOMMENDED_WATER_INTAKE,
       value = "$recommendedWaterIntake$waterUnit",
-      onSettingsRowClick = { /*TODO()*/ }
+      onSettingsRowClick = {
+        setShowDialog(true)
+        setDialogToShow(Settings.RECOMMENDED_WATER_INTAKE)
+      }
     )
     SettingsRowSelectValue(
       text = Settings.DAILY_WATER_GOAL,
       value = "$dailyWaterGoal$waterUnit",
-      onSettingsRowClick = { /*TODO()*/ }
+      onSettingsRowClick = {
+        setShowDialog(true)
+        setDialogToShow(Settings.DAILY_WATER_GOAL)
+      }
     )
   }
   Divider()
@@ -151,14 +252,20 @@ fun PersonalSettings(
 
 @Composable
 fun MainSettings(
-  appTheme:String
+  appTheme:String,
+  setShowDialog :(Boolean) -> Unit,
+  setDialogToShow: (String) -> Unit
 ){
+  val context = LocalContext.current
   SettingsSubheading(text = "Main Settings")
   Divider()
   SettingsRowSelectValue(
     text = Settings.APP_THEME,
     value = appTheme,
-    onSettingsRowClick = { /*TODO()*/ }
+    onSettingsRowClick = {
+      setShowDialog(true)
+      setDialogToShow(Settings.APP_THEME)
+    }
   )
   SettingsRowNoValue(
     text = Settings.RESET_DATA,
@@ -170,11 +277,36 @@ fun MainSettings(
   )
   SettingsRowNoValue(
     text = Settings.SHARE,
-    onSettingsRowClick = {/*TODO()*/}
+    onSettingsRowClick = {
+      val sharingIntent = Intent(Intent.ACTION_SEND)
+      sharingIntent.type = "text/plain"
+      sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
+      sharingIntent.putExtra(Intent.EXTRA_TEXT, "Isko Edit karna hai")//TODO
+      val bundleOptions = Bundle()
+      startActivity(
+        context,
+        Intent.createChooser(sharingIntent, "Share via"),
+        bundleOptions
+      )
+    }
   )
   SettingsRowNoValue(
     text = Settings.CONTACT_DEVELOPERS,
-    onSettingsRowClick = {/*TODO()*/}
+    onSettingsRowClick = {
+      val contactIntent = Intent(Intent.ACTION_SEND)
+      contactIntent.data = Uri.parse("test@gmail.com")
+      contactIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail")
+      contactIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+      contactIntent.type = "text/plain"
+      contactIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
+      contactIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("test@gmail.com"))
+      val bundleOptions = Bundle()
+      startActivity(
+        context,
+        Intent.createChooser(contactIntent, "Send Email via"),
+        bundleOptions
+      )
+    }
   )
   Divider()
 }

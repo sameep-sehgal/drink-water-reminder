@@ -12,9 +12,15 @@ import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.ui.screens.settingstab.verticalPaddingSettings
 
 @Composable
-fun SettingsRowBooleanValue(text: String, value:Boolean, onCheckedChange: (Boolean) -> Unit) {
+fun SettingsRowBooleanValue(
+  text: String,
+  value:Boolean,
+  onCheckedChange: (Boolean) -> Unit
+) {
   Row(
-    modifier = Modifier.clickable { onCheckedChange(!value) },
+    modifier = Modifier.clickable {
+      onCheckedChange(!value)
+    },
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(

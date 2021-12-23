@@ -3,6 +3,10 @@ package com.example.myapplication.utils
 class RecommendedWaterIntake {
   companion object{
     const val NOT_SET = -1
+    const val MAX_WATER_LEVEL_IN_ML = 5000
+    const val MIN_WATER_LEVEL_IN_ML = 800
+    const val MAX_WATER_LEVEL_IN_OZ = 27
+    const val MIN_WATER_LEVEL_IN_OZ = 169
     private const val PER_HOUR_ACTIVITY_WATER_INCREASE_IN_OZ = 24
     private const val PER_HOUR_ACTIVITY_WATER_INCREASE_IN_ML = 710
 
@@ -25,33 +29,40 @@ class RecommendedWaterIntake {
         return waterIntakeInOz
 
       val waterIntakeInMl = Units.convertOzToMl(waterIntakeInOz)
-      return waterIntakeInMl + (10 - (waterIntakeInMl%10))  //Round to nearest 10s
+      return roundTo10(waterIntakeInMl)
     }
 
     fun addForActivity(
       activityMinutes:Int,
       waterUnit:String
     ):Int {
+      var res = ((activityMinutes/60f) * PER_HOUR_ACTIVITY_WATER_INCREASE_IN_ML).toInt()
       if(waterUnit == Units.OZ)
-        return ((activityMinutes/60f) * PER_HOUR_ACTIVITY_WATER_INCREASE_IN_OZ).toInt()
+        res = ((activityMinutes/60f) * PER_HOUR_ACTIVITY_WATER_INCREASE_IN_OZ).toInt()
 
-      return ((activityMinutes/60f) * PER_HOUR_ACTIVITY_WATER_INCREASE_IN_ML).toInt()
+      return roundTo10(res)
     }
 
     fun addForWeather(
       weather: String,
       baseWaterIntake:Int
     ):Int {
+      var res = 0
       if(weather == Weather.HOT)
-        return (0.15f*baseWaterIntake).toInt()
+        res = (0.15f*baseWaterIntake).toInt()
 
       if(weather == Weather.WARM)
-        return (0.075f*baseWaterIntake).toInt()
+        res = (0.075f*baseWaterIntake).toInt()
 
       if(weather == Weather.COLD)
-        return ((-0.075f)*baseWaterIntake).toInt()
+        res = ((-0.075f)*baseWaterIntake).toInt()
 
-      return 0
+      return roundTo10(res)
+    }
+
+    fun roundTo10(num:Int) :Int{
+      if(num%10 == 0) return num
+      return num + (10 - (num%10)) //Round to nearest 10s
     }
   }
 }

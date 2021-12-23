@@ -1,7 +1,10 @@
 package com.example.myapplication.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.ui.screens.collectuserdata.GetReminderPeriod
+import com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent.SetGenderSettingDialog
 
 class Settings {
   companion object {
@@ -18,7 +21,5 @@ class Settings {
     const val RATE_US = "Rate Us"
     const val SHARE = "Share"
     const val CONTACT_DEVELOPERS = "Contact Developers"
-
-    private val listOfSettingsToShowDialog = hashMapOf<String, @Composable()()->Unit>()
   }
 }

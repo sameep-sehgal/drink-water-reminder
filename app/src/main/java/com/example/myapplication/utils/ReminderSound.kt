@@ -10,11 +10,18 @@ class ReminderSound {
     const val POURING_WATER = "Pouring Water"
     const val POURING_ICEWATER = "Pouring Icewater"
     val NAME_VALUE_MAPPER = hashMapOf(
-      "Water Drop" to R.raw.water_drop,
-      "Water Bloop" to R.raw.water_bloop,
-      "River Flow" to R.raw.river_flow,
-      "Pouring Water" to R.raw.pouring_water,
-      "Pouring Icewater" to R.raw.pouring_icewater
+      WATER_DROP to R.raw.water_drop,
+      WATER_BLOOP to R.raw.water_bloop,
+      RIVER_FLOW to R.raw.river_flow,
+      POURING_WATER to R.raw.pouring_water,
+      POURING_ICEWATER to R.raw.pouring_icewater
+    )
+    val LIST_OF_SOUNDS = listOf<String>(
+      WATER_DROP,
+      WATER_BLOOP,
+      RIVER_FLOW,
+      POURING_WATER,
+      POURING_ICEWATER
     )
   }
 }

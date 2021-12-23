@@ -11,7 +11,12 @@ import com.example.myapplication.ui.components.ShowDialog
 @Composable
 fun WorkoutDialog(setShowWorkoutDialog:(Boolean)->Unit):Unit{
     val title = "Set Today's Workout Level"
-    ShowDialog(title = title, content = { WorkoutDialogContent() }, setShowDialog = setShowWorkoutDialog)
+    ShowDialog(
+        title = title,
+        content = { WorkoutDialogContent() },
+        setShowDialog = setShowWorkoutDialog,
+        onConfirmButtonClick = { /*Todo*/ }
+    )
 }
 
 @Composable

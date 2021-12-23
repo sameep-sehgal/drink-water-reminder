@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.hometab.screens
+package com.example.myapplication.ui.screens.hometab.components.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,12 @@ import com.example.myapplication.ui.components.ShowDialog
 @Composable
 fun ResetDialog(setShowResetDialog:(Boolean)->Unit):Unit{
     val title = "Reset Today's Record?"
-    ShowDialog(title = title, content = { ResetDialogContent() }, setShowDialog = setShowResetDialog)
+    ShowDialog(
+        title = title,
+        content = { ResetDialogContent() },
+        setShowDialog = setShowResetDialog,
+        onConfirmButtonClick = { /*Todo*/ }
+    )
 }
 
 @Composable

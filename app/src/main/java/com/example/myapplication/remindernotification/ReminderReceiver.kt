@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.myapplication.MainActivity
@@ -116,6 +117,10 @@ class ReminderReceiver: BroadcastReceiver() {
       reminderGap:Int,
       context: Context
     ) {
+      if(reminderGap == ReminderGap.DONT_REMIND) {
+        cancelReminder(context)
+        return
+      }
       val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
       val intent = Intent(context, ReminderReceiver::class.java)
       //pass data to broadcast receiver using intent extras
@@ -142,6 +147,7 @@ class ReminderReceiver: BroadcastReceiver() {
       val pendingIntent =
         PendingIntent.getBroadcast(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
       alarmManager.cancel(pendingIntent)
+      Log.d("TAG", "cancelReminder: Reminder Cancelled")
     }
   }
 }

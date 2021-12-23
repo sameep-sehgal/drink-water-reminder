@@ -33,6 +33,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.compose.foundation.isSystemInDarkTheme
+import com.example.myapplication.utils.AppTheme
+
 
 @ExperimentalPagerApi
 @AndroidEntryPoint //This annotation gives access to Hilt dependencies in the composables
@@ -53,12 +56,21 @@ class MainActivity : ComponentActivity() {
         setContent{
           val setGoal = homeTabViewModel.waterRecord.collectAsState().value.goal
           val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
+          val appTheme = preferenceDataStoreViewModel.appTheme.collectAsState(initial = AppTheme.DEFAULT)
+          var darkTheme:Boolean = false
+          when(appTheme.value) {
+            AppTheme.DARK -> darkTheme = true
+            AppTheme.LIGHT -> darkTheme = false
+            AppTheme.DEFAULT -> darkTheme = isSystemInDarkTheme()
+          }
           if(setGoal == RecommendedWaterIntake.NOT_SET){
             homeTabViewModel.updateDailyWaterRecord(
               DailyWaterRecord(goal = goal.value)
             )
           }
-          ApplicationTheme {
+          ApplicationTheme(
+            darkTheme = darkTheme
+          ) {
             Surface {
               val pagerState = rememberPagerState()
               Column {

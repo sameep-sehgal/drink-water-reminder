@@ -7,7 +7,8 @@ import androidx.compose.runtime.Composable
 fun ShowDialog(
   title:String,
   content:@Composable()()->Unit,
-  setShowDialog:(Boolean)->Unit
+  setShowDialog:(Boolean)->Unit,
+  onConfirmButtonClick:() -> Unit
 ) {
 
   AlertDialog(
@@ -18,8 +19,8 @@ fun ShowDialog(
     confirmButton = {
       Button(
         onClick = {
-          // Change the state to close the dialog
-          onDialogDismiss(setShowDialog)
+          onConfirmButtonClick()
+          setShowDialog(false)
         },
       ) {
         Text("Confirm")
