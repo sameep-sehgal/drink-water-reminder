@@ -19,101 +19,97 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeTabViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,//For Hilt
-    private val waterDataRepository: WaterDataRepository,
-    private val preferenceDataStore: PreferenceDataStore
+  private val savedStateHandle: SavedStateHandle,//For Hilt
+  private val waterDataRepository: WaterDataRepository,
+  private val preferenceDataStore: PreferenceDataStore
 ) :ViewModel(){
-    val TAG = HomeTabViewModel::class.simpleName
-    //Create all the state variables and map repository methods
-    //ViewModel methods will be used in the UI
+  val TAG = HomeTabViewModel::class.simpleName
+  //Create all the state variables and map repository methods
+  //ViewModel methods will be used in the UI
 
-    //Initialize state required for app to run in the constructor
-    init {
+  //Initialize state required for app to run in the constructor
+  init {
 //        getSavedKey()
-        getDailyWaterRecord()
-        getTodaysDrinkLogs()
-    }
+    getDailyWaterRecord()
+    getTodaysDrinkLogs()
+  }
 
-    private val _drinkLogs = MutableStateFlow<List<DrinkLogs>>(emptyList())
-    val drinkLogs : StateFlow<List<DrinkLogs>> =  _drinkLogs.asStateFlow()
+  private val _drinkLogs = MutableStateFlow<List<DrinkLogs>>(emptyList())
+  val drinkLogs : StateFlow<List<DrinkLogs>> =  _drinkLogs.asStateFlow()
 
-    private fun getTodaysDrinkLogs(){
-        viewModelScope.launch(Dispatchers.IO) {
-            waterDataRepository.getDrinkLogs().distinctUntilChanged()
-                .catch { e->
-                    Log.e("getTodaysDrinkLogs", "error before collecting from Flow", )
-                }
-                .collect {
-                    if(it.isNullOrEmpty()) Log.d("getTodaysDrinkLogs",
-                        "Today's Drink Logs List is empty")
-                    else {
-                        _drinkLogs.value = it.sortedByDescending { it.time }
-                    }
-                }
+  private fun getTodaysDrinkLogs(){
+    viewModelScope.launch(Dispatchers.IO) {
+      waterDataRepository.getDrinkLogs().distinctUntilChanged()
+        .catch { e->
+          Log.e("getTodaysDrinkLogs", "error before collecting from Flow", )
+        }
+        .collect {
+          _drinkLogs.value = it.sortedByDescending { it.time }
         }
     }
+  }
 
-    private val _savedKey = MutableStateFlow<Int>(0)
-    val savedKey : StateFlow<Int> = _savedKey.asStateFlow()
+  private val _savedKey = MutableStateFlow<Int>(0)
+  val savedKey : StateFlow<Int> = _savedKey.asStateFlow()
 
-    fun getSavedKey(){
-        viewModelScope.launch (Dispatchers.IO){
-            preferenceDataStore.recommendedWaterIntake().collect {
-                _savedKey.value = it
-            }
-        }
+  fun getSavedKey(){
+    viewModelScope.launch (Dispatchers.IO){
+      preferenceDataStore.recommendedWaterIntake().collect {
+        _savedKey.value = it
+      }
     }
+  }
 
-    fun setSavedKey(key: Int) {
-        viewModelScope.launch {
-            preferenceDataStore.setRecommendedWaterIntake(key)
-        }
+  fun setSavedKey(key: Int) {
+    viewModelScope.launch {
+      preferenceDataStore.setRecommendedWaterIntake(key)
     }
+  }
 
-    private val _waterRecord = MutableStateFlow<DailyWaterRecord>(DailyWaterRecord(goal = 0, currWaterAmount = 0))
-    val waterRecord : StateFlow<DailyWaterRecord> = _waterRecord.asStateFlow()
-    fun getDailyWaterRecord(date:String = DateString.getTodaysDate()){
-        viewModelScope.launch (Dispatchers.IO){
-            waterDataRepository.getDailyWaterRecord(date).collect {
-                Log.d(TAG, "getDailyWaterRecord $it")
-                if(it === null) {
-                    Log.d(TAG, "getDailyWaterRecord $it")
-                    insertDailyWaterRecord(DailyWaterRecord(goal = RecommendedWaterIntake.NOT_SET))
-                    getDailyWaterRecord()
-                }else {
-                    _waterRecord.value = it
-                }
-            }
+  private val _waterRecord = MutableStateFlow<DailyWaterRecord>(DailyWaterRecord(goal = 0, currWaterAmount = 0))
+  val waterRecord : StateFlow<DailyWaterRecord> = _waterRecord.asStateFlow()
+  fun getDailyWaterRecord(date:String = DateString.getTodaysDate()){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.getDailyWaterRecord(date).collect {
+        Log.d(TAG, "getDailyWaterRecord $it")
+        if(it === null) {
+          Log.d(TAG, "getDailyWaterRecord $it")
+          insertDailyWaterRecord(DailyWaterRecord(goal = RecommendedWaterIntake.NOT_SET))
+          getDailyWaterRecord()
+        }else {
+          _waterRecord.value = it
         }
+      }
     }
+  }
 
-    fun insertDailyWaterRecord(waterRecord: DailyWaterRecord){
-        viewModelScope.launch (Dispatchers.IO){
-            waterDataRepository.insertDailyWaterRecord(waterRecord)
-        }
+  fun insertDailyWaterRecord(waterRecord: DailyWaterRecord){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.insertDailyWaterRecord(waterRecord)
     }
+  }
 
-    fun insertDrinkLog(drinkLog: DrinkLogs){
-        viewModelScope.launch(Dispatchers.IO) {
-            waterDataRepository.insertDrinkLog(drinkLog = drinkLog)
-        }
+  fun insertDrinkLog(drinkLog: DrinkLogs){
+    viewModelScope.launch(Dispatchers.IO) {
+      waterDataRepository.insertDrinkLog(drinkLog = drinkLog)
     }
+  }
 
-    fun updateDailyWaterRecord(dailyWaterRecord: DailyWaterRecord){
-        viewModelScope.launch(Dispatchers.IO) {
-            waterDataRepository.updateDailyWaterRecord(dailyWaterRecord)
-        }
+  fun updateDailyWaterRecord(dailyWaterRecord: DailyWaterRecord){
+    viewModelScope.launch(Dispatchers.IO) {
+      waterDataRepository.updateDailyWaterRecord(dailyWaterRecord)
     }
+  }
 
-    fun updateDrinkLog(drinkLog: DrinkLogs){
-        viewModelScope.launch(Dispatchers.IO) {
-            waterDataRepository.updateDrinkLog(drinkLog)
-        }
+  fun updateDrinkLog(drinkLog: DrinkLogs){
+    viewModelScope.launch(Dispatchers.IO) {
+      waterDataRepository.updateDrinkLog(drinkLog)
     }
+  }
 
-    fun deleteDrinkLog(drinkLog: DrinkLogs){
-        viewModelScope.launch (Dispatchers.IO){
-            waterDataRepository.deleteDrinkLog(drinkLog = drinkLog)
-        }
+  fun deleteDrinkLog(drinkLog: DrinkLogs){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.deleteDrinkLog(drinkLog = drinkLog)
     }
+  }
 }
