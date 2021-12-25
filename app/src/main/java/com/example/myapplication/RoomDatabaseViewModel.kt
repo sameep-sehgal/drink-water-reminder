@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.util.Log
+import androidx.compose.animation.core.updateTransition
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -70,7 +71,10 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
-  fun insertDrinkLog(drinkLog: DrinkLogs){
+  fun insertDrinkLog(
+    drinkLog: DrinkLogs,
+    dailyWaterRecord: DailyWaterRecord
+  ){
     viewModelScope.launch(Dispatchers.IO) {
       waterDataRepository.insertDrinkLog(drinkLog = drinkLog)
     }
@@ -88,7 +92,10 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
-  fun deleteDrinkLog(drinkLog: DrinkLogs){
+  fun deleteDrinkLog(
+    drinkLog: DrinkLogs,
+    dailyWaterRecord: DailyWaterRecord
+  ){
     viewModelScope.launch (Dispatchers.IO){
       waterDataRepository.deleteDrinkLog(drinkLog = drinkLog)
     }

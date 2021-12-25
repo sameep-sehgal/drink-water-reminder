@@ -119,7 +119,12 @@ fun HomeTab(
         WeatherDialog(setShowWeatherDialog = setShowWeatherDialog)
       }
       if(showResetDialog){
-        ResetDialog(setShowResetDialog = setShowResetDialog)
+        ResetDialog(
+          setShowResetDialog = setShowResetDialog,
+          roomDatabaseViewModel = roomDatabaseViewModel,
+          drinkLogs = drinkLogsList.value,
+          dailyWaterRecord = todaysWaterRecord.value
+        )
       }
       if(showFruitDialog){
         FruitDialog(setShowFruitDialog = setShowFruitDialog)
