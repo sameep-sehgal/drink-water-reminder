@@ -101,7 +101,7 @@ fun DrinkLogsList(
               }
               IconButton(
                 onClick = {
-                  roomDatabaseViewModel.deleteDrinkLog(it,dailyWaterRecord)
+                  roomDatabaseViewModel.deleteDrinkLog(it)
                   roomDatabaseViewModel.updateDailyWaterRecord(
                     DailyWaterRecord(
                       goal = dailyWaterRecord.goal,

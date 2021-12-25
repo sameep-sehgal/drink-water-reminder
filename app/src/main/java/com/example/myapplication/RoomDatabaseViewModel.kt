@@ -72,8 +72,7 @@ class RoomDatabaseViewModel @Inject constructor(
   }
 
   fun insertDrinkLog(
-    drinkLog: DrinkLogs,
-    dailyWaterRecord: DailyWaterRecord
+    drinkLog: DrinkLogs
   ){
     viewModelScope.launch(Dispatchers.IO) {
       waterDataRepository.insertDrinkLog(drinkLog = drinkLog)
@@ -93,8 +92,7 @@ class RoomDatabaseViewModel @Inject constructor(
   }
 
   fun deleteDrinkLog(
-    drinkLog: DrinkLogs,
-    dailyWaterRecord: DailyWaterRecord
+    drinkLog: DrinkLogs
   ){
     viewModelScope.launch (Dispatchers.IO){
       waterDataRepository.deleteDrinkLog(drinkLog = drinkLog)

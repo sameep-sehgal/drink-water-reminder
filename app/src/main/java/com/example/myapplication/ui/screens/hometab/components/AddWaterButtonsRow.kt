@@ -38,7 +38,6 @@ fun AddWaterButtonsRow(
         onClick = {
           roomDatabaseViewModel.insertDrinkLog(
             DrinkLogs(amount = it[1] as Int, icon = it[0] as Int),
-            dailyWaterRecord
           )
           roomDatabaseViewModel.updateDailyWaterRecord(
             DailyWaterRecord(

@@ -25,13 +25,7 @@ fun ResetDialog(
     setShowDialog = setShowResetDialog,
     onConfirmButtonClick = {
       for (log in drinkLogs){
-        roomDatabaseViewModel.deleteDrinkLog(
-          drinkLog = log,
-          dailyWaterRecord = DailyWaterRecord(
-            goal = dailyWaterRecord.goal,
-            currWaterAmount = 0
-          )
-        )
+        roomDatabaseViewModel.deleteDrinkLog(drinkLog = log)
       }
       roomDatabaseViewModel.updateDailyWaterRecord(
         DailyWaterRecord(
