@@ -5,8 +5,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -14,19 +17,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.myapplication.R
 
 @Composable
-fun AnimatedWaterGlass(){
-  var percentage by remember{ mutableStateOf(0.4f) }
+fun AnimatedWaterGlass(
+  currWaterAmount:Int,
+  goal:Int
+){
   val currentPercentage = remember { Animatable(0f) }
-  LaunchedEffect(percentage) {
+  LaunchedEffect(currWaterAmount) {
     //Run when the key(percentage) changes
     //Percentage must be 'remembered' to detect change here
-    currentPercentage.animateTo(
-      percentage,
-      animationSpec = tween(durationMillis = 1000)
-    )
+    if(currWaterAmount.toFloat()/goal < 1f){
+      currentPercentage.animateTo(
+        currWaterAmount.toFloat()/goal,
+        animationSpec = tween(durationMillis = 1000)
+      )
+    }else{
+      currentPercentage.animateTo(
+        1f,
+        animationSpec = tween(durationMillis = 1000)
+      )
+    }
   }
   var cc by remember { mutableStateOf(IntSize.Zero) }
 
@@ -44,11 +59,7 @@ fun AnimatedWaterGlass(){
           endY = cc.height * (1 - currentPercentage.value + 0.01f)
         )
       )
-      .clickable(enabled = true,
-        onClick = {
-          if (percentage > 0.91f) percentage = 0.0f
-          percentage += 0.1f
-        }))
+  )
 }
 
 

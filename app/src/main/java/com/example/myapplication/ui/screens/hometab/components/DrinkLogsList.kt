@@ -14,19 +14,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.data.models.DrinkLogs
-import com.example.myapplication.ui.screens.hometab.HomeTabViewModel
+import com.example.myapplication.RoomDatabaseViewModel
+import com.example.myapplication.data.models.DailyWaterRecord
+import com.example.myapplication.ui.screens.hometab.components.dialogs.EditDrinkLogDialog
 import com.example.myapplication.ui.theme.Typography
+import com.example.myapplication.utils.Container
 import com.example.myapplication.utils.TimeString
 
 @ExperimentalFoundationApi
 @Composable
 fun DrinkLogsList(
   drinkLogsList: List<DrinkLogs>,
-  homeTabViewModel: HomeTabViewModel
+  roomDatabaseViewModel: RoomDatabaseViewModel,
+  waterUnit:String,
+  dailyWaterRecord: DailyWaterRecord
 ){
+  val (showEditDrinkLogDialog, setShowEditDrinkLogDialog) =  remember { mutableStateOf(false) }
+  val selectedDrinkLog =  remember { mutableStateOf(DrinkLogs(amount = 0, icon = 0)) }
+
   Column(
     modifier = Modifier.fillMaxWidth(),
   ){
+    if(showEditDrinkLogDialog){
+      EditDrinkLogDialog(
+        drinkLog = selectedDrinkLog.value,
+        setShowEditDrinkLogDialog = setShowEditDrinkLogDialog
+      )
+    }
     drinkLogsList.forEach {
       Box(
         modifier = Modifier
@@ -60,14 +74,25 @@ fun DrinkLogsList(
               horizontalArrangement = Arrangement.Center,
               verticalAlignment = Alignment.CenterVertically
             ){
-              Icon(painter = painterResource(it.icon), contentDescription = "Selected glass")
-              Text(text = it.amount.toString(), style = Typography.subtitle1)
+              Container.IMAGE_MAPPER[it.icon]?.let { it1 -> painterResource(it1) }
+                ?.let { it2 ->
+                  Icon(
+                    painter = it2,
+                    contentDescription = "Selected glass",
+                    modifier = Modifier
+                      .size(20.dp)
+                      .padding(2.dp, 0.dp)
+                  ) }
+              Text(text = "${it.amount}$waterUnit", style = Typography.subtitle1)
             }
             Row(
               verticalAlignment = Alignment.CenterVertically
             ){
               IconButton(
-                onClick = { /*TODO*/ }
+                onClick = {
+                  selectedDrinkLog.value = it
+                  setShowEditDrinkLogDialog(true)
+                }
               ) {
                 Icon(
                   painter = painterResource(R.drawable.edit_icon),
@@ -76,7 +101,13 @@ fun DrinkLogsList(
               }
               IconButton(
                 onClick = {
-                  homeTabViewModel.deleteDrinkLog(it)
+                  roomDatabaseViewModel.deleteDrinkLog(it)
+                  roomDatabaseViewModel.updateDailyWaterRecord(
+                    DailyWaterRecord(
+                      goal = dailyWaterRecord.goal,
+                      currWaterAmount = dailyWaterRecord.currWaterAmount - it.amount
+                    )
+                  )
                 }
               ) {
                 Icon(

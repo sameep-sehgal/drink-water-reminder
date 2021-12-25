@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.hometab
+package com.example.myapplication
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -12,24 +12,21 @@ import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.RecommendedWaterIntake
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeTabViewModel @Inject constructor(
+class RoomDatabaseViewModel @Inject constructor(
   private val savedStateHandle: SavedStateHandle,//For Hilt
-  private val waterDataRepository: WaterDataRepository,
-  private val preferenceDataStore: PreferenceDataStore
+  private val waterDataRepository: WaterDataRepository
 ) :ViewModel(){
-  val TAG = HomeTabViewModel::class.simpleName
+  val TAG = RoomDatabaseViewModel::class.simpleName
   //Create all the state variables and map repository methods
   //ViewModel methods will be used in the UI
 
   //Initialize state required for app to run in the constructor
   init {
-//        getSavedKey()
     getDailyWaterRecord()
     getTodaysDrinkLogs()
   }
@@ -49,22 +46,6 @@ class HomeTabViewModel @Inject constructor(
     }
   }
 
-  private val _savedKey = MutableStateFlow<Int>(0)
-  val savedKey : StateFlow<Int> = _savedKey.asStateFlow()
-
-  fun getSavedKey(){
-    viewModelScope.launch (Dispatchers.IO){
-      preferenceDataStore.recommendedWaterIntake().collect {
-        _savedKey.value = it
-      }
-    }
-  }
-
-  fun setSavedKey(key: Int) {
-    viewModelScope.launch {
-      preferenceDataStore.setRecommendedWaterIntake(key)
-    }
-  }
 
   private val _waterRecord = MutableStateFlow<DailyWaterRecord>(DailyWaterRecord(goal = 0, currWaterAmount = 0))
   val waterRecord : StateFlow<DailyWaterRecord> = _waterRecord.asStateFlow()

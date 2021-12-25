@@ -25,7 +25,6 @@ import com.example.myapplication.ui.components.DisplayTabLayout
 import com.example.myapplication.ui.components.Tabs
 import com.example.myapplication.ui.screens.collectuserdata.CollectUserData
 import com.example.myapplication.ui.screens.hometab.HomeTab
-import com.example.myapplication.ui.screens.hometab.HomeTabViewModel
 import com.example.myapplication.ui.screens.settingstab.SettingsTab
 import com.example.myapplication.ui.theme.ApplicationTheme
 import com.example.myapplication.utils.RecommendedWaterIntake
@@ -42,7 +41,7 @@ import com.example.myapplication.utils.AppTheme
 class MainActivity : ComponentActivity() {
   private val TAG = MainActivity::class.java.simpleName
   private val preferenceDataStoreViewModel: PreferenceDataStoreViewModel by viewModels()
-  private val homeTabViewModel: HomeTabViewModel by viewModels()
+  private val roomDatabaseViewModel: RoomDatabaseViewModel by viewModels()
   private var notificationManager: NotificationManager? = null
 
   @ExperimentalFoundationApi
@@ -54,17 +53,17 @@ class MainActivity : ComponentActivity() {
     preferenceDataStoreViewModel.isUserInfoCollected.observe(this){
       if(it == true){
         setContent{
-          val setGoal = homeTabViewModel.waterRecord.collectAsState().value.goal
+          val setGoal = roomDatabaseViewModel.waterRecord.collectAsState().value.goal
           val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
           val appTheme = preferenceDataStoreViewModel.appTheme.collectAsState(initial = AppTheme.DEFAULT)
-          var darkTheme:Boolean = false
+          var darkTheme = false
           when(appTheme.value) {
             AppTheme.DARK -> darkTheme = true
             AppTheme.LIGHT -> darkTheme = false
             AppTheme.DEFAULT -> darkTheme = isSystemInDarkTheme()
           }
           if(setGoal == RecommendedWaterIntake.NOT_SET){
-            homeTabViewModel.updateDailyWaterRecord(
+            roomDatabaseViewModel.updateDailyWaterRecord(
               DailyWaterRecord(goal = goal.value)
             )
           }
@@ -84,7 +83,10 @@ class MainActivity : ComponentActivity() {
                   Log.d(TAG, "onCreateTabLayout: $index  ${pagerState.currentPage}")
                   Column(modifier = Modifier.fillMaxSize()) {
                     when(index) {
-                      0 -> HomeTab()
+                      0 -> HomeTab(
+                        preferenceDataStoreViewModel,
+                        roomDatabaseViewModel
+                      )
                       1 -> HistoryTab()
                       2 -> SettingsTab(preferenceDataStoreViewModel)
                     }

@@ -4,10 +4,17 @@ import com.example.myapplication.R
 
 class Container {
   companion object {
-    const val BOTTLE = R.drawable.soda_bottle_5
-    const val MUG = R.drawable.mug_3
-    const val GLASS = R.drawable.glass_2
-    const val CUP = R.drawable.cup_1
+    const val BOTTLE = 0
+    const val MUG = 1
+    const val GLASS = 2
+    const val CUP = 3
+
     //TODO("Add more containers here")
+    val IMAGE_MAPPER = hashMapOf(
+      BOTTLE to R.drawable.bottle_4,
+      MUG to R.drawable.mug_3,
+      GLASS to R.drawable.glass_2,
+      CUP to R.drawable.cup_1
+    )
   }
 }

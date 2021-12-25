@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.screens.hometab.components.dialogs
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,7 +15,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.data.models.ReminderTimings
-import com.example.myapplication.ui.components.TimePicker
 import com.example.myapplication.ui.theme.Typography
 
 @Composable
@@ -157,7 +155,7 @@ fun BottomBar(
   ) {
     Icon(
       modifier = Modifier.padding(8.dp,16.dp),
-      painter = painterResource(id = R.drawable.add_icon),
+      painter = painterResource(id = R.drawable.add_button),
       contentDescription = "Add new Reminder"
     )
   }

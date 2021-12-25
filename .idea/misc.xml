@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/add_button.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/clock_icon.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/cup_1.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/female_icon.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/glass_2.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/history_icon_clock_white.xml" value="0.1" />
@@ -11,7 +13,9 @@
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/home_icon_glass_white.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_water_glass_with_bg_2.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/male_icon.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/mug_3.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/notification_bell.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/plus_icon.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/reset_button.xml" value="0.1259259259259259" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/settings_icon_white.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/soda_bottle_5.xml" value="0.1" />
