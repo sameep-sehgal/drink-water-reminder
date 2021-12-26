@@ -38,7 +38,10 @@ fun DrinkLogsList(
     if(showEditDrinkLogDialog){
       EditDrinkLogDialog(
         drinkLog = selectedDrinkLog.value,
-        setShowEditDrinkLogDialog = setShowEditDrinkLogDialog
+        setShowEditDrinkLogDialog = setShowEditDrinkLogDialog,
+        roomDatabaseViewModel = roomDatabaseViewModel,
+        waterUnit = waterUnit,
+        dailyWaterRecord = dailyWaterRecord
       )
     }
     drinkLogsList.forEach {

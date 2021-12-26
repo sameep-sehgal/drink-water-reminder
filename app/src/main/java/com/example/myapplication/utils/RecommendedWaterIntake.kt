@@ -5,10 +5,44 @@ class RecommendedWaterIntake {
     const val NOT_SET = -1
     const val MAX_WATER_LEVEL_IN_ML = 5000
     const val MIN_WATER_LEVEL_IN_ML = 800
-    const val MAX_WATER_LEVEL_IN_OZ = 27
-    const val MIN_WATER_LEVEL_IN_OZ = 169
+    const val MIN_WATER_LEVEL_IN_ML_FOR_LOG = 50
+    const val MAX_WATER_LEVEL_IN_ML_FOR_LOG = 1000
+    const val MIN_WATER_LEVEL_IN_OZ_FOR_LOG = 1
+    const val MAX_WATER_LEVEL_IN_OZ_FOR_LOG = 35
+    const val MAX_WATER_LEVEL_IN_OZ = 169
+    const val MIN_WATER_LEVEL_IN_OZ = 27
     private const val PER_HOUR_ACTIVITY_WATER_INCREASE_IN_OZ = 24
     private const val PER_HOUR_ACTIVITY_WATER_INCREASE_IN_ML = 710
+
+    val VALUES_FOR_WATER_GOAL_NUMBER_PICKER = { waterUnit:String ->
+      val res: MutableList<String> = mutableListOf()
+      if(waterUnit == Units.ML){
+        for(i in MIN_WATER_LEVEL_IN_ML/10 .. MAX_WATER_LEVEL_IN_ML/10){
+          res.add((i*10).toString())
+        }
+      }else{
+        for(i in MIN_WATER_LEVEL_IN_OZ .. MAX_WATER_LEVEL_IN_OZ){
+          res.add(i.toString())
+        }
+      }
+
+      res
+    }
+
+    val VALUES_FOR_WATER_LOG_NUMBER_PICKER = { waterUnit:String ->
+      val res: MutableList<String> = mutableListOf()
+      if(waterUnit == Units.ML){
+        for(i in MIN_WATER_LEVEL_IN_ML_FOR_LOG/10..MAX_WATER_LEVEL_IN_ML_FOR_LOG/10){
+          res.add((i*10).toString())
+        }
+      }else{
+        for(i in MIN_WATER_LEVEL_IN_OZ_FOR_LOG..MAX_WATER_LEVEL_IN_OZ_FOR_LOG){
+          res.add(i.toString())
+        }
+      }
+
+      res
+    }
 
     fun calculateBaseWaterIntake(
       gender:String,
