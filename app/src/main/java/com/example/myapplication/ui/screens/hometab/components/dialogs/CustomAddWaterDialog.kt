@@ -3,26 +3,79 @@ package com.example.myapplication.ui.screens.hometab.components.dialogs
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import com.example.myapplication.RoomDatabaseViewModel
+import com.example.myapplication.data.models.DailyWaterRecord
+import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.components.ShowDialog
+import com.example.myapplication.utils.RecommendedWaterIntake
+import com.example.myapplication.utils.TimeString
+import java.util.*
 
 @Composable
-fun CustomAddWaterDialog(setShowCustomAddWaterDialog:(Boolean)->Unit){
-  val title = "Add Water"
+fun CustomAddWaterDialog(
+  waterUnit: String,
+  setShowCustomAddWaterDialog:(Boolean)->Unit,
+  roomDatabaseViewModel: RoomDatabaseViewModel,
+  dailyWaterRecord: DailyWaterRecord
+){
+  val title = "Add Water Intake"
+  var time by remember { mutableStateOf(TimeString.longToString(Calendar.getInstance().timeInMillis)) }
+  var amount by remember { mutableStateOf(RecommendedWaterIntake.defaultCustomAddWaterIntake(waterUnit)) }
+  var icon by remember { mutableStateOf(RecommendedWaterIntake.DEFAULT_CUSTOM_ADD_WATER_CONTAINTER) }
+  val setTime = {value:String -> time = value}
+  val setAmount = {value:Int -> amount = value}
+  val setIcon = {value:Int -> icon = value}
+
   ShowDialog(
     title = title,
-    content = { CustomAddWaterDialogContent() },
+    content = { CustomAddWaterDialogContent(
+      time = time,
+      amount = amount,
+      icon = icon,
+      setTime = setTime,
+      setAmount = setAmount,
+      setIcon = setIcon,
+      waterUnit = waterUnit
+    ) },
     setShowDialog = setShowCustomAddWaterDialog,
-    onConfirmButtonClick = { /*Todo*/ }
+    onConfirmButtonClick = {
+      val calendar = Calendar.getInstance()
+      calendar.set(Calendar.HOUR_OF_DAY, time.split(":")[0].toInt())
+      calendar.set(Calendar.MINUTE, time.split(":")[1].toInt())
+      roomDatabaseViewModel.insertDrinkLog(
+        DrinkLogs(
+          amount = amount,
+          icon = icon,
+          time = calendar.timeInMillis
+        )
+      )
+      dailyWaterRecord.currWaterAmount += amount
+      roomDatabaseViewModel.updateDailyWaterRecord(dailyWaterRecord)
+    }
   )
 }
 
 @Composable
-fun CustomAddWaterDialogContent(){
+fun CustomAddWaterDialogContent(
+  time:String,
+  amount:Int,
+  icon:Int,
+  setTime:(String) -> Unit,
+  setAmount:(Int) -> Unit,
+  setIcon:(Int) -> Unit,
+  waterUnit:String
+){
   Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
-    Text(text = "Add Water")
-    Text(text = "You will be able to add water here")
+    EditDrinkLogDialogContent(
+      time = time,
+      amount = amount,
+      icon = icon,
+      setTime = setTime,
+      setAmount = setAmount,
+      setIcon = setIcon,
+      waterUnit = waterUnit
+    )
   }
 }

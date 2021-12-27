@@ -25,7 +25,7 @@ fun AddWaterButtonsRow(
 
 ) {
   val buttons = listOf(
-    listOf(Container.CUP, 200, "Water"),
+    listOf(Container.GLASS, 200, "Water"),
     listOf(Container.MUG, 300, "Water"),
     listOf(Container.BOTTLE, 500, "Water"),
   )

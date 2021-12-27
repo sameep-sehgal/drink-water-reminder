@@ -11,6 +11,9 @@ class RecommendedWaterIntake {
     const val MAX_WATER_LEVEL_IN_OZ_FOR_LOG = 35
     const val MAX_WATER_LEVEL_IN_OZ = 169
     const val MIN_WATER_LEVEL_IN_OZ = 27
+    const val DEFAULT_CUSTOM_ADD_WATER_CONTAINTER = Container.MUG
+    private const val DEFAULT_CUSTOM_ADD_WATER_VALUE_IN_ML = 300
+    private const val DEFAULT_CUSTOM_ADD_WATER_VALUE_IN_OZ = 10
     private const val PER_HOUR_ACTIVITY_WATER_INCREASE_IN_OZ = 24
     private const val PER_HOUR_ACTIVITY_WATER_INCREASE_IN_ML = 710
 
@@ -42,6 +45,13 @@ class RecommendedWaterIntake {
       }
 
       res
+    }
+
+    fun defaultCustomAddWaterIntake(waterUnit: String): Int{
+      if(waterUnit == Units.ML){
+        return DEFAULT_CUSTOM_ADD_WATER_VALUE_IN_ML
+      }
+      return DEFAULT_CUSTOM_ADD_WATER_VALUE_IN_OZ
     }
 
     fun calculateBaseWaterIntake(

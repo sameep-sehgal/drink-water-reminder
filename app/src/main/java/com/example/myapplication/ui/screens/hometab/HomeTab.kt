@@ -130,7 +130,12 @@ fun HomeTab(
         FruitDialog(setShowFruitDialog = setShowFruitDialog)
       }
       if(showCustomAddWaterDialog){
-        CustomAddWaterDialog(setShowCustomAddWaterDialog = setShowCustomAddWaterDialog)
+        CustomAddWaterDialog(
+          waterUnit = waterUnit.value,
+          setShowCustomAddWaterDialog = setShowCustomAddWaterDialog,
+          dailyWaterRecord = todaysWaterRecord.value,
+          roomDatabaseViewModel = roomDatabaseViewModel
+        )
       }
     }
   }

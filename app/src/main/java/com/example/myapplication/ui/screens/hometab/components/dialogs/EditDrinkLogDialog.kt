@@ -2,18 +2,15 @@ package com.example.myapplication.ui.screens.hometab.components.dialogs
 
 import android.app.TimePickerDialog
 import android.content.DialogInterface
-import android.graphics.drawable.GradientDrawable
 import android.widget.NumberPicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -24,9 +21,11 @@ import com.example.myapplication.utils.TimeString
 import com.example.myapplication.R
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.ui.components.DropdownSelect
+import com.example.myapplication.utils.Container
 import com.example.myapplication.utils.RecommendedWaterIntake
 import com.example.myapplication.utils.Units
 import java.util.*
+import kotlin.collections.HashMap
 
 @Composable
 fun EditDrinkLogDialog(
@@ -49,11 +48,13 @@ fun EditDrinkLogDialog(
   ShowDialog(
     title = title,
     content = { EditDrinkLogDialogContent(
-      time,
-      amount,
-      setTime,
-      setAmount,
-      waterUnit
+      time = time,
+      amount = amount,
+      icon = icon,
+      setTime = setTime,
+      setAmount = setAmount,
+      setIcon = setIcon,
+      waterUnit = waterUnit
     )},
     setShowDialog = setShowEditDrinkLogDialog,
     onConfirmButtonClick = {
@@ -78,8 +79,10 @@ fun EditDrinkLogDialog(
 fun EditDrinkLogDialogContent(
   time:String,
   amount:Int,
+  icon:Int,
   setTime:(String) -> Unit,
   setAmount:(Int) -> Unit,
+  setIcon:(Int) -> Unit,
   waterUnit:String
 ){
   val (showTimePicker, setShowTimePicker) =  remember { mutableStateOf(false) }
@@ -102,8 +105,10 @@ fun EditDrinkLogDialogContent(
     }
   }
 
-  var containerSelectorExpanded by remember { mutableStateOf(false) }
-  var selectedOptionText by remember { mutableStateOf("options[0]") }
+  val setSelectedOptionDropdown = { option:HashMap<String,Any?> ->
+    setIcon(option["value"] as Int)
+  }
+
 
   Column(
     modifier = Modifier.background(MaterialTheme.colors.background),
@@ -155,12 +160,18 @@ fun EditDrinkLogDialogContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
-        Icon(
-          painter = painterResource(id = R.drawable.cup_1),
-          contentDescription = "container",
-          modifier = Modifier.size(64.dp).padding(0.dp,8.dp)
+        Container.IMAGE_MAPPER[icon]?.let { painterResource(id = it) }?.let {
+          Icon(
+            painter = it,
+            contentDescription = "container",
+            modifier = Modifier.size(64.dp).padding(0.dp,8.dp)
+          )
+        }
+        DropdownSelect(
+          options = Container.OPTIONS_FOR_DROPDOWN,
+          selectedOption = Container.getSelectedOptionForDropdown(icon),
+          setSelectedOption = setSelectedOptionDropdown
         )
-        DropdownSelect()
       }
       Row(
         verticalAlignment = Alignment.CenterVertically,

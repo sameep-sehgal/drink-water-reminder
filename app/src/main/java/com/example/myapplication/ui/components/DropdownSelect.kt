@@ -3,10 +3,8 @@ package com.example.myapplication.ui.components
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
@@ -20,11 +18,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 
 @Composable
-fun DropdownSelect() {
+fun DropdownSelect(
+  options:List<HashMap<String,Any?>>,
+  selectedOption: HashMap<String,Any?>,//Must be passes down as state
+  setSelectedOption:(HashMap<String,Any?>) -> Unit
+) {
+  //options must be of type {"text":"Option 1", "value":5}
   var expanded by remember { mutableStateOf(false) }
-  val suggestions = listOf("Item1","Item2","Item3")
-  var selectedText by remember { mutableStateOf("Glass") }
-
   var textfieldSize by remember { mutableStateOf(Size.Zero)}
 
   val icon = if (expanded)
@@ -33,7 +33,7 @@ fun DropdownSelect() {
     Icons.Filled.KeyboardArrowDown
 
 
-  Column() {
+  Column {
     Row(
       modifier = Modifier.border(
         width = 1.dp,
@@ -46,7 +46,7 @@ fun DropdownSelect() {
       verticalAlignment = Alignment.CenterVertically
     ) {
       Text(
-        text = selectedText,
+        text = selectedOption["text"].toString(),
         fontSize = 16.sp,
         modifier = Modifier.padding(4.dp),
         color = if(expanded) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
@@ -57,34 +57,18 @@ fun DropdownSelect() {
         tint = if(expanded) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
       )
     }
-//    OutlinedTextField(
-//      value = selectedText,
-//      onValueChange = { selectedText = it },
-//      modifier = Modifier
-//        .fillMaxWidth()
-//        .onGloballyPositioned { coordinates ->
-//          //This value is used to assign to the DropDown the same width
-//          textfieldSize = coordinates.size.toSize()
-//        },
-//      label = {Text("Label")},
-//      trailingIcon = {
-//        Icon(icon,"contentDescription",
-//          Modifier.clickable { expanded = !expanded })
-//      },
-//      keyboardOptions = KeyboardOptions(keyboardType = KeyBoard)
-//    )
     DropdownMenu(
       expanded = expanded,
       onDismissRequest = { expanded = false },
       modifier = Modifier
         .width(with(LocalDensity.current){textfieldSize.width.toDp()})
     ) {
-      suggestions.forEach { label ->
+      options.forEach { option ->
         DropdownMenuItem(onClick = {
-          selectedText = label
+          setSelectedOption(option)
           expanded = false
         }) {
-          Text(text = label)
+          Text(text = option["text"].toString())
         }
       }
     }
