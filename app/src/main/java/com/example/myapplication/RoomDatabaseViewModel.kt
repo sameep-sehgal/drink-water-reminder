@@ -65,6 +65,16 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
+//  private val _firstWaterRecord = MutableStateFlow<DailyWaterRecord>(DailyWaterRecord(goal = 0, currWaterAmount = 0))
+//  val firstWaterRecord : StateFlow<DailyWaterRecord> = _waterRecord.asStateFlow()
+//  fun getFirstWaterRecord() {
+//    viewModelScope.launch(Dispatchers.IO) {
+//      waterDataRepository.getFirstWaterRecord().collect {
+//        _firstWaterRecord.value = it
+//      }
+//    }
+//  }
+
   fun insertDailyWaterRecord(waterRecord: DailyWaterRecord){
     viewModelScope.launch (Dispatchers.IO){
       waterDataRepository.insertDailyWaterRecord(waterRecord)

@@ -6,6 +6,7 @@ import java.util.*
 
 class DateString {
     companion object {
+        const val NOT_SET = ""
         private val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
 
         fun getTodaysDate():String {

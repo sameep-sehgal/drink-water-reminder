@@ -22,6 +22,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   //preference keys
   private object PreferencesKeys {
     val IS_USER_INFO_COLLECTED = booleanPreferencesKey("is_user_info_collected")
+    val FIRST_WATER_DATA_DATE = stringPreferencesKey("first_water_data_date")
 
     //Personal Settings
     val GENDER = stringPreferencesKey("gender")
@@ -72,6 +73,23 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   override suspend fun setIsUserInfoCollected(value: Boolean) {
     dataStore.edit {
       it[PreferencesKeys.IS_USER_INFO_COLLECTED] = value
+    }
+  }
+
+  override fun firstWaterDataDate(): Flow<String> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.FIRST_WATER_DATA_DATE] ?: DateString.NOT_SET
+    }
+
+  override suspend fun setFirstWaterDataDate(date: String) {
+    dataStore.edit {
+      it[PreferencesKeys.FIRST_WATER_DATA_DATE] = date
     }
   }
 

@@ -33,6 +33,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.foundation.isSystemInDarkTheme
+import com.example.myapplication.ui.screens.historytab.HistoryTab
 import com.example.myapplication.utils.AppTheme
 
 
@@ -87,7 +88,9 @@ class MainActivity : ComponentActivity() {
                         preferenceDataStoreViewModel,
                         roomDatabaseViewModel
                       )
-                      1 -> HistoryTab()
+                      1 -> HistoryTab(
+                        roomDatabaseViewModel
+                      )
                       2 -> SettingsTab(preferenceDataStoreViewModel)
                     }
                   }

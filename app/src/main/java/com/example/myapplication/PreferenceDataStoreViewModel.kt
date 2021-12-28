@@ -21,6 +21,14 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
+  val firstWaterDataDate = preferenceDataStore.firstWaterDataDate()
+
+  fun setFirstWaterDataDate(date: String) {
+    viewModelScope.launch {
+      preferenceDataStore.setFirstWaterDataDate(date)
+    }
+  }
+
   //Personal Settings
 
   val gender = preferenceDataStore.gender()

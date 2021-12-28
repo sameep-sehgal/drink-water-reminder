@@ -20,6 +20,9 @@ interface WaterDatabaseDao {
     @Query("SELECT * FROM reminder_timings")
     fun getReminderTimings(): Flow<List<ReminderTimings>>
 
+//    @Query("SELECT * FROM daily_water_record ORDER BY date ASC LIMIT 1")
+//    fun getFirstWaterRecord(): Flow<DailyWaterRecord>
+
 
 //    @Query("SELECT curr_water_amount FROM daily_water_record WHERE date = :date")
 //    fun getTodaysCurrWaterAmount(date:String = DateString.getTodaysDate()):Flow<Int>
