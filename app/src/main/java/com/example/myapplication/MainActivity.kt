@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
     preferenceDataStoreViewModel.isUserInfoCollected.observe(this){
       if(it == true){
         setContent{
-          val setGoal = roomDatabaseViewModel.waterRecord.collectAsState().value.goal
+          val setGoal = roomDatabaseViewModel.todaysWaterRecord.collectAsState().value.goal
           val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
           val appTheme = preferenceDataStoreViewModel.appTheme.collectAsState(initial = AppTheme.DEFAULT)
           var darkTheme = false
@@ -89,7 +89,8 @@ class MainActivity : ComponentActivity() {
                         roomDatabaseViewModel
                       )
                       1 -> HistoryTab(
-                        roomDatabaseViewModel
+                        roomDatabaseViewModel,
+                        preferenceDataStoreViewModel
                       )
                       2 -> SettingsTab(preferenceDataStoreViewModel)
                     }

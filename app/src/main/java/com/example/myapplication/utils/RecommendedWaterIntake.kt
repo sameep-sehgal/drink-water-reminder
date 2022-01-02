@@ -11,6 +11,8 @@ class RecommendedWaterIntake {
     const val MAX_WATER_LEVEL_IN_OZ_FOR_LOG = 35
     const val MAX_WATER_LEVEL_IN_OZ = 169
     const val MIN_WATER_LEVEL_IN_OZ = 27
+    const val DEFAULT_WATER_GOAL_IN_ML = 2500
+    const val DEFAULT_WATER_GOAL_IN_OZ = 85
     const val DEFAULT_CUSTOM_ADD_WATER_CONTAINTER = Container.MUG
     private const val DEFAULT_CUSTOM_ADD_WATER_VALUE_IN_ML = 300
     private const val DEFAULT_CUSTOM_ADD_WATER_VALUE_IN_OZ = 10

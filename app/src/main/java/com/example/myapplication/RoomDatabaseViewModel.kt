@@ -1,13 +1,11 @@
 package com.example.myapplication
 
 import android.util.Log
-import androidx.compose.animation.core.updateTransition
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
-import com.example.myapplication.data.preferencedatastore.PreferenceDataStore
 import com.example.myapplication.repository.WaterDataRepository
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.RecommendedWaterIntake
@@ -28,7 +26,7 @@ class RoomDatabaseViewModel @Inject constructor(
 
   //Initialize state required for app to run in the constructor
   init {
-    getDailyWaterRecord()
+    getTodaysWaterRecord()
     getTodaysDrinkLogs()
   }
 
@@ -48,19 +46,32 @@ class RoomDatabaseViewModel @Inject constructor(
   }
 
 
-  private val _waterRecord = MutableStateFlow<DailyWaterRecord>(DailyWaterRecord(goal = 0, currWaterAmount = 0))
-  val waterRecord : StateFlow<DailyWaterRecord> = _waterRecord.asStateFlow()
-  fun getDailyWaterRecord(date:String = DateString.getTodaysDate()){
+  private val _todaysWaterRecord = MutableStateFlow<DailyWaterRecord>(DailyWaterRecord(goal = 0, currWaterAmount = 0))
+  val todaysWaterRecord : StateFlow<DailyWaterRecord> = _todaysWaterRecord.asStateFlow()
+  private fun getTodaysWaterRecord(date:String = DateString.getTodaysDate()){
     viewModelScope.launch (Dispatchers.IO){
       waterDataRepository.getDailyWaterRecord(date).collect {
         Log.d(TAG, "getDailyWaterRecord $it")
         if(it === null) {
           Log.d(TAG, "getDailyWaterRecord $it")
           insertDailyWaterRecord(DailyWaterRecord(goal = RecommendedWaterIntake.NOT_SET))
-          getDailyWaterRecord()
+          getTodaysWaterRecord()
         }else {
-          _waterRecord.value = it
+          _todaysWaterRecord.value = it
         }
+      }
+    }
+  }
+
+  private val _waterRecord = MutableStateFlow(hashMapOf<String,DailyWaterRecord>())
+  val waterRecord : StateFlow<HashMap<String,DailyWaterRecord>> = _waterRecord.asStateFlow()
+  fun getDailyWaterRecord(date:String = DateString.getTodaysDate()){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.getDailyWaterRecord(date).collect {
+        Log.d(TAG, "getDailyWaterRecord $it")
+        val temp = _waterRecord.value
+        temp[date] = it
+        _waterRecord.value = temp
       }
     }
   }

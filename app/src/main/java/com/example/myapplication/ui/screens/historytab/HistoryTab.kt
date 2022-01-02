@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.ui.screens.historytab.components.DataGraph
 import com.example.myapplication.ui.screens.hometab.components.buttons.BackToTopButton
@@ -20,7 +21,8 @@ import com.example.myapplication.ui.screens.hometab.components.buttons.CustomAdd
 
 @Composable
 fun HistoryTab(
-  roomDatabaseViewModel: RoomDatabaseViewModel
+  roomDatabaseViewModel: RoomDatabaseViewModel,
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ){
   val (showCustomAddWaterDialog, setShowCustomAddWaterDialog) =  remember { mutableStateOf(false) }
   val scrollState = rememberScrollState()
@@ -39,7 +41,10 @@ fun HistoryTab(
         .fillMaxWidth()
         .verticalScroll(scrollState)
     ){
-      DataGraph(roomDatabaseViewModel)
+      DataGraph(
+        roomDatabaseViewModel,
+        preferenceDataStoreViewModel
+      )
     }
   }
 }

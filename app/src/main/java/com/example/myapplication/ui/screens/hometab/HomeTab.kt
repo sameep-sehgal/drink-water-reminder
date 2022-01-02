@@ -6,14 +6,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.PreferenceDataStoreViewModel
-import com.example.myapplication.R
 import com.example.myapplication.RoomDatabaseViewModel
-import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.screens.hometab.components.*
 import com.example.myapplication.ui.screens.hometab.components.buttons.BackToTopButton
 import com.example.myapplication.ui.screens.hometab.components.buttons.CustomAddWaterButton
@@ -23,7 +19,6 @@ import com.example.myapplication.ui.screens.hometab.components.dialogs.FruitDial
 import com.example.myapplication.ui.screens.hometab.components.dialogs.ResetDialog
 import com.example.myapplication.ui.screens.hometab.screens.*
 import com.example.myapplication.ui.theme.Typography
-import com.example.myapplication.utils.Container
 import com.example.myapplication.utils.Units
 
 @ExperimentalFoundationApi
@@ -33,7 +28,7 @@ fun HomeTab(
   roomDatabaseViewModel: RoomDatabaseViewModel
 ){
   val drinkLogsList = roomDatabaseViewModel.drinkLogs.collectAsState()
-  val todaysWaterRecord = roomDatabaseViewModel.waterRecord.collectAsState()
+  val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
   val (showWorkoutDialog, setShowWorkoutDialog) =  remember { mutableStateOf(false) }
   val (showWeatherDialog, setShowWeatherDialog) =  remember { mutableStateOf(false) }

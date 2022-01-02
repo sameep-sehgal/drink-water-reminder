@@ -27,9 +27,9 @@ class WaterDataRepository @Inject constructor(
     return waterDatabaseDao.getDrinkLogs(date).flowOn(Dispatchers.IO).conflate()
   }
 
-  fun getFirstWaterRecord(): Flow<DailyWaterRecord> {
-    return waterDatabaseDao.getFirstWaterRecord()
-  }
+//  fun getFirstWaterRecord(): Flow<DailyWaterRecord> {
+//    return waterDatabaseDao.getFirstWaterRecord()
+//  }
 
   suspend fun insertDailyWaterRecord(dailyWaterRecord: DailyWaterRecord): Long {
     return waterDatabaseDao.insertDailyWaterRecord(dailyWaterRecord)
