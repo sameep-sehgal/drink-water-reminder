@@ -107,6 +107,7 @@ fun DrinkLogsList(
                   roomDatabaseViewModel.deleteDrinkLog(it)
                   roomDatabaseViewModel.updateDailyWaterRecord(
                     DailyWaterRecord(
+                      date = dailyWaterRecord.date,
                       goal = dailyWaterRecord.goal,
                       currWaterAmount = dailyWaterRecord.currWaterAmount - it.amount
                     )

@@ -2,10 +2,13 @@ package com.example.myapplication.ui.screens.historytab.components
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.data.models.DailyWaterRecord
@@ -16,7 +19,9 @@ import com.example.myapplication.utils.Units
 @Composable
 fun DataGraph(
   roomDatabaseViewModel: RoomDatabaseViewModel,
-  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
+  setSelectedDate: (String) -> Unit,
+  selectedDate: String
 ) {
   val listState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
@@ -31,7 +36,8 @@ fun DataGraph(
   Log.d("TAG", "DataGraph: ${firstWaterRecordDate.value}")
   LazyRow(
     reverseLayout = true,
-    state = listState
+    state = listState,
+    modifier = Modifier.padding(0.dp, 8.dp)
   ) {
     if(firstWaterRecordDate.value != DateString.NOT_SET) {
       //Compose composable only when data is loaded
@@ -46,7 +52,9 @@ fun DataGraph(
                 Bar(
                   date = it1,
                   waterAmount = it2,
-                  waterGoal = it3
+                  waterGoal = it3,
+                  setSelectedDate = setSelectedDate,
+                  selectedDate = selectedDate
                 )
               }
             }
