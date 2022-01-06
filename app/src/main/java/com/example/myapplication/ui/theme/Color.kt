@@ -11,6 +11,8 @@ val VeryLightGray = Color(0xFFDADEDF)
 val LightGray = Color(0xFFA7AFB2)
 val SelectedItemColorLight = Color(0xFFe6f3ff)
 val SelectedItemColorDark = Color(0x33e6f3ff)
+val SettingsSubheadingLight = Color(0x33A7AFB2)
+val SettingsSubheadingDark = Color(0x66A7AFB2)
 
 val SelectedItemColor =
   @Composable{
@@ -19,4 +21,9 @@ val SelectedItemColor =
     else SelectedItemColorLight
   }
 
-val SettingsSubheadingBg = SelectedItemColor
+val SettingsSubheadingBg =
+  @Composable{
+    if (isSystemInDarkTheme())
+      SettingsSubheadingDark
+    else SettingsSubheadingLight
+}

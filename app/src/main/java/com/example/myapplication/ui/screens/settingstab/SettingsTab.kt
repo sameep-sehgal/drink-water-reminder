@@ -3,7 +3,6 @@ package com.example.myapplication.ui.screens.settingstab
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -68,6 +67,7 @@ fun SettingsTab(
       setShowDialog,
       setDialogToShow
     )
+    ContainerSettings()
     MainSettings(
       appTheme.value,
       setShowDialog,
@@ -207,7 +207,6 @@ fun PersonalSettings(
   setDialogToShow: (String) -> Unit
 ){
   SettingsSubheading(text = "Personal Settings")
-  Divider()
   Column {
     SettingsRowSelectValue(
       text = Settings.GENDER,
@@ -247,7 +246,28 @@ fun PersonalSettings(
       }
     )
   }
-  Divider()
+}
+
+@Composable
+fun ContainerSettings(
+
+){
+  SettingsSubheading(text = "Containers")
+  SettingsRowSelectValue(
+    text = "Glass",
+    value = "200mL",
+    onSettingsRowClick = {}
+  )
+  SettingsRowSelectValue(
+    text = "Mug",
+    value = "300mL",
+    onSettingsRowClick = {}
+  )
+  SettingsRowSelectValue(
+    text = "Bottle",
+    value = "500mL",
+    onSettingsRowClick = {}
+  )
 }
 
 @Composable
@@ -258,7 +278,6 @@ fun MainSettings(
 ){
   val context = LocalContext.current
   SettingsSubheading(text = "Main Settings")
-  Divider()
   SettingsRowSelectValue(
     text = Settings.APP_THEME,
     value = appTheme,
@@ -308,5 +327,4 @@ fun MainSettings(
       )
     }
   )
-  Divider()
 }
