@@ -51,6 +51,7 @@ fun HomeTab(
         .fillMaxWidth()
         .verticalScroll(scrollState)
     ){
+      WaterTip()
 
       TodaysWaterRecord(
         currWaterAmount = todaysWaterRecord.value.currWaterAmount,
