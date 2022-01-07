@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.hometab.screens
+package com.example.myapplication.ui.screens.hometab.components.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -9,20 +9,20 @@ import androidx.compose.ui.Modifier
 import com.example.myapplication.ui.components.ShowDialog
 
 @Composable
-fun WeatherDialog(setShowWeatherDialog:(Boolean)->Unit):Unit{
-  val title = "How's the weather Today?"
+fun ReportDialog(setShowReportDialog:(Boolean)->Unit):Unit{
+  val title = "Drink Water Report"
   ShowDialog(
     title = title,
-    content = { WeatherDialogContent() },
-    setShowDialog = setShowWeatherDialog,
+    content = { ReportDialogContent() },
+    setShowDialog = setShowReportDialog,
     onConfirmButtonClick = { /*Todo*/ }
   )
 }
 
 @Composable
-fun WeatherDialogContent():Unit{
+fun ReportDialogContent():Unit{
   Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
     Text(text = "Dialog working")
-    Text(text = "This is Weather Dialog Content")
+    Text(text = "This is Report Dialog Content")
   }
 }

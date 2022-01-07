@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.hometab.components
+package com.example.myapplication.ui.screens.hometab.components.buttons
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -12,13 +12,13 @@ import androidx.compose.ui.res.painterResource
 import com.example.myapplication.R
 
 @Composable
-fun WeatherButton(modifier: Modifier,setShowWeatherDialog:(Boolean)->Unit){
+fun ReportButton(modifier: Modifier, setShowReportDialog:(Boolean)->Unit){
     Row(modifier = modifier,
         verticalAlignment = Alignment.CenterVertically) {
-        Image(painter = painterResource(R.drawable.weather_button),
-            contentDescription = "Weather Button",
+        Image(painter = painterResource(R.drawable.report_button),
+            contentDescription = "Report Button",
             modifier = Modifier
                 .clip(CircleShape)
-                .clickable(enabled = true, onClick = { setShowWeatherDialog(true) }))
+                .clickable(enabled = true, onClick = { setShowReportDialog(true) }))
     }
 }

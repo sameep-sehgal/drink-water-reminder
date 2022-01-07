@@ -14,8 +14,10 @@ import com.example.myapplication.ui.screens.hometab.components.*
 import com.example.myapplication.ui.screens.hometab.components.buttons.BackToTopButton
 import com.example.myapplication.ui.screens.hometab.components.buttons.CustomAddWaterButton
 import com.example.myapplication.ui.screens.hometab.components.buttons.FruitButton
+import com.example.myapplication.ui.screens.hometab.components.buttons.ReportButton
 import com.example.myapplication.ui.screens.hometab.components.dialogs.CustomAddWaterDialog
 import com.example.myapplication.ui.screens.hometab.components.dialogs.FruitDialog
+import com.example.myapplication.ui.screens.hometab.components.dialogs.ReportDialog
 import com.example.myapplication.ui.screens.hometab.components.dialogs.ResetDialog
 import com.example.myapplication.ui.screens.hometab.screens.*
 import com.example.myapplication.ui.theme.Typography
@@ -31,7 +33,7 @@ fun HomeTab(
   val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
   val (showWorkoutDialog, setShowWorkoutDialog) =  remember { mutableStateOf(false) }
-  val (showWeatherDialog, setShowWeatherDialog) =  remember { mutableStateOf(false) }
+  val (showReportDialog, setShowReportDialog) =  remember { mutableStateOf(false) }
   val (showResetDialog, setShowResetDialog) =  remember { mutableStateOf(false) }
   val (showFruitDialog, setShowFruitDialog) =  remember { mutableStateOf(false) }
   val (showCustomAddWaterDialog, setShowCustomAddWaterDialog) =  remember { mutableStateOf(false) }
@@ -64,9 +66,15 @@ fun HomeTab(
           Modifier.weight(1f),
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
-          WeatherButton(modifier = Modifier.weight(1f), setShowWeatherDialog = setShowWeatherDialog)
+          ReportButton(
+            modifier = Modifier.weight(1f),
+            setShowReportDialog = setShowReportDialog
+          )
 
-          ResetButton(modifier = Modifier.weight(1f), setShowResetDialog = setShowResetDialog)
+          ResetButton(
+            modifier = Modifier.weight(1f),
+            setShowResetDialog = setShowResetDialog
+          )
         }
 
         AnimatedWaterGlass(
@@ -111,8 +119,8 @@ fun HomeTab(
       if(showWorkoutDialog){
         WorkoutDialog(setShowWorkoutDialog = setShowWorkoutDialog)
       }
-      if(showWeatherDialog){
-        WeatherDialog(setShowWeatherDialog = setShowWeatherDialog)
+      if(showReportDialog){
+        ReportDialog(setShowReportDialog = setShowReportDialog)
       }
       if(showResetDialog){
         ResetDialog(

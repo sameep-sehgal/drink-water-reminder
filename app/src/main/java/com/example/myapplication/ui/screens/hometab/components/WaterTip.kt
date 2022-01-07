@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.data.static.WaterTips
-import com.example.myapplication.ui.theme.VeryLightGray
+import com.example.myapplication.ui.theme.SettingsSubheadingBg
 
 @Composable
 fun WaterTip() {
@@ -25,8 +25,8 @@ fun WaterTip() {
     modifier = Modifier
       .padding(8.dp)
       .clip(RoundedCornerShape(15.dp)),
-    elevation = 6.dp,
-    backgroundColor = VeryLightGray
+    elevation = 0.dp,
+    backgroundColor = SettingsSubheadingBg()
   ){
     Row(
       verticalAlignment = Alignment.CenterVertically,
