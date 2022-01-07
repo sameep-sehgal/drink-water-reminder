@@ -147,4 +147,26 @@ class RoomDatabaseViewModel @Inject constructor(
       waterDataRepository.deleteDrinkLog(drinkLog = drinkLog)
     }
   }
+
+  private val _drinkLogsCount = MutableStateFlow<Int>(0)
+  val drinkLogsCount : StateFlow<Int> = _drinkLogsCount.asStateFlow()
+  fun getDrinkLogsCount(){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.getDrinkLogsCount().collect {
+        Log.d(TAG, "getDailyWaterRecord $it")
+        _drinkLogsCount.value = it
+      }
+    }
+  }
+
+  private val _waterRecordsCount = MutableStateFlow<Int>(0)
+  val waterRecordsCount : StateFlow<Int> = _waterRecordsCount.asStateFlow()
+  fun getWaterRecordsCount(){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.getDrinkLogsCount().collect {
+        Log.d(TAG, "getDailyWaterRecord $it")
+        _waterRecordsCount.value = it
+      }
+    }
+  }
 }
