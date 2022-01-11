@@ -51,11 +51,11 @@ class WaterDataRepository @Inject constructor(
     waterDatabaseDao.deleteDrinkLog(drinkLog)
   }
 
-  suspend fun getDrinkLogsCount(): Flow<Int> {
-    return waterDatabaseDao.getDrinkLogsCount().flowOn(Dispatchers.IO).conflate()
+  suspend fun getDrinkLogsCount(): Int {
+    return waterDatabaseDao.getDrinkLogsCount()
   }
 
-  suspend fun getWaterRecordsCount(): Flow<Int> {
-    return waterDatabaseDao.getWaterRecordsCount().flowOn(Dispatchers.IO).conflate()
+  suspend fun getWaterRecordsCount(): Int {
+    return waterDatabaseDao.getWaterRecordsCount()
   }
 }

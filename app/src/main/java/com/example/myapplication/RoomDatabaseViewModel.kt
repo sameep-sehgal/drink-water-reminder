@@ -148,25 +148,17 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
-  private val _drinkLogsCount = MutableStateFlow<Int>(0)
-  val drinkLogsCount : StateFlow<Int> = _drinkLogsCount.asStateFlow()
+  var drinkLogsCount:Int = 0
   fun getDrinkLogsCount(){
     viewModelScope.launch (Dispatchers.IO){
-      waterDataRepository.getDrinkLogsCount().collect {
-        Log.d(TAG, "getDailyWaterRecord $it")
-        _drinkLogsCount.value = it
-      }
+      drinkLogsCount = waterDataRepository.getDrinkLogsCount()
     }
   }
 
-  private val _waterRecordsCount = MutableStateFlow<Int>(0)
-  val waterRecordsCount : StateFlow<Int> = _waterRecordsCount.asStateFlow()
+  var waterRecordsCount :Int = 0
   fun getWaterRecordsCount(){
     viewModelScope.launch (Dispatchers.IO){
-      waterDataRepository.getDrinkLogsCount().collect {
-        Log.d(TAG, "getDailyWaterRecord $it")
-        _waterRecordsCount.value = it
-      }
+      waterRecordsCount = waterDataRepository.getDrinkLogsCount()
     }
   }
 }

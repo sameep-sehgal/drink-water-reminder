@@ -21,6 +21,7 @@ import com.example.myapplication.utils.TimeString
 import com.example.myapplication.R
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.ui.components.DropdownSelect
+import com.example.myapplication.ui.theme.PersianGreen
 import com.example.myapplication.utils.Container
 import com.example.myapplication.utils.RecommendedWaterIntake
 import com.example.myapplication.utils.Units
@@ -189,6 +190,7 @@ fun EditDrinkLogDialogContent(
           },
           update = {
             it.value = amount/10
+            it.setBackgroundColor(PersianGreen.hashCode())
           }
         )
         Text(

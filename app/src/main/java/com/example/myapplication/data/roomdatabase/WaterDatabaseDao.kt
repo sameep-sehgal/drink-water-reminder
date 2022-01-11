@@ -57,9 +57,9 @@ interface WaterDatabaseDao {
     @Delete
     suspend fun deleteReminderTiming(reminderTiming: ReminderTimings)
 
-    @Query("SELECT COUNT(*) FROM drink_logs")
-    suspend fun getDrinkLogsCount(): Flow<Int>
+    @Query("SELECT COUNT(id) FROM drink_logs")
+    suspend fun getDrinkLogsCount(): Int
 
-    @Query("SELECT COUNT(*) FROM daily_water_record")
-    suspend fun getWaterRecordsCount(): Flow<Int>
+    @Query("SELECT COUNT(date) FROM daily_water_record")
+    suspend fun getWaterRecordsCount(): Int
 }
