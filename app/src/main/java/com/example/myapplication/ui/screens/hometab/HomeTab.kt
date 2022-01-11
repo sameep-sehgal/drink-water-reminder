@@ -120,7 +120,10 @@ fun HomeTab(
         WorkoutDialog(setShowWorkoutDialog = setShowWorkoutDialog)
       }
       if(showReportDialog){
-        ReportDialog(setShowReportDialog = setShowReportDialog)
+        ReportDialog(
+          setShowReportDialog = setShowReportDialog,
+          roomDatabaseViewModel = roomDatabaseViewModel
+        )
       }
       if(showResetDialog){
         ResetDialog(
