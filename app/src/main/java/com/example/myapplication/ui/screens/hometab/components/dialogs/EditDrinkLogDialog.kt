@@ -71,7 +71,13 @@ fun EditDrinkLogDialog(
         )
       )
       dailyWaterRecord.currWaterAmount -= (drinkLog.amount - amount)
-      roomDatabaseViewModel.updateDailyWaterRecord(dailyWaterRecord)
+      roomDatabaseViewModel.updateDailyWaterRecord(
+        DailyWaterRecord(
+          date = dailyWaterRecord.date,
+          goal = dailyWaterRecord.goal,
+          currWaterAmount = dailyWaterRecord.currWaterAmount
+        )
+      )
     }
   )
 }

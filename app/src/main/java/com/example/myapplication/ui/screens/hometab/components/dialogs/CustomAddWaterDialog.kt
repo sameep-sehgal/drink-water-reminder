@@ -52,7 +52,13 @@ fun CustomAddWaterDialog(
         )
       )
       dailyWaterRecord.currWaterAmount += amount
-      roomDatabaseViewModel.updateDailyWaterRecord(dailyWaterRecord)
+      roomDatabaseViewModel.updateDailyWaterRecord(
+        DailyWaterRecord(
+          date = dailyWaterRecord.date,
+          goal = dailyWaterRecord.goal,
+          currWaterAmount = dailyWaterRecord.currWaterAmount
+        )
+      )
     }
   )
 }
