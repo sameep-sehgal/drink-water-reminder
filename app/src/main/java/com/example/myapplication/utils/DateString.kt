@@ -1,7 +1,5 @@
 package com.example.myapplication.utils
 
-import android.util.Log
-import com.example.myapplication.utils.DateString.Companion.dateFormat
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,9 +25,10 @@ class DateString {
     fun getPrevDate(date:String):String {
       if(date == NOT_SET) return NOT_SET
       val calendar = Calendar.getInstance()
-      calendar.set(Calendar.YEAR, date.split("-")[0].toInt())
-      calendar.set(Calendar.MONTH, date.split("-")[1].toInt() - 1) //value==0 represents January
-      calendar.set(Calendar.DAY_OF_MONTH, date.split("-")[2].toInt())
+      val time = date.split("-")
+      calendar.set(Calendar.YEAR, time[0].toInt())
+      calendar.set(Calendar.MONTH, time[1].toInt() - 1) //value==0 represents January
+      calendar.set(Calendar.DAY_OF_MONTH, time[2].toInt())
       calendar.add(Calendar.SECOND,-24*60*60)
       return dateFormat.format(calendar.time)
     }
@@ -39,6 +38,17 @@ class DateString {
       val dd = date.split('-')[2]
       val mm = date.split('-')[1]
       return "$mm/$dd"
+    }
+
+    fun reduceDays(date:String,days:Int):String {
+      if(date == NOT_SET) return NOT_SET
+      val calendar = Calendar.getInstance()
+      val time = date.split("-")
+      calendar.set(Calendar.YEAR, time[0].toInt())
+      calendar.set(Calendar.MONTH, time[1].toInt() - 1) //value==0 represents January
+      calendar.set(Calendar.DAY_OF_MONTH, time[2].toInt())
+      calendar.add(Calendar.SECOND,-days*24*60*60)
+      return dateFormat.format(calendar.time)
     }
   }
 }

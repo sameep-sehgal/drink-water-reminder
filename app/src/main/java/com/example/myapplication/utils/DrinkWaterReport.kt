@@ -1,5 +1,13 @@
 package com.example.myapplication.utils
 
+import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import com.example.myapplication.RoomDatabaseViewModel
+import com.example.myapplication.data.models.DailyWaterRecord
+import com.example.myapplication.ui.screens.historytab.components.Bar
+
 object DrinkWaterReport {
 
   fun calculateDrinkFrequency(
@@ -10,19 +18,19 @@ object DrinkWaterReport {
     return drinkLogsCount/waterRecordsCount
   }
 
-  fun calculateStreak(): Int {
-    //TODO
-    return 3
-  }
+  fun calculateAverage(
+    waterRecordsList: List<DailyWaterRecord>,
+    type:String
+  ) : Int {
+    var divide = 30
+    if(type == "weekly") divide = 7
 
-  fun calculateWeeklyAverage() : Int {
-    //TODO
-    return 2000
-  }
+    var sum = 0
+    for(record in waterRecordsList) {
+      sum += record.currWaterAmount
+    }
 
-  fun calculateMonthlyAverage() : Int {
-    //TODO
-    return 2000
+    return sum/divide
   }
 
   fun calculateAverageCompletion() : Int {

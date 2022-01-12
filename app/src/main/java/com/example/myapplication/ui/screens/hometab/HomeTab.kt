@@ -122,7 +122,9 @@ fun HomeTab(
       if(showReportDialog){
         ReportDialog(
           setShowReportDialog = setShowReportDialog,
-          roomDatabaseViewModel = roomDatabaseViewModel
+          roomDatabaseViewModel = roomDatabaseViewModel,
+          preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+          waterUnit = waterUnit.value
         )
       }
       if(showResetDialog){

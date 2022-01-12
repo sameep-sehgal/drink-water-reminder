@@ -14,6 +14,9 @@ interface WaterDatabaseDao {
     @Query("SELECT * FROM daily_water_record WHERE date = :date")
     fun getDailyWaterRecord(date:String = DateString.getTodaysDate()):Flow<DailyWaterRecord>
 
+    @Query("SELECT * FROM daily_water_record WHERE date BETWEEN :startDate AND :endDate")
+    fun getDailyWaterRecordsList(endDate:String = DateString.getTodaysDate(), startDate:String):Flow<List<DailyWaterRecord>>
+
     @Query("SELECT * FROM drink_logs WHERE date = :date")
     fun getDrinkLogs(date:String = DateString.getTodaysDate()): Flow<List<DrinkLogs>>
 
