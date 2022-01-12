@@ -3,6 +3,8 @@ package com.example.myapplication.utils
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 class DateString {
   companion object {
@@ -24,11 +26,7 @@ class DateString {
 
     fun getPrevDate(date:String):String {
       if(date == NOT_SET) return NOT_SET
-      val calendar = Calendar.getInstance()
-      val time = date.split("-")
-      calendar.set(Calendar.YEAR, time[0].toInt())
-      calendar.set(Calendar.MONTH, time[1].toInt() - 1) //value==0 represents January
-      calendar.set(Calendar.DAY_OF_MONTH, time[2].toInt())
+      val calendar = getCalendarInstance(date)
       calendar.add(Calendar.SECOND,-24*60*60)
       return dateFormat.format(calendar.time)
     }
@@ -42,13 +40,45 @@ class DateString {
 
     fun reduceDays(date:String,days:Int):String {
       if(date == NOT_SET) return NOT_SET
-      val calendar = Calendar.getInstance()
-      val time = date.split("-")
-      calendar.set(Calendar.YEAR, time[0].toInt())
-      calendar.set(Calendar.MONTH, time[1].toInt() - 1) //value==0 represents January
-      calendar.set(Calendar.DAY_OF_MONTH, time[2].toInt())
+      val calendar = getCalendarInstance(date)
       calendar.add(Calendar.SECOND,-days*24*60*60)
       return dateFormat.format(calendar.time)
+    }
+
+    fun calculateDaysDifference(date1:String, date2:String): Int {
+      if(date1 == NOT_SET || date2 == NOT_SET) return 0
+      val calendar1 = getCalendarInstance(date1)
+      val calendar2 = getCalendarInstance(date2)
+      return calculateDaysDifference(calendar1,calendar2)
+    }
+
+    private fun getCalendarInstance(date:String): Calendar {
+      val calendar = Calendar.getInstance()
+      val dateArray = date.split("-")
+      calendar.set(Calendar.YEAR, dateArray[0].toInt())
+      calendar.set(Calendar.MONTH, dateArray[1].toInt() - 1) //value==0 represents January
+      calendar.set(Calendar.DAY_OF_MONTH, dateArray[2].toInt())
+      return calendar
+    }
+
+    private fun calculateDaysDifference(calendar1:Calendar, calendar2: Calendar): Int {
+      val newStart = Calendar.getInstance()
+      newStart.timeInMillis = calendar1.getTimeInMillis()
+      newStart[Calendar.HOUR_OF_DAY] = 0
+      newStart[Calendar.MINUTE] = 0
+      newStart[Calendar.SECOND] = 0
+      newStart[Calendar.MILLISECOND] = 0
+
+      val newEnd = Calendar.getInstance()
+      newEnd.timeInMillis = calendar2.getTimeInMillis()
+      newEnd[Calendar.HOUR_OF_DAY] = 0
+      newEnd[Calendar.MINUTE] = 0
+      newEnd[Calendar.SECOND] = 0
+      newEnd[Calendar.MILLISECOND] = 0
+
+      val end = newEnd.timeInMillis
+      val start = newStart.timeInMillis
+      return TimeUnit.MILLISECONDS.toDays(abs(end - start)).toInt()
     }
   }
 }

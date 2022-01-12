@@ -62,4 +62,8 @@ class WaterDataRepository @Inject constructor(
   suspend fun getWaterRecordsCount(): Int {
     return waterDatabaseDao.getWaterRecordsCount()
   }
+
+  suspend fun getCompletedWaterRecordsCount(): Int {
+    return waterDatabaseDao.getCompletedWaterRecordsCount()
+  }
 }

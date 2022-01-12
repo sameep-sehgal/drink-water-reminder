@@ -129,7 +129,7 @@ class RoomDatabaseViewModel @Inject constructor(
     viewModelScope.launch(Dispatchers.IO) {
       waterDataRepository.getDailyWaterRecordsList(endDate, startDate).distinctUntilChanged()
         .catch { e->
-          Log.e("getWaterRecordsList", "error before collecting from Flow", )
+          Log.e("getWaterRecordsList", "error before collecting from Flow")
         }
         .collect { it1 ->
           _monthWaterRecordsList.value = it1.sortedByDescending { it.date }
@@ -195,6 +195,14 @@ class RoomDatabaseViewModel @Inject constructor(
   fun getWaterRecordsCount(){
     viewModelScope.launch (Dispatchers.IO){
       _waterRecordsCount.value = waterDataRepository.getWaterRecordsCount()
+    }
+  }
+
+  private val _completedWaterRecordsCount = MutableStateFlow(0)
+  val completedWaterRecordsCount : StateFlow<Int> = _completedWaterRecordsCount.asStateFlow()
+  fun getCompletedWaterRecordsCount(){
+    viewModelScope.launch (Dispatchers.IO){
+      _completedWaterRecordsCount.value = waterDataRepository.getCompletedWaterRecordsCount()
     }
   }
 }

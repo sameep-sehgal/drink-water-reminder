@@ -65,4 +65,7 @@ interface WaterDatabaseDao {
 
     @Query("SELECT COUNT(date) FROM daily_water_record")
     suspend fun getWaterRecordsCount(): Int
+
+    @Query("SELECT COUNT(date) FROM daily_water_record WHERE is_goal_achieved = 1")
+    suspend fun getCompletedWaterRecordsCount(): Int
 }

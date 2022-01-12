@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.hometab.components.dialogs
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
@@ -11,8 +12,8 @@ import androidx.compose.ui.Modifier
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.ui.components.ShowDialog
+import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.DrinkWaterReport
-import com.example.myapplication.utils.Units
 
 @Composable
 fun ReportDialog(
@@ -38,14 +39,19 @@ fun ReportDialogContent(
 ){
   val drinkLogsCount = roomDatabaseViewModel.drinkLogsCount.collectAsState()
   val waterRecordsCount = roomDatabaseViewModel.waterRecordsCount.collectAsState()
+  val completedWaterRecordsCount = roomDatabaseViewModel.completedWaterRecordsCount.collectAsState()
   val weekWaterRecordsList = roomDatabaseViewModel.weekWaterRecordsList.collectAsState()
   val monthWaterRecordsList = roomDatabaseViewModel.monthWaterRecordsList.collectAsState()
+  val firstWaterRecordDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
+  val todaysDate = DateString.getTodaysDate()
+  val totalDays = DateString.calculateDaysDifference(firstWaterRecordDate.value, todaysDate)
 
   LaunchedEffect(key1 = true) {
     roomDatabaseViewModel.getDrinkLogsCount()
     roomDatabaseViewModel.getWaterRecordsCount()
     roomDatabaseViewModel.getWeekWaterRecordsList()
     roomDatabaseViewModel.getMonthWaterRecordsList()
+    roomDatabaseViewModel.getCompletedWaterRecordsCount()
   }
 
   Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
@@ -68,11 +74,15 @@ fun ReportDialogContent(
     )
     Text(
       text = "Goal Completed: " +
-              "${DrinkWaterReport.calculateAverageCompletion()}%"
+              "${completedWaterRecordsCount.value}/" +
+              "$totalDays days"
     )
     Text(
       text = "Average Completion: " +
-              "${DrinkWaterReport.calculateAverageCompletion()}%"
+              "${DrinkWaterReport.calculateAverageCompletion(
+                completedWaterRecordsCount = completedWaterRecordsCount.value,
+                totalDays = totalDays
+              )}%"
     )
   }
 }

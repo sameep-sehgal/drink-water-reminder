@@ -1,12 +1,6 @@
 package com.example.myapplication.utils
 
-import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.data.models.DailyWaterRecord
-import com.example.myapplication.ui.screens.historytab.components.Bar
 
 object DrinkWaterReport {
 
@@ -33,8 +27,11 @@ object DrinkWaterReport {
     return sum/divide
   }
 
-  fun calculateAverageCompletion() : Int {
-    //TODO
-    return 76
+  fun calculateAverageCompletion(
+    completedWaterRecordsCount:Int,
+    totalDays:Int
+  ) : Int {
+    if(totalDays == 0) return 0
+    return (completedWaterRecordsCount*100)/totalDays
   }
 }
