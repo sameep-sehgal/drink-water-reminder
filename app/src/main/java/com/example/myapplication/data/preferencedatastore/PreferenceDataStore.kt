@@ -39,6 +39,11 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     val REMINDER_AFTER_GOAL_ACHIEVED = booleanPreferencesKey("reminder_after_goal_achieved")
     val REMINDER_SOUND = stringPreferencesKey("reminder_sound")
 
+    //Container Settings
+    val GLASS_CAPACITY = intPreferencesKey("glass_capacity")
+    val MUG_CAPACITY = intPreferencesKey("mug_capacity")
+    val BOTTLE_CAPACITY = intPreferencesKey("bottle_capacity")
+
     //Main Settings
     val APP_THEME = stringPreferencesKey("app_theme")
   }
@@ -281,6 +286,58 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   override suspend fun setReminderSound(sound: String) {
     dataStore.edit {
       it[PreferencesKeys.REMINDER_SOUND] = sound
+    }
+  }
+
+  //Container Settings
+  override fun glassCapacity(): Flow<Int> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.GLASS_CAPACITY] ?: Container.baseGlassCapacityInMl
+    }
+
+  override suspend fun setGlassCapacity(capacity: Int) {
+    dataStore.edit {
+      it[PreferencesKeys.GLASS_CAPACITY] = capacity
+    }
+  }
+
+  override fun mugCapacity(): Flow<Int> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.MUG_CAPACITY] ?: Container.baseMugCapacityInMl
+    }
+
+  override suspend fun setMugCapacity(capacity: Int) {
+    dataStore.edit {
+      it[PreferencesKeys.MUG_CAPACITY] = capacity
+    }
+  }
+
+  override fun bottleCapacity(): Flow<Int> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.BOTTLE_CAPACITY] ?: Container.baseBottleCapacityInMl
+    }
+
+  override suspend fun setBottleCapacity(capacity: Int) {
+    dataStore.edit {
+      it[PreferencesKeys.BOTTLE_CAPACITY] = capacity
     }
   }
 

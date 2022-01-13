@@ -95,7 +95,8 @@ fun HomeTab(
       AddWaterButtonsRow(
         waterUnit.value,
         roomDatabaseViewModel,
-        todaysWaterRecord.value
+        todaysWaterRecord.value,
+        preferenceDataStoreViewModel
       )
 
       Text(

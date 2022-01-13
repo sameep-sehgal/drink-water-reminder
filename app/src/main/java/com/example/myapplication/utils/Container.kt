@@ -7,7 +7,14 @@ class Container {
     const val BOTTLE = 0
     const val MUG = 1
     const val GLASS = 2
-    const val CUP = 3
+
+    const val baseGlassCapacityInMl = 200
+    const val baseMugCapacityInMl = 300
+    const val baseBottleCapacityInMl = 500
+
+    const val baseGlassCapacityInOz = 7
+    const val baseMugCapacityInOz = 10
+    const val baseBottleCapacityInOz = 15
 
     //TODO("Add more containers here")
     val IMAGE_MAPPER = hashMapOf(

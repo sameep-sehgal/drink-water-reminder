@@ -6,29 +6,51 @@ import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.utils.Container
+import com.example.myapplication.utils.Units
 
 @Composable
 fun AddWaterButtonsRow(
   waterUnit:String,
   roomDatabaseViewModel: RoomDatabaseViewModel,
-  dailyWaterRecord: DailyWaterRecord
-
+  dailyWaterRecord: DailyWaterRecord,
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ) {
+  val initialGlassCapacity:Int
+  val initialMugCapacity:Int
+  val initialBottleCapacity:Int
+
+  if(waterUnit == Units.ML) {
+    initialGlassCapacity = Container.baseGlassCapacityInMl
+    initialMugCapacity = Container.baseMugCapacityInMl
+    initialBottleCapacity = Container.baseBottleCapacityInMl
+  }else {
+    initialGlassCapacity = Container.baseGlassCapacityInOz
+    initialMugCapacity = Container.baseMugCapacityInOz
+    initialBottleCapacity = Container.baseBottleCapacityInOz
+  }
+
+  val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = initialGlassCapacity)
+  val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = initialMugCapacity)
+  val bottleCapacity = preferenceDataStoreViewModel.bottleCapacity.collectAsState(initial = initialBottleCapacity)
+
   val buttons = listOf(
-    listOf(Container.GLASS, 200, "Water"),
-    listOf(Container.MUG, 300, "Water"),
-    listOf(Container.BOTTLE, 500, "Water"),
+    listOf(Container.GLASS, glassCapacity.value, "Water"),
+    listOf(Container.MUG, mugCapacity.value, "Water"),
+    listOf(Container.BOTTLE, bottleCapacity.value, "Water"),
   )
+
   Row(
     modifier = Modifier.fillMaxWidth(),
     horizontalArrangement = Arrangement.SpaceEvenly
@@ -46,7 +68,9 @@ fun AddWaterButtonsRow(
             )
           )
         },
-        modifier = Modifier.padding(4.dp,16.dp).clip(CircleShape)
+        modifier = Modifier
+          .padding(4.dp, 16.dp)
+          .clip(CircleShape)
       ) {
         Column(
           horizontalAlignment = Alignment.CenterHorizontally

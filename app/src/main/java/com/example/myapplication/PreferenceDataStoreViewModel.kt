@@ -121,6 +121,32 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
+  //Container Settings
+
+  val glassCapacity = preferenceDataStore.glassCapacity()
+
+  fun setGlassCapacity(capacity: Int) {
+    viewModelScope.launch {
+      preferenceDataStore.setGlassCapacity(capacity)
+    }
+  }
+
+  val mugCapacity = preferenceDataStore.mugCapacity()
+
+  fun setMugCapacity(capacity: Int) {
+    viewModelScope.launch {
+      preferenceDataStore.setMugCapacity(capacity)
+    }
+  }
+
+  val bottleCapacity = preferenceDataStore.bottleCapacity()
+
+  fun setBottleCapacity(capacity: Int) {
+    viewModelScope.launch {
+      preferenceDataStore.setBottleCapacity(capacity)
+    }
+  }
+
   //Main Settings
 
   val appTheme = preferenceDataStore.appTheme()

@@ -36,6 +36,14 @@ interface PreferenceDataStoreInterface {
   fun reminderSound() :Flow<String>
   suspend fun setReminderSound(sound:String)
 
+  //Container Settings
+  fun glassCapacity() :Flow<Int>
+  suspend fun setGlassCapacity(capacity:Int)
+  fun mugCapacity() :Flow<Int>
+  suspend fun setMugCapacity(capacity:Int)
+  fun bottleCapacity() :Flow<Int>
+  suspend fun setBottleCapacity(capacity:Int)
+
   //Main Settings
   fun appTheme() :Flow<String>
   suspend fun setAppTheme(theme:String)
