@@ -27,23 +27,9 @@ fun AddWaterButtonsRow(
   dailyWaterRecord: DailyWaterRecord,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ) {
-  val initialGlassCapacity:Int
-  val initialMugCapacity:Int
-  val initialBottleCapacity:Int
-
-  if(waterUnit == Units.ML) {
-    initialGlassCapacity = Container.baseGlassCapacityInMl
-    initialMugCapacity = Container.baseMugCapacityInMl
-    initialBottleCapacity = Container.baseBottleCapacityInMl
-  }else {
-    initialGlassCapacity = Container.baseGlassCapacityInOz
-    initialMugCapacity = Container.baseMugCapacityInOz
-    initialBottleCapacity = Container.baseBottleCapacityInOz
-  }
-
-  val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = initialGlassCapacity)
-  val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = initialMugCapacity)
-  val bottleCapacity = preferenceDataStoreViewModel.bottleCapacity.collectAsState(initial = initialBottleCapacity)
+  val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = Container.baseGlassCapacity(waterUnit))
+  val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit))
+  val bottleCapacity = preferenceDataStoreViewModel.bottleCapacity.collectAsState(initial = Container.baseBottleCapacity(waterUnit))
 
   val buttons = listOf(
     listOf(Container.GLASS, glassCapacity.value, "Water"),

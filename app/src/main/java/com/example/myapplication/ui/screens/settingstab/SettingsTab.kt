@@ -41,6 +41,10 @@ fun SettingsTab(
   val reminderSound = preferenceDataStoreViewModel.reminderSound.collectAsState(initial = ReminderSound.WATER_DROP)
   val appTheme = preferenceDataStoreViewModel.appTheme.collectAsState(initial = ReminderSound.WATER_DROP)
   val reminderAfterGoalAchieved = preferenceDataStoreViewModel.reminderAfterGoalAchieved.collectAsState(initial = false)
+  val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = Container.baseGlassCapacity(waterUnit.value))
+  val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit.value))
+  val bottleCapacity = preferenceDataStoreViewModel.bottleCapacity.collectAsState(initial = Container.baseBottleCapacity(waterUnit.value))
+
   val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
   val (dialogToShow, setDialogToShow) =  remember { mutableStateOf("") }
 
@@ -67,7 +71,12 @@ fun SettingsTab(
       setShowDialog,
       setDialogToShow
     )
-    ContainerSettings()
+    ContainerSettings(
+      glassCapacity.value,
+      mugCapacity.value,
+      bottleCapacity.value,
+      weightUnit.value
+    )
     MainSettings(
       appTheme.value,
       setShowDialog,
@@ -250,22 +259,25 @@ fun PersonalSettings(
 
 @Composable
 fun ContainerSettings(
-
+  glassCapacity:Int,
+  mugCapacity:Int,
+  bottleCapacity:Int,
+  weightUnit: String
 ){
   SettingsSubheading(text = "Containers")
   SettingsRowSelectValue(
     text = "Glass",
-    value = "200mL",
+    value = "$glassCapacity$weightUnit",
     onSettingsRowClick = {}
   )
   SettingsRowSelectValue(
     text = "Mug",
-    value = "300mL",
+    value = "$mugCapacity$weightUnit",
     onSettingsRowClick = {}
   )
   SettingsRowSelectValue(
     text = "Bottle",
-    value = "500mL",
+    value = "$bottleCapacity$weightUnit",
     onSettingsRowClick = {}
   )
 }

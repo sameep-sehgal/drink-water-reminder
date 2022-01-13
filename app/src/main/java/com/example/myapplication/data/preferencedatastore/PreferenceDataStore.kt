@@ -48,22 +48,6 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     val APP_THEME = stringPreferencesKey("app_theme")
   }
 
-  fun reminderPeriodStartWithoutFlow() : String {
-    var res:String = ""
-    dataStore.data.catch {
-      if (it is IOException) {
-        emit(emptyPreferences())
-      } else {
-        throw it
-      }
-    }.map {
-      it[PreferencesKeys.REMINDER_PERIOD_START] ?: ReminderPeriod.NOT_SET
-    }.map {
-      res = it
-    }
-    return res
-  }
-
   override fun isUserInfoCollected(): Flow<Boolean> =
     dataStore.data.catch {
       if (it is IOException) {
@@ -298,7 +282,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.GLASS_CAPACITY] ?: Container.baseGlassCapacityInMl
+      it[PreferencesKeys.GLASS_CAPACITY] ?: Container.baseGlassCapacity(Units.ML)
     }
 
   override suspend fun setGlassCapacity(capacity: Int) {
@@ -315,7 +299,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.MUG_CAPACITY] ?: Container.baseMugCapacityInMl
+      it[PreferencesKeys.MUG_CAPACITY] ?: Container.baseMugCapacity(Units.ML)
     }
 
   override suspend fun setMugCapacity(capacity: Int) {
@@ -332,7 +316,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.BOTTLE_CAPACITY] ?: Container.baseBottleCapacityInMl
+      it[PreferencesKeys.BOTTLE_CAPACITY] ?: Container.baseBottleCapacity(Units.ML)
     }
 
   override suspend fun setBottleCapacity(capacity: Int) {

@@ -8,13 +8,13 @@ class Container {
     const val MUG = 1
     const val GLASS = 2
 
-    const val baseGlassCapacityInMl = 200
-    const val baseMugCapacityInMl = 300
-    const val baseBottleCapacityInMl = 500
+    private const val BASE_GLASS_CAPACITY_ML = 200
+    private const val BASE_MUG_CAPACITY_ML = 300
+    private const val BASE_BOTTLE_CAPACITY_ML = 500
 
-    const val baseGlassCapacityInOz = 7
-    const val baseMugCapacityInOz = 10
-    const val baseBottleCapacityInOz = 15
+    private const val BASE_GLASS_CAPACITY_OZ = 7
+    private const val BASE_MUG_CAPACITY_OZ = 10
+    private const val BASE_BOTTLE_CAPACITY_OZ = 15
 
     //TODO("Add more containers here")
     val IMAGE_MAPPER = hashMapOf(
@@ -37,6 +37,21 @@ class Container {
         GLASS -> res = hashMapOf("text" to "Glass ", "value" to GLASS)
       }
       return res
+    }
+
+    fun baseGlassCapacity(waterUnit:String): Int {
+      if(waterUnit == Units.ML) return BASE_GLASS_CAPACITY_ML
+      return BASE_GLASS_CAPACITY_OZ
+    }
+
+    fun baseMugCapacity(waterUnit:String): Int {
+      if(waterUnit == Units.ML) return BASE_MUG_CAPACITY_ML
+      return BASE_MUG_CAPACITY_OZ
+    }
+
+    fun baseBottleCapacity(waterUnit:String): Int {
+      if(waterUnit == Units.ML) return BASE_BOTTLE_CAPACITY_ML
+      return BASE_BOTTLE_CAPACITY_OZ
     }
   }
 }
