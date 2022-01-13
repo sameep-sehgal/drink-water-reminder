@@ -27,27 +27,23 @@ fun WaterQuantityPicker(
       setAmount(newVal)
     }
   }
-  Row(
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.Center,
-  ){
-    AndroidView(
-      factory = { context ->
-        val numberPicker = NumberPicker(context)
-        numberPicker.maxValue = if(waterUnit == Units.ML) RecommendedWaterIntake.MAX_WATER_LEVEL_IN_ML_FOR_LOG/10 else RecommendedWaterIntake.MAX_WATER_LEVEL_IN_OZ_FOR_LOG
-        numberPicker.minValue = if(waterUnit == Units.ML) RecommendedWaterIntake.MIN_WATER_LEVEL_IN_ML_FOR_LOG/10 else RecommendedWaterIntake.MIN_WATER_LEVEL_IN_OZ_FOR_LOG
-        numberPicker.displayedValues = RecommendedWaterIntake.VALUES_FOR_WATER_LOG_NUMBER_PICKER(waterUnit).toTypedArray()
-        numberPicker.setOnValueChangedListener(numberPickerChangeListener)
-        numberPicker
-      },
-      update = {
-        it.value = amount/10
-      }
-    )
-    Text(
-      text = waterUnit,
-      modifier = Modifier.padding(8.dp),
-      color = MaterialTheme.colors.onSurface
-    )
-  }
+
+  AndroidView(
+    factory = { context ->
+      val numberPicker = NumberPicker(context)
+      numberPicker.maxValue = if(waterUnit == Units.ML) RecommendedWaterIntake.MAX_WATER_LEVEL_IN_ML_FOR_LOG/10 else RecommendedWaterIntake.MAX_WATER_LEVEL_IN_OZ_FOR_LOG
+      numberPicker.minValue = if(waterUnit == Units.ML) RecommendedWaterIntake.MIN_WATER_LEVEL_IN_ML_FOR_LOG/10 else RecommendedWaterIntake.MIN_WATER_LEVEL_IN_OZ_FOR_LOG
+      numberPicker.displayedValues = RecommendedWaterIntake.VALUES_FOR_WATER_LOG_NUMBER_PICKER(waterUnit).toTypedArray()
+      numberPicker.setOnValueChangedListener(numberPickerChangeListener)
+      numberPicker
+    },
+    update = {
+      it.value = amount/10
+    }
+  )
+//    Text(
+//      text = waterUnit,
+//      modifier = Modifier.padding(8.dp),
+//      color = MaterialTheme.colors.onSurface
+//    )
 }

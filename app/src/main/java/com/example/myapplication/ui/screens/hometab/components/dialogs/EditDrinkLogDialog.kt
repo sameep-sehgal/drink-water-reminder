@@ -188,6 +188,11 @@ fun EditDrinkLogDialogContent(
           amount = amount,
           setAmount = setAmount
         )
+        Text(
+          text = waterUnit,
+          modifier = Modifier.padding(8.dp),
+          color = MaterialTheme.colors.onSurface
+        )
       }
     }
 //    IconSelector() TODO

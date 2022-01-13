@@ -21,5 +21,8 @@ class Settings {
     const val RATE_US = "Rate Us"
     const val SHARE = "Share"
     const val CONTACT_DEVELOPERS = "Contact Developers"
+    const val GLASS_CAPACITY = "Glass Capacity"
+    const val MUG_CAPACITY = "Mug Capacity"
+    const val BOTTLE_CAPACITY = "Bottle Capacity"
   }
 }

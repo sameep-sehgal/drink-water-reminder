@@ -128,7 +128,7 @@ fun CalculateWaterIntake(
             reminderGap.value,
             context
           )
-          
+
           preferenceDataStoreViewModel.setGlassCapacity(Container.baseGlassCapacity(waterUnit.value))
           preferenceDataStoreViewModel.setMugCapacity(Container.baseMugCapacity(waterUnit.value))
           preferenceDataStoreViewModel.setBottleCapacity(Container.baseBottleCapacity(waterUnit.value))

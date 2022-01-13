@@ -13,7 +13,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.myapplication.PreferenceDataStoreViewModel
-import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowBooleanValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowNoValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowSelectValue
@@ -75,7 +74,9 @@ fun SettingsTab(
       glassCapacity.value,
       mugCapacity.value,
       bottleCapacity.value,
-      weightUnit.value
+      waterUnit.value,
+      setShowDialog,
+      setDialogToShow
     )
     MainSettings(
       appTheme.value,
@@ -83,14 +84,6 @@ fun SettingsTab(
       setDialogToShow
     )
 
-    if(showDialog && dialogToShow != Settings.GENDER){
-      ShowDialog(
-        title = "Set $dialogToShow",
-        content = { /*TODO*/ },
-        setShowDialog = setShowDialog,
-        onConfirmButtonClick = { /*TODO*/ }
-      )
-    }
     if(showDialog && dialogToShow == Settings.REMINDER_PERIOD){
       SetReminderPeriodSettingDialog(
         reminderGap = reminderGap.value,
@@ -143,6 +136,33 @@ fun SettingsTab(
         setShowDialog = setShowDialog,
         recommendedWaterIntake = recommendedWaterIntake.value,
         waterUnit = waterUnit.value
+      )
+    }
+    if(showDialog && dialogToShow == Settings.GLASS_CAPACITY){
+      SetContainerCapacity(
+        container = Container.GLASS,
+        capacity = glassCapacity.value,
+        waterUnit = waterUnit.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog
+      )
+    }
+    if(showDialog && dialogToShow == Settings.MUG_CAPACITY){
+      SetContainerCapacity(
+        container = Container.MUG,
+        capacity = mugCapacity.value,
+        waterUnit = waterUnit.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog
+      )
+    }
+    if(showDialog && dialogToShow == Settings.BOTTLE_CAPACITY){
+      SetContainerCapacity(
+        container = Container.BOTTLE,
+        capacity = bottleCapacity.value,
+        waterUnit = waterUnit.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog
       )
     }
     if(showDialog && dialogToShow == Settings.APP_THEME){
@@ -262,23 +282,34 @@ fun ContainerSettings(
   glassCapacity:Int,
   mugCapacity:Int,
   bottleCapacity:Int,
-  weightUnit: String
+  waterUnit: String,
+  setShowDialog :(Boolean) -> Unit,
+  setDialogToShow: (String) -> Unit
 ){
   SettingsSubheading(text = "Containers")
   SettingsRowSelectValue(
     text = "Glass",
-    value = "$glassCapacity$weightUnit",
-    onSettingsRowClick = {}
+    value = "$glassCapacity$waterUnit",
+    onSettingsRowClick = {
+      setShowDialog(true)
+      setDialogToShow(Settings.GLASS_CAPACITY)
+    }
   )
   SettingsRowSelectValue(
     text = "Mug",
-    value = "$mugCapacity$weightUnit",
-    onSettingsRowClick = {}
+    value = "$mugCapacity$waterUnit",
+    onSettingsRowClick = {
+      setShowDialog(true)
+      setDialogToShow(Settings.MUG_CAPACITY)
+    }
   )
   SettingsRowSelectValue(
     text = "Bottle",
-    value = "$bottleCapacity$weightUnit",
-    onSettingsRowClick = {}
+    value = "$bottleCapacity$waterUnit",
+    onSettingsRowClick = {
+      setShowDialog(true)
+      setDialogToShow(Settings.BOTTLE_CAPACITY)
+    }
   )
 }
 
