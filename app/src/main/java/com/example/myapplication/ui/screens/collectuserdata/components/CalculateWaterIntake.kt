@@ -128,23 +128,10 @@ fun CalculateWaterIntake(
             reminderGap.value,
             context
           )
-          val glassCapacity:Int
-          val mugCapacity:Int
-          val bottleCapacity:Int
-
-          if(waterUnit.value == Units.ML) {
-            glassCapacity = Container.baseGlassCapacityInMl
-            mugCapacity = Container.baseMugCapacityInMl
-            bottleCapacity = Container.baseBottleCapacityInMl
-          }else {
-            glassCapacity = Container.baseGlassCapacityInOz
-            mugCapacity = Container.baseMugCapacityInOz
-            bottleCapacity = Container.baseBottleCapacityInOz
-          }
-
-          preferenceDataStoreViewModel.setGlassCapacity(glassCapacity)
-          preferenceDataStoreViewModel.setMugCapacity(mugCapacity)
-          preferenceDataStoreViewModel.setBottleCapacity(bottleCapacity)
+          
+          preferenceDataStoreViewModel.setGlassCapacity(Container.baseGlassCapacity(waterUnit.value))
+          preferenceDataStoreViewModel.setMugCapacity(Container.baseMugCapacity(waterUnit.value))
+          preferenceDataStoreViewModel.setBottleCapacity(Container.baseBottleCapacity(waterUnit.value))
 
           //User Data stored now switch to TabLayout HomeScreen
           preferenceDataStoreViewModel.setIsUserInfoCollected(true)

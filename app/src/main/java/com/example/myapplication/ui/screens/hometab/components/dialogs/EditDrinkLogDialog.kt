@@ -2,7 +2,6 @@ package com.example.myapplication.ui.screens.hometab.components.dialogs
 
 import android.app.TimePickerDialog
 import android.content.DialogInterface
-import android.widget.NumberPicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.components.ShowDialog
@@ -21,10 +19,8 @@ import com.example.myapplication.utils.TimeString
 import com.example.myapplication.R
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.ui.components.DropdownSelect
-import com.example.myapplication.ui.theme.PersianGreen
+import com.example.myapplication.ui.components.WaterQuantityPicker
 import com.example.myapplication.utils.Container
-import com.example.myapplication.utils.RecommendedWaterIntake
-import com.example.myapplication.utils.Units
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -104,13 +100,13 @@ fun EditDrinkLogDialogContent(
     setShowTimePicker(false)
   }
 
-  val numberPickerChangeListener = NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
-    if(waterUnit == Units.ML){
-      setAmount(newVal*10)
-    }else {
-      setAmount(newVal)
-    }
-  }
+//  val numberPickerChangeListener = NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
+//    if(waterUnit == Units.ML){
+//      setAmount(newVal*10)
+//    }else {
+//      setAmount(newVal)
+//    }
+//  }
 
   val setSelectedOptionDropdown = { option:HashMap<String,Any?> ->
     setIcon(option["value"] as Int)
@@ -171,7 +167,9 @@ fun EditDrinkLogDialogContent(
           Icon(
             painter = it,
             contentDescription = "container",
-            modifier = Modifier.size(64.dp).padding(0.dp,8.dp)
+            modifier = Modifier
+              .size(64.dp)
+              .padding(0.dp, 8.dp)
           )
         }
         DropdownSelect(
@@ -185,24 +183,10 @@ fun EditDrinkLogDialogContent(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.weight(1f)
       ) {
-        AndroidView(
-          factory = { context ->
-            val numberPicker = NumberPicker(context)
-            numberPicker.maxValue = if(waterUnit == Units.ML) RecommendedWaterIntake.MAX_WATER_LEVEL_IN_ML_FOR_LOG/10 else RecommendedWaterIntake.MAX_WATER_LEVEL_IN_OZ_FOR_LOG
-            numberPicker.minValue = if(waterUnit == Units.ML) RecommendedWaterIntake.MIN_WATER_LEVEL_IN_ML_FOR_LOG/10 else RecommendedWaterIntake.MIN_WATER_LEVEL_IN_OZ_FOR_LOG
-            numberPicker.displayedValues = RecommendedWaterIntake.VALUES_FOR_WATER_LOG_NUMBER_PICKER(waterUnit).toTypedArray()
-            numberPicker.setOnValueChangedListener(numberPickerChangeListener)
-            numberPicker
-          },
-          update = {
-            it.value = amount/10
-            it.setBackgroundColor(PersianGreen.hashCode())
-          }
-        )
-        Text(
-          text = waterUnit,
-          modifier = Modifier.padding(8.dp),
-          color = MaterialTheme.colors.onSurface
+        WaterQuantityPicker(
+          waterUnit = waterUnit,
+          amount = amount,
+          setAmount = setAmount
         )
       }
     }
