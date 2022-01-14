@@ -1,9 +1,7 @@
 package com.example.myapplication.repository
 
-import androidx.room.*
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
-import com.example.myapplication.data.preferencedatastore.PreferenceDataStore
 import com.example.myapplication.data.roomdatabase.WaterDatabaseDao
 import com.example.myapplication.utils.DateString
 import kotlinx.coroutines.Dispatchers
@@ -15,8 +13,7 @@ import javax.inject.Inject
 //Repository is single source of truth for all data -- API and database
 //Both retrofit and room are linked here to provide data access methods to the ViewModel
 class WaterDataRepository @Inject constructor(
-  private val waterDatabaseDao: WaterDatabaseDao,
-  private val preferenceDataStore: PreferenceDataStore
+  private val waterDatabaseDao: WaterDatabaseDao
 ) {
   //Database Queries
   fun getDailyWaterRecord(date:String = DateString.getTodaysDate()): Flow<DailyWaterRecord>{
@@ -30,10 +27,6 @@ class WaterDataRepository @Inject constructor(
   fun getDailyWaterRecordsList(endDate:String = DateString.getTodaysDate(), startDate:String): Flow<List<DailyWaterRecord>> {
     return waterDatabaseDao.getDailyWaterRecordsList(endDate,startDate)
   }
-
-//  fun getFirstWaterRecord(): Flow<DailyWaterRecord> {
-//    return waterDatabaseDao.getFirstWaterRecord()
-//  }
 
   suspend fun insertDailyWaterRecord(dailyWaterRecord: DailyWaterRecord): Long {
     return waterDatabaseDao.insertDailyWaterRecord(dailyWaterRecord)

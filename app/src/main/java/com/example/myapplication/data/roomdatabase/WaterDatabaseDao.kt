@@ -14,6 +14,9 @@ interface WaterDatabaseDao {
     @Query("SELECT * FROM daily_water_record WHERE date = :date")
     fun getDailyWaterRecord(date:String = DateString.getTodaysDate()):Flow<DailyWaterRecord>
 
+    @Query("SELECT * FROM daily_water_record WHERE date = :date")
+    fun getDailyWaterRecordWithoutFlow(date:String = DateString.getTodaysDate()):DailyWaterRecord
+
     @Query("SELECT * FROM daily_water_record WHERE date BETWEEN :startDate AND :endDate")
     fun getDailyWaterRecordsList(endDate:String = DateString.getTodaysDate(), startDate:String):Flow<List<DailyWaterRecord>>
 
@@ -22,16 +25,6 @@ interface WaterDatabaseDao {
 
     @Query("SELECT * FROM reminder_timings")
     fun getReminderTimings(): Flow<List<ReminderTimings>>
-
-//    @Query("SELECT * FROM daily_water_record ORDER BY date ASC LIMIT 1")
-//    fun getFirstWaterRecord(): Flow<DailyWaterRecord>
-
-
-//    @Query("SELECT curr_water_amount FROM daily_water_record WHERE date = :date")
-//    fun getTodaysCurrWaterAmount(date:String = DateString.getTodaysDate()):Flow<Int>
-//
-//    @Query("SELECT is_goal_achieved FROM daily_water_record WHERE date = :date")
-//    fun getTodaysIsGoalAchieved(date:String = DateString.getTodaysDate()):Flow<Boolean>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDailyWaterRecord(dailyWaterRecord: DailyWaterRecord):Long

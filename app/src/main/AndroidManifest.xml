@@ -27,6 +27,8 @@
 
         <receiver android:name=".remindernotification.ReminderReceiver" />
 
+        <receiver android:name=".remindernotification.AddWaterReceiver" />
+
     </application>
 
 </manifest>

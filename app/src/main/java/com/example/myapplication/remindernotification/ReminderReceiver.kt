@@ -11,10 +11,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
+import com.example.myapplication.data.roomdatabase.WaterDatabaseDao
+import com.example.myapplication.repository.WaterDataRepository
 import com.example.myapplication.utils.ReminderGap
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
 //Use broadcast Receiver since app wont run when we have to show notifications
 //It will automatically show notification at desired time without running the app
@@ -29,11 +32,18 @@ class ReminderReceiver: BroadcastReceiver() {
     val reminderPeriodStart = intent?.getStringExtra("reminder_period_start")
     val reminderPeriodEnd = intent?.getStringExtra("reminder_period_end")
     val reminderGap = intent?.getIntExtra("reminder_gap",ReminderGap.NOT_SET)
-
     val i = Intent(context, MainActivity::class.java).apply {
       flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
+    val addWaterIntentGlass = Intent(context, AddWaterReceiver::class.java).apply { putExtra("value", 200) }
+    val addWaterIntentMug = Intent(context, AddWaterReceiver::class.java).apply { putExtra("value", 300) }
+    val addWaterIntentBottle = Intent(context, AddWaterReceiver::class.java).apply { putExtra("value", 500) }
+
+    //Request codes are used to uniquely identify intents. They must not be the same for different intents
     val pendingIntent = PendingIntent.getActivity(context,0,i,PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingActionIntentGlass = PendingIntent.getBroadcast(context,1, addWaterIntentGlass, PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingActionIntentMug = PendingIntent.getBroadcast(context,2, addWaterIntentMug, PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingActionIntentBottle = PendingIntent.getBroadcast(context,3, addWaterIntentBottle, PendingIntent.FLAG_UPDATE_CURRENT)
 
     //Build a notification here
     val builder = context?.let {
@@ -47,6 +57,9 @@ class ReminderReceiver: BroadcastReceiver() {
         .setAutoCancel(true)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setContentIntent(pendingIntent)
+        .addAction(R.drawable.glass_2, "200ml", pendingActionIntentGlass)
+        .addAction(R.drawable.mug_3, "300ml", pendingActionIntentMug)
+        .addAction(R.drawable.bottle_4, "500ml", pendingActionIntentBottle)
     }
 
     val reminderPeriodEndHour = reminderPeriodEnd?.split(':')?.get(0)?.toInt()

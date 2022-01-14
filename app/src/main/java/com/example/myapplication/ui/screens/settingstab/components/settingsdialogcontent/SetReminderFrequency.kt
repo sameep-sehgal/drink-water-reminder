@@ -68,7 +68,7 @@ fun SetReminderFrequencySettingDialog(
     onConfirmButtonClick = {
       preferenceDataStoreViewModel.setReminderGap(selectedReminderGap)
       val calendar = Calendar.getInstance()
-      calendar.add(Calendar.MILLISECOND, selectedReminderGap)
+      calendar.add(Calendar.MILLISECOND, 10000) //TODO(Change back to reminder gap)
       ReminderReceiver.setReminder(
         time = calendar.timeInMillis,
         reminderPeriodStart = reminderPeriodStart,

@@ -34,19 +34,13 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideWaterDataRepository(waterDatabaseDao: WaterDatabaseDao,preferenceDataStore: PreferenceDataStore):WaterDataRepository
-        = WaterDataRepository(waterDatabaseDao = waterDatabaseDao, preferenceDataStore = preferenceDataStore)
+    fun provideWaterDataRepository(waterDatabaseDao: WaterDatabaseDao):WaterDataRepository
+        = WaterDataRepository(waterDatabaseDao = waterDatabaseDao)
 
     @Singleton
     @Provides
     fun provideReminderRepository(waterDatabaseDao: WaterDatabaseDao,preferenceDataStore: PreferenceDataStore):ReminderRepository
         = ReminderRepository(waterDatabaseDao = waterDatabaseDao, preferenceDataStore = preferenceDataStore)
-
-    //Not reqd viewmodels are already annotated by HiltViewModel
-//    @Singleton
-//    @Provides
-//    fun provideHomeTabViewModel(waterDataRepository: WaterDataRepository):HomeTabViewModel
-//        = HomeTabViewModel(waterDataRepository = waterDataRepository)
 
     @Singleton
     @Provides
