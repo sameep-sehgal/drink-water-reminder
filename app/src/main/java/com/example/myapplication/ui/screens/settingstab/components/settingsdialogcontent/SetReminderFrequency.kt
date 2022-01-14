@@ -27,7 +27,10 @@ fun SetReminderFrequencySettingDialog(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowDialog:(Boolean) -> Unit,
   reminderPeriodStart: String,
-  reminderPeriodEnd: String
+  reminderPeriodEnd: String,
+  glassCapacity:Int,
+  mugCapacity:Int,
+  bottleCapacity:Int,
 ) {
   var selectedReminderGap by  remember { mutableStateOf(reminderGap) }
   val setSelectedReminderGap = { timeGap:Int ->
@@ -74,6 +77,9 @@ fun SetReminderFrequencySettingDialog(
         reminderPeriodStart = reminderPeriodStart,
         reminderPeriodEnd = reminderPeriodEnd,
         reminderGap = selectedReminderGap,
+        glassCapacity = glassCapacity,
+        mugCapacity = mugCapacity,
+        bottleCapacity = bottleCapacity,
         context = context
       )
     }

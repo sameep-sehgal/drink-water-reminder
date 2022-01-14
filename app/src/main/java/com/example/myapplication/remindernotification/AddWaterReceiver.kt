@@ -19,6 +19,7 @@ class AddWaterReceiver: BroadcastReceiver() {
   override fun onReceive(context: Context?, intent: Intent?) {
     GlobalScope.launch (Dispatchers.Main){
       if (context != null) {
+        NotificationManagerCompat.from(context).cancel(TEST_NOTIFICATION_ID)
         val amount = intent?.getIntExtra("value", 0)
         if(amount != null && amount != 0) {
           val db = WaterDatabase.getInstance(context).waterDatabaseDao()
@@ -30,8 +31,7 @@ class AddWaterReceiver: BroadcastReceiver() {
             goal = todaysWaterRecord.goal,
             currWaterAmount = todaysWaterRecord.currWaterAmount + amount
           ))
-          NotificationManagerCompat.from(context).cancel(TEST_NOTIFICATION_ID)
-          Log.d(TAG, "onReceive: AddWaterReceiver $amount ${todaysWaterRecord.date} ${todaysWaterRecord.goal} ${todaysWaterRecord.currWaterAmount}")
+          Log.d(TAG, "onReceive: Successfully added water intake $amount ${todaysWaterRecord.date} ${todaysWaterRecord.goal} ${todaysWaterRecord.currWaterAmount}")
         }
       }
     }

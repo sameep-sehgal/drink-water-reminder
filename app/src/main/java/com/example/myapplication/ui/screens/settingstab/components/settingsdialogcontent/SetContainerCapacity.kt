@@ -8,13 +8,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.ui.components.WaterQuantityPicker
 import com.example.myapplication.utils.Container
 import com.example.myapplication.utils.Settings
+import java.util.*
 
 
 @Composable
@@ -24,12 +27,18 @@ fun SetContainerCapacity(
   waterUnit:String,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowDialog:(Boolean) -> Unit,
+  reminderGap: Int,
+  reminderPeriodStart: String,
+  reminderPeriodEnd: String,
+  glassCapacity: Int,
+  mugCapacity: Int,
+  bottleCapacity: Int
 ) {
   var selectedCapacity by remember { mutableStateOf(capacity) }
   val setCapacity = {value:Int -> selectedCapacity = value}
+  val context = LocalContext.current
 
   var title = "Container"
-
   when(container){
     Container.GLASS -> title = Settings.GLASS_CAPACITY
     Container.MUG -> title = Settings.MUG_CAPACITY
@@ -90,12 +99,48 @@ fun SetContainerCapacity(
     },
     setShowDialog = setShowDialog,
     onConfirmButtonClick = {
-      if(container == Container.GLASS)
+      val calendar = Calendar.getInstance()
+      calendar.add(Calendar.MILLISECOND, 10000) //TODO(Change back to reminder gap)
+
+      if(container == Container.GLASS){
         preferenceDataStoreViewModel.setGlassCapacity(selectedCapacity)
-      if(container == Container.MUG)
+        ReminderReceiver.setReminder(
+          time = calendar.timeInMillis,
+          reminderPeriodStart = reminderPeriodStart,
+          reminderPeriodEnd = reminderPeriodEnd,
+          reminderGap = reminderGap,
+          glassCapacity = selectedCapacity,
+          mugCapacity = mugCapacity,
+          bottleCapacity = bottleCapacity,
+          context = context
+        )
+      }
+      if(container == Container.MUG) {
         preferenceDataStoreViewModel.setMugCapacity(selectedCapacity)
-      if(container == Container.BOTTLE)
+        ReminderReceiver.setReminder(
+          time = calendar.timeInMillis,
+          reminderPeriodStart = reminderPeriodStart,
+          reminderPeriodEnd = reminderPeriodEnd,
+          reminderGap = reminderGap,
+          glassCapacity = glassCapacity,
+          mugCapacity = selectedCapacity,
+          bottleCapacity = bottleCapacity,
+          context = context
+        )
+      }
+      if(container == Container.BOTTLE) {
         preferenceDataStoreViewModel.setBottleCapacity(selectedCapacity)
+        ReminderReceiver.setReminder(
+          time = calendar.timeInMillis,
+          reminderPeriodStart = reminderPeriodStart,
+          reminderPeriodEnd = reminderPeriodEnd,
+          reminderGap = reminderGap,
+          glassCapacity = glassCapacity,
+          mugCapacity = mugCapacity,
+          bottleCapacity = selectedCapacity,
+          context = context
+        )
+      }
     }
   )
 }

@@ -118,6 +118,9 @@ fun CalculateWaterIntake(
           preferenceDataStoreViewModel.setRecommendedWaterIntake(recommendedWaterIntake)
           preferenceDataStoreViewModel.setDailyWaterGoal(recommendedWaterIntake)
 
+          val baseGlassCapacity = Container.baseGlassCapacity(waterUnit.value)
+          val baseMugCapacity = Container.baseMugCapacity(waterUnit.value)
+          val baseBottleCapacity = Container.baseBottleCapacity(waterUnit.value)
           //Set Repeating Reminder
           val calendar = Calendar.getInstance()
           calendar.add(Calendar.MILLISECOND, reminderGap.value)
@@ -126,12 +129,15 @@ fun CalculateWaterIntake(
             reminderPeriodStart.value,
             reminderPeriodEnd.value,
             reminderGap.value,
+            baseGlassCapacity,
+            baseMugCapacity,
+            baseBottleCapacity,
             context
           )
 
-          preferenceDataStoreViewModel.setGlassCapacity(Container.baseGlassCapacity(waterUnit.value))
-          preferenceDataStoreViewModel.setMugCapacity(Container.baseMugCapacity(waterUnit.value))
-          preferenceDataStoreViewModel.setBottleCapacity(Container.baseBottleCapacity(waterUnit.value))
+          preferenceDataStoreViewModel.setGlassCapacity(baseGlassCapacity)
+          preferenceDataStoreViewModel.setMugCapacity(baseMugCapacity)
+          preferenceDataStoreViewModel.setBottleCapacity(baseBottleCapacity)
 
           //User Data stored now switch to TabLayout HomeScreen
           preferenceDataStoreViewModel.setIsUserInfoCollected(true)

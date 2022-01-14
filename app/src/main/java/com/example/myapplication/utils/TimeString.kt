@@ -24,5 +24,18 @@ class TimeString {
 
             return "$HH:$MM"
         }
+
+        fun getCalendarInstance(time:String): Calendar {
+            val timeHour = time.split(':')[0].toInt()
+            val timeMinute = time.split(':')[1].toInt()
+
+            val timeCalendar = Calendar.getInstance()
+            timeCalendar.set(Calendar.HOUR_OF_DAY,timeHour)
+            timeCalendar.set(Calendar.MINUTE,timeMinute)
+            timeCalendar.set(Calendar.SECOND,0)
+            timeCalendar.set(Calendar.MILLISECOND,0)
+
+            return timeCalendar
+        }
     }
 }
