@@ -145,4 +145,9 @@ class MainActivity : ComponentActivity() {
       notificationManager?.createNotificationChannel(channel)
     }
   }
+
+  override fun onResume() {
+    super.onResume()
+    notificationManager?.cancelAll()
+  }
 }

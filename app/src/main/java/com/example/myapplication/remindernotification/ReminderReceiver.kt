@@ -46,6 +46,11 @@ class ReminderReceiver: BroadcastReceiver() {
     val mugCapacity = intent?.getIntExtra("mug_capacity",0)
     val bottleCapacity = intent?.getIntExtra("bottle_capacity",0)
 
+    //Todo(""Will Need to fetch waterUnit through intent extras"")
+    //Todo(""Will Need to pass Boolean remindAfterGoalAchieved? through intent extras"")
+    //Todo(""Will Need to pass Boolean dontRemindToday through intent extras"")
+    //Todo(""Will Need to pass channel_id as well to support different reminder sounds through intent extras also handle reminder sounds for API < 26"")
+
     var reminderPeriodStartTime: Calendar = Calendar.getInstance()
     var reminderPeriodEndTime: Calendar = Calendar.getInstance()
     if(reminderPeriodStart != null) {
