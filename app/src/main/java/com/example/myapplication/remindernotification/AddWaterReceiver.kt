@@ -17,9 +17,11 @@ class AddWaterReceiver: BroadcastReceiver() {
 
   @DelicateCoroutinesApi
   override fun onReceive(context: Context?, intent: Intent?) {
+    if (context != null) {
+      NotificationManagerCompat.from(context).cancel(TEST_NOTIFICATION_ID)
+    }
     GlobalScope.launch (Dispatchers.Main){
       if (context != null) {
-        NotificationManagerCompat.from(context).cancel(TEST_NOTIFICATION_ID)
         val amount = intent?.getIntExtra("value", 0)
         if(amount != null && amount != 0) {
           val db = WaterDatabase.getInstance(context).waterDatabaseDao()
