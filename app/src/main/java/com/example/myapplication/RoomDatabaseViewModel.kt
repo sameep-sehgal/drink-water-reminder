@@ -26,6 +26,10 @@ class RoomDatabaseViewModel @Inject constructor(
 
   //Initialize state required for app to run in the constructor
   init {
+    refreshData()
+  }
+
+  fun refreshData() {
     getTodaysWaterRecord()
     getTodaysDrinkLogs()
     getSelectedHistoryDrinkLogs(DateString.getTodaysDate())

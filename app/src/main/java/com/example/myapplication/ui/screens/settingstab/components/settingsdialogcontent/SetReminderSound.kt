@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
 import android.media.MediaPlayer
+import android.media.RingtoneManager
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -77,10 +78,17 @@ fun PlayAudio(
   setPlayAudio: (Boolean) -> Unit
 ) {
   val context = LocalContext.current
-  val mediaPlayer =
-    ReminderSound.NAME_VALUE_MAPPER[reminderSound]?.let { MediaPlayer.create(context, it) }
   val mediaPlayerCompletionListener = MediaPlayer.OnCompletionListener {
     setPlayAudio(false)
+  }
+
+  val mediaPlayer: MediaPlayer? = if(reminderSound == ReminderSound.DEVICE_DEFAULT){
+    MediaPlayer.create(
+      context,
+      RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+    )
+  }else {
+    ReminderSound.NAME_VALUE_MAPPER[reminderSound]?.let { MediaPlayer.create(context, it) }
   }
   mediaPlayer?.setOnCompletionListener(mediaPlayerCompletionListener)
 

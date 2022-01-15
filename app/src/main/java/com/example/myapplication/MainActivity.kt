@@ -22,7 +22,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.myapplication.data.models.DailyWaterRecord
-import com.example.myapplication.remindernotification.CHANNEL_ID
 import com.example.myapplication.ui.components.DisplayTabLayout
 import com.example.myapplication.ui.components.Tabs
 import com.example.myapplication.ui.screens.collectuserdata.CollectUserData
@@ -38,6 +37,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import com.example.myapplication.remindernotification.CHANNEL_ID_2
 import com.example.myapplication.ui.screens.historytab.HistoryTab
 import com.example.myapplication.utils.AppTheme
+import com.example.myapplication.utils.ReminderSound
 
 
 @ExperimentalPagerApi
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 //    notificationManager?.deleteNotificationChannel(CHANNEL_ID)
-    createNotificationChannel()
+    createNotificationChannel(CHANNEL_ID_2)
     notificationManager?.notificationChannels?.forEach {
       Log.d(TAG, "onCreate: $it")
     }
@@ -120,27 +120,24 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  private fun createNotificationChannel() {
+  private fun createNotificationChannel(channelId: String) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//      val sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + "raw/water_drop")
-      val sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.water_drop)
-      Log.d(TAG, "createNotificationChannel: ${sound}")
-//      val attributes = AudioAttributes.Builder()
-//        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-//        .build()
-      val attributes = AudioAttributes.Builder()
-        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-        .setUsage(AudioAttributes.USAGE_ALARM)
-        .build()
-      val name = getString(R.string.app_name)
-      val descriptionText = getString(R.string.app_name)
+//      Log.d(TAG, "createNotificationChannel: ${sound}")
+      val name = "Drink Water Reminder"
+      val descriptionText = "Drink Water Reminder"
       val importance = NotificationManager.IMPORTANCE_HIGH
-      val channel = NotificationChannel(CHANNEL_ID_2, name, importance).apply {
+      val channel = NotificationChannel(channelId, name, importance).apply {
         description = descriptionText
-        setSound(sound,attributes)
+        lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+        if(channelId != ReminderSound.DEVICE_DEFAULT) {
+          val sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[channelId])
+          val attributes = AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_ALARM)
+            .build()
+          setSound(sound,attributes)
+        }
       }
-      channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-//      channel.setSound(sound,attributes)
 
       notificationManager?.createNotificationChannel(channel)
     }
@@ -149,5 +146,6 @@ class MainActivity : ComponentActivity() {
   override fun onResume() {
     super.onResume()
     notificationManager?.cancelAll()
+    roomDatabaseViewModel.refreshData()
   }
 }
