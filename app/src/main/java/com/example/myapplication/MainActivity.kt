@@ -38,6 +38,7 @@ import com.example.myapplication.remindernotification.CHANNEL_ID_2
 import com.example.myapplication.ui.screens.historytab.HistoryTab
 import com.example.myapplication.utils.AppTheme
 import com.example.myapplication.utils.ReminderSound
+import com.google.accompanist.pager.PagerState
 
 
 @ExperimentalPagerApi
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
   private val preferenceDataStoreViewModel: PreferenceDataStoreViewModel by viewModels()
   private val roomDatabaseViewModel: RoomDatabaseViewModel by viewModels()
   private var notificationManager: NotificationManager? = null
+  private lateinit var pagerState: PagerState
 
   @RequiresApi(Build.VERSION_CODES.O)
   @ExperimentalFoundationApi
@@ -79,7 +81,7 @@ class MainActivity : ComponentActivity() {
             darkTheme = darkTheme
           ) {
             Surface {
-              val pagerState = rememberPagerState()
+              pagerState = rememberPagerState()
               Column {
                 DisplayTabLayout(pagerState)
                 //Pager used to swipe between different tabs
@@ -120,6 +122,13 @@ class MainActivity : ComponentActivity() {
     }
   }
 
+  override fun onResume() {
+    super.onResume()
+    notificationManager?.cancelAll()
+    roomDatabaseViewModel.refreshData()
+
+  }
+
   private fun createNotificationChannel(channelId: String) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //      Log.d(TAG, "createNotificationChannel: ${sound}")
@@ -141,11 +150,5 @@ class MainActivity : ComponentActivity() {
 
       notificationManager?.createNotificationChannel(channel)
     }
-  }
-
-  override fun onResume() {
-    super.onResume()
-    notificationManager?.cancelAll()
-    roomDatabaseViewModel.refreshData()
   }
 }

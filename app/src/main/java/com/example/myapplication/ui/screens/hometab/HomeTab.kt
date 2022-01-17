@@ -86,7 +86,7 @@ fun HomeTab(
           Modifier.weight(1f),
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
-          WorkoutButton(modifier = Modifier.weight(1f), setShowWorkoutDialog = setShowWorkoutDialog)
+          SetTodaysReminderButton(modifier = Modifier.weight(1f), setShowWorkoutDialog = setShowWorkoutDialog)
 
           FruitButton(modifier = Modifier.weight(1f), setShowFruitDialog = setShowFruitDialog)
         }
