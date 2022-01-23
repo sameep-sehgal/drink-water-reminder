@@ -77,7 +77,7 @@ class ReminderReceiver: BroadcastReceiver() {
 
       //Build notification only when we need to show.
       val builder = context?.let {
-        NotificationCompat.Builder(it, CHANNEL_ID_2)
+        NotificationCompat.Builder(it, CHANNEL_ID_4)
           //TODO(Surround setSound with if condition to handle device default sound)
           .setSound(
             Uri.parse("android.resource://"

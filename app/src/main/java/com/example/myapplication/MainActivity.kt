@@ -35,6 +35,8 @@ import com.google.accompanist.pager.rememberPagerState
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.foundation.isSystemInDarkTheme
 import com.example.myapplication.remindernotification.CHANNEL_ID_2
+import com.example.myapplication.remindernotification.CHANNEL_ID_3
+import com.example.myapplication.remindernotification.CHANNEL_ID_4
 import com.example.myapplication.ui.screens.historytab.HistoryTab
 import com.example.myapplication.utils.AppTheme
 import com.example.myapplication.utils.ReminderSound
@@ -55,11 +57,11 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//    notificationManager?.deleteNotificationChannel(CHANNEL_ID)
-    createNotificationChannel(CHANNEL_ID_2)
-    notificationManager?.notificationChannels?.forEach {
-      Log.d(TAG, "onCreate: $it")
-    }
+//    notificationManager?.deleteNotificationChannel(CHANNEL_ID_3)
+    createNotificationChannel(CHANNEL_ID_4)
+//    notificationManager?.notificationChannels?.forEach {
+//      Log.d(TAG, "onCreate: $it")
+//    }
     preferenceDataStoreViewModel.isUserInfoCollected.observe(this){
       if(it == true){
         setContent{
@@ -72,7 +74,8 @@ class MainActivity : ComponentActivity() {
             AppTheme.LIGHT -> darkTheme = false
             AppTheme.DEFAULT -> darkTheme = isSystemInDarkTheme()
           }
-          if(setGoal == RecommendedWaterIntake.NOT_SET){
+          if(setGoal == RecommendedWaterIntake.NOT_SET && goal.value!=0){
+            Log.d(TAG, "onCreate: ${goal.value}")
             roomDatabaseViewModel.updateDailyWaterRecord(
               DailyWaterRecord(goal = goal.value)
             )
@@ -139,10 +142,10 @@ class MainActivity : ComponentActivity() {
         description = descriptionText
         lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         if(channelId != ReminderSound.DEVICE_DEFAULT) {
-          val sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[channelId])
+          val sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[ReminderSound.WATER_DROP])
           val attributes = AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .setUsage(AudioAttributes.USAGE_ALARM)
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
             .build()
           setSound(sound,attributes)
         }
