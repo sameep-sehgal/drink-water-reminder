@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
+import android.content.Context
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.util.Log
@@ -14,16 +15,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.utils.ReminderSound
 import com.example.myapplication.utils.Settings
+import java.util.*
 
 @Composable
 fun SetReminderSoundSettingDialog(
   reminderSound: String,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
-  setShowDialog:(Boolean) -> Unit
+  setShowDialog:(Boolean) -> Unit,
+  reminderPeriodStart: String,
+  reminderPeriodEnd: String,
+  glassCapacity:Int,
+  mugCapacity:Int,
+  bottleCapacity:Int,
+  reminderGap: Int,
+  dailyWaterGoal: Int,
+  remindAfterGoalAchieved: Boolean,
+  waterUnit: String,
+  context:Context
 ) {
   val selectedReminderSound = remember { mutableStateOf(reminderSound) }
   val playAudio = remember { mutableStateOf(false) }
@@ -68,6 +81,23 @@ fun SetReminderSoundSettingDialog(
     setShowDialog = setShowDialog,
     onConfirmButtonClick = {
       preferenceDataStoreViewModel.setReminderSound(selectedReminderSound.value)
+      val calendar = Calendar.getInstance()
+      calendar.add(Calendar.MILLISECOND, reminderGap)
+      //TODO(Delete old channel and create new channel)
+      ReminderReceiver.setReminder(
+        time = calendar.timeInMillis,
+        reminderPeriodStart = reminderPeriodStart,
+        reminderPeriodEnd = reminderPeriodEnd,
+        reminderGap = reminderGap,
+        glassCapacity = glassCapacity,
+        mugCapacity = mugCapacity,
+        bottleCapacity = bottleCapacity,
+        channelId = selectedReminderSound.value,
+        waterUnit = waterUnit,
+        dailyWaterGoal = dailyWaterGoal,
+        remindAfterGoalAchieved = remindAfterGoalAchieved,
+        context = context
+      )
     }
   )
 }

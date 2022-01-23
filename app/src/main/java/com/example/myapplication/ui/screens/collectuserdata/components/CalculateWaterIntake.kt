@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.screens.collectuserdata.components
 
-import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
@@ -117,6 +116,7 @@ fun CalculateWaterIntake(
         onClick = {
           preferenceDataStoreViewModel.setRecommendedWaterIntake(recommendedWaterIntake)
           preferenceDataStoreViewModel.setDailyWaterGoal(recommendedWaterIntake)
+          preferenceDataStoreViewModel.setReminderSound(ReminderSound.DEFAULT_CHANNEL_ID)
 
           val baseGlassCapacity = Container.baseGlassCapacity(waterUnit.value)
           val baseMugCapacity = Container.baseMugCapacity(waterUnit.value)
@@ -132,6 +132,10 @@ fun CalculateWaterIntake(
             baseGlassCapacity,
             baseMugCapacity,
             baseBottleCapacity,
+            ReminderSound.DEFAULT_CHANNEL_ID,
+            waterUnit.value,
+            recommendedWaterIntake ,
+            true,
             context
           )
 

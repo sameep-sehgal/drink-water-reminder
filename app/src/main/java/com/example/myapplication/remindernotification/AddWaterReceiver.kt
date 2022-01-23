@@ -23,11 +23,20 @@ class AddWaterReceiver: BroadcastReceiver() {
     GlobalScope.launch (Dispatchers.Main){
       if (context != null) {
         val amount = intent?.getIntExtra("value", 0)
+        val dailyWaterGoal = intent?.getIntExtra("daily_water_goal", 0)
+        val container = intent?.getIntExtra("container", 0)
         if(amount != null && amount != 0) {
           val db = WaterDatabase.getInstance(context).waterDatabaseDao()
-          val todaysWaterRecord = withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
+          var todaysWaterRecord = withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
+          Log.d(TAG, "onAddWaterReceiver: $todaysWaterRecord")
+          if(todaysWaterRecord === null){
+            //Day changes after notification is shown
+            dailyWaterGoal?.let { DailyWaterRecord(goal = it) }
+              ?.let { db.insertDailyWaterRecord(it) }
+            todaysWaterRecord = withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
+          }
           //TODO("Handle date change here")
-          db.insertDrinkLog(DrinkLogs(amount = amount, icon = Container.GLASS))
+          container?.let { DrinkLogs(amount = amount, icon = it) }?.let { db.insertDrinkLog(it) }
           db.updateDailyWaterRecord(DailyWaterRecord(
             date = todaysWaterRecord.date,
             goal = todaysWaterRecord.goal,

@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.PreferenceDataStoreViewModel
@@ -32,11 +32,14 @@ fun SetContainerCapacity(
   reminderPeriodEnd: String,
   glassCapacity: Int,
   mugCapacity: Int,
-  bottleCapacity: Int
+  bottleCapacity: Int,
+  reminderSound: String,
+  dailyWaterGoal: Int,
+  remindAfterGoalAchieved: Boolean,
+  context: Context
 ) {
   var selectedCapacity by remember { mutableStateOf(capacity) }
   val setCapacity = {value:Int -> selectedCapacity = value}
-  val context = LocalContext.current
 
   var title = "Container"
   when(container){
@@ -112,6 +115,10 @@ fun SetContainerCapacity(
           glassCapacity = selectedCapacity,
           mugCapacity = mugCapacity,
           bottleCapacity = bottleCapacity,
+          channelId = reminderSound,
+          waterUnit = waterUnit,
+          dailyWaterGoal = dailyWaterGoal,
+          remindAfterGoalAchieved = remindAfterGoalAchieved,
           context = context
         )
       }
@@ -125,6 +132,10 @@ fun SetContainerCapacity(
           glassCapacity = glassCapacity,
           mugCapacity = selectedCapacity,
           bottleCapacity = bottleCapacity,
+          channelId = reminderSound,
+          waterUnit = waterUnit,
+          dailyWaterGoal = dailyWaterGoal,
+          remindAfterGoalAchieved = remindAfterGoalAchieved,
           context = context
         )
       }
@@ -138,6 +149,10 @@ fun SetContainerCapacity(
           glassCapacity = glassCapacity,
           mugCapacity = mugCapacity,
           bottleCapacity = selectedCapacity,
+          channelId = reminderSound,
+          waterUnit = waterUnit,
+          dailyWaterGoal = dailyWaterGoal,
+          remindAfterGoalAchieved = remindAfterGoalAchieved,
           context = context
         )
       }

@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.components.ShowDialog
@@ -31,13 +31,17 @@ fun SetReminderFrequencySettingDialog(
   glassCapacity:Int,
   mugCapacity:Int,
   bottleCapacity:Int,
+  reminderSound: String,
+  dailyWaterGoal: Int,
+  remindAfterGoalAchieved: Boolean,
+  waterUnit: String,
+  context: Context
 ) {
   var selectedReminderGap by  remember { mutableStateOf(reminderGap) }
   val setSelectedReminderGap = { timeGap:Int ->
     selectedReminderGap = timeGap
   }
   val scrollState = rememberScrollState()
-  val context = LocalContext.current
 
   ShowDialog(
     title = "Set ${Settings.REMINDER_FREQUENCY}",
@@ -80,6 +84,10 @@ fun SetReminderFrequencySettingDialog(
         glassCapacity = glassCapacity,
         mugCapacity = mugCapacity,
         bottleCapacity = bottleCapacity,
+        channelId = reminderSound,
+        waterUnit = waterUnit,
+        dailyWaterGoal = dailyWaterGoal,
+        remindAfterGoalAchieved = remindAfterGoalAchieved,
         context = context
       )
     }

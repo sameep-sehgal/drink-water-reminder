@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,10 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.R
+import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.utils.RecommendedWaterIntake
 import com.example.myapplication.utils.Settings
 import com.example.myapplication.utils.Units
+import java.util.*
 
 @Composable
 fun SetDailyWaterGoalSettingDialog(
@@ -27,9 +30,19 @@ fun SetDailyWaterGoalSettingDialog(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowDialog:(Boolean) -> Unit,
   recommendedWaterIntake: Int,
-  waterUnit:String
+  waterUnit:String,
+  reminderGap: Int,
+  reminderPeriodStart: String,
+  reminderPeriodEnd: String,
+  glassCapacity: Int,
+  mugCapacity: Int,
+  bottleCapacity: Int,
+  reminderSound: String,
+  remindAfterGoalAchieved: Boolean,
+  context:Context
 ) {
   val selectedDailyWaterGoal = remember { mutableStateOf(dailyWaterGoal) }
+
   val maxWaterLevel =
     if(waterUnit == Units.ML)
       RecommendedWaterIntake.MAX_WATER_LEVEL_IN_ML
@@ -71,7 +84,23 @@ fun SetDailyWaterGoalSettingDialog(
     },
     setShowDialog = setShowDialog,
     onConfirmButtonClick = {
+      val calendar = Calendar.getInstance()
+      calendar.add(Calendar.MILLISECOND, reminderGap)
       preferenceDataStoreViewModel.setDailyWaterGoal(selectedDailyWaterGoal.value)
+      ReminderReceiver.setReminder(
+        time = calendar.timeInMillis,
+        reminderPeriodStart = reminderPeriodStart,
+        reminderPeriodEnd = reminderPeriodEnd,
+        reminderGap = reminderGap,
+        glassCapacity = glassCapacity,
+        mugCapacity = mugCapacity,
+        bottleCapacity = bottleCapacity,
+        channelId = reminderSound,
+        waterUnit = waterUnit,
+        dailyWaterGoal = dailyWaterGoal,
+        remindAfterGoalAchieved = remindAfterGoalAchieved,
+        context = context
+      )
       //TODO("Also Edit today's entry of database")
     }
   )

@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
+import android.content.Context
 import android.widget.NumberPicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.myapplication.PreferenceDataStoreViewModel
@@ -27,7 +27,12 @@ fun SetReminderPeriodSettingDialog(
   reminderPeriodEnd: String,
   glassCapacity: Int,
   mugCapacity: Int,
-  bottleCapacity: Int
+  bottleCapacity: Int,
+  reminderSound: String,
+  dailyWaterGoal: Int,
+  remindAfterGoalAchieved: Boolean,
+  waterUnit: String,
+  context: Context
 ) {
   var selectedReminderTimingStart by  remember { mutableStateOf(reminderPeriodStart) }
   val setSelectedReminderTimingStart = { time:String ->
@@ -61,8 +66,6 @@ fun SetReminderPeriodSettingDialog(
       TimeString.HHMMIntToString(selectedReminderTimingEnd.split(":")[0].toInt(),newVal)
     setSelectedReminderTimingEnd(newTime)
   }
-
-  val context = LocalContext.current
 
   ShowDialog(
     title = "Set ${Settings.REMINDER_PERIOD}",
@@ -199,7 +202,11 @@ fun SetReminderPeriodSettingDialog(
         context = context,
         glassCapacity = glassCapacity,
         mugCapacity = mugCapacity,
-        bottleCapacity = bottleCapacity
+        bottleCapacity = bottleCapacity,
+        channelId = reminderSound,
+        waterUnit = waterUnit,
+        dailyWaterGoal = dailyWaterGoal,
+        remindAfterGoalAchieved = remindAfterGoalAchieved
       )
     }
   )

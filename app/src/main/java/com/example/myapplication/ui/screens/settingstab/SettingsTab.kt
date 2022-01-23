@@ -44,6 +44,7 @@ fun SettingsTab(
   val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit.value))
   val bottleCapacity = preferenceDataStoreViewModel.bottleCapacity.collectAsState(initial = Container.baseBottleCapacity(waterUnit.value))
 
+  val context = LocalContext.current
   val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
   val (dialogToShow, setDialogToShow) =  remember { mutableStateOf("") }
 
@@ -93,7 +94,12 @@ fun SettingsTab(
         reminderPeriodEnd = reminderPeriodEnd.value,
         glassCapacity = glassCapacity.value,
         mugCapacity = mugCapacity.value,
-        bottleCapacity = bottleCapacity.value
+        bottleCapacity = bottleCapacity.value,
+        reminderSound = reminderSound.value,
+        dailyWaterGoal = dailyWaterGoal.value,
+        remindAfterGoalAchieved = reminderAfterGoalAchieved.value,
+        waterUnit = waterUnit.value,
+        context = context
       )
     }
     if(showDialog && dialogToShow == Settings.REMINDER_FREQUENCY){
@@ -105,14 +111,29 @@ fun SettingsTab(
         reminderPeriodEnd = reminderPeriodEnd.value,
         glassCapacity = glassCapacity.value,
         mugCapacity = mugCapacity.value,
-        bottleCapacity = bottleCapacity.value
+        bottleCapacity = bottleCapacity.value,
+        reminderSound = reminderSound.value,
+        dailyWaterGoal = dailyWaterGoal.value,
+        remindAfterGoalAchieved = reminderAfterGoalAchieved.value,
+        waterUnit = waterUnit.value,
+        context = context
       )
     }
     if(showDialog && dialogToShow == Settings.REMINDER_SOUND){
       SetReminderSoundSettingDialog(
         reminderSound = reminderSound.value,
         preferenceDataStoreViewModel = preferenceDataStoreViewModel,
-        setShowDialog = setShowDialog
+        setShowDialog = setShowDialog,
+        reminderPeriodStart = reminderPeriodStart.value,
+        reminderPeriodEnd = reminderPeriodEnd.value,
+        reminderGap = reminderGap.value,
+        glassCapacity = glassCapacity.value,
+        mugCapacity = mugCapacity.value,
+        bottleCapacity = bottleCapacity.value,
+        dailyWaterGoal = dailyWaterGoal.value,
+        remindAfterGoalAchieved = reminderAfterGoalAchieved.value,
+        waterUnit = waterUnit.value,
+        context = context
       )
     }
     if(showDialog && dialogToShow == Settings.GENDER){
@@ -122,7 +143,7 @@ fun SettingsTab(
         setShowDialog = setShowDialog,
         weight = weight.value,
         weightUnit = weightUnit.value,
-        waterUnit = waterUnit.value
+        waterUnit = waterUnit.value,
       )
     }
     if(showDialog && dialogToShow == Settings.WEIGHT){
@@ -141,7 +162,16 @@ fun SettingsTab(
         preferenceDataStoreViewModel = preferenceDataStoreViewModel,
         setShowDialog = setShowDialog,
         recommendedWaterIntake = recommendedWaterIntake.value,
-        waterUnit = waterUnit.value
+        reminderPeriodStart = reminderPeriodStart.value,
+        reminderPeriodEnd = reminderPeriodEnd.value,
+        reminderGap = reminderGap.value,
+        glassCapacity = glassCapacity.value,
+        mugCapacity = mugCapacity.value,
+        bottleCapacity = bottleCapacity.value,
+        reminderSound = reminderSound.value,
+        waterUnit = waterUnit.value,
+        remindAfterGoalAchieved = reminderAfterGoalAchieved.value,
+        context = context
       )
     }
     if(showDialog && dialogToShow == Settings.GLASS_CAPACITY){
@@ -156,7 +186,11 @@ fun SettingsTab(
         reminderPeriodEnd = reminderPeriodEnd.value,
         glassCapacity = glassCapacity.value,
         mugCapacity = mugCapacity.value,
-        bottleCapacity = bottleCapacity.value
+        bottleCapacity = bottleCapacity.value,
+        reminderSound = reminderSound.value,
+        dailyWaterGoal = dailyWaterGoal.value,
+        remindAfterGoalAchieved = reminderAfterGoalAchieved.value,
+        context = context
       )
     }
     if(showDialog && dialogToShow == Settings.MUG_CAPACITY){
@@ -171,7 +205,11 @@ fun SettingsTab(
         reminderPeriodEnd = reminderPeriodEnd.value,
         glassCapacity = glassCapacity.value,
         mugCapacity = mugCapacity.value,
-        bottleCapacity = bottleCapacity.value
+        bottleCapacity = bottleCapacity.value,
+        reminderSound = reminderSound.value,
+        dailyWaterGoal = dailyWaterGoal.value,
+        remindAfterGoalAchieved = reminderAfterGoalAchieved.value,
+        context = context
       )
     }
     if(showDialog && dialogToShow == Settings.BOTTLE_CAPACITY){
@@ -186,7 +224,11 @@ fun SettingsTab(
         reminderPeriodEnd = reminderPeriodEnd.value,
         glassCapacity = glassCapacity.value,
         mugCapacity = mugCapacity.value,
-        bottleCapacity = bottleCapacity.value
+        bottleCapacity = bottleCapacity.value,
+        reminderSound = reminderSound.value,
+        dailyWaterGoal = dailyWaterGoal.value,
+        remindAfterGoalAchieved = reminderAfterGoalAchieved.value,
+        context = context
       )
     }
     if(showDialog && dialogToShow == Settings.APP_THEME){

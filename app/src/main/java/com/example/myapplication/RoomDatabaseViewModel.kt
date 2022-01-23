@@ -24,11 +24,6 @@ class RoomDatabaseViewModel @Inject constructor(
   //Create all the state variables and map repository methods
   //ViewModel methods will be used in the UI
 
-  //Initialize state required for app to run in the constructor
-  init {
-    refreshData()
-  }
-
   fun refreshData() {
     getTodaysWaterRecord()
     getTodaysDrinkLogs()

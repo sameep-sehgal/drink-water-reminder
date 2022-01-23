@@ -11,6 +11,8 @@ class ReminderSound {
     const val POURING_ICEWATER = "Pouring Icewater"
     const val DEVICE_DEFAULT = "Device Default"
 
+    const val DEFAULT_CHANNEL_ID = POURING_WATER
+
     val NAME_VALUE_MAPPER = hashMapOf(
       WATER_DROP to R.raw.water_drop,
       WATER_BLOOP to R.raw.water_bloop,
