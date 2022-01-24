@@ -69,57 +69,17 @@ class ReminderReceiver: BroadcastReceiver() {
     val currTime = Calendar.getInstance()
 
     if(currTime < reminderPeriodEndTime && currTime > reminderPeriodStartTime){
-      val mainActivityIntent = Intent(context, MainActivity::class.java).apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-      }
-      //Request codes are used to uniquely identify intents. They must not be the same for different intents
-      val pendingIntent = PendingIntent.getActivity(context,0,mainActivityIntent,PendingIntent.FLAG_UPDATE_CURRENT)
-
       //Build notification only when we need to show.
-      val builder = context?.let {
-        NotificationCompat.Builder(it, CHANNEL_ID_4)
-          //TODO(Surround setSound with if condition to handle device default sound)
-          .setSound(
-            Uri.parse("android.resource://"
-                    + context.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[channelId]))
-          .setSmallIcon(R.drawable.home_icon_glass_white)
-          .setContentTitle("It's Time To Drink Water!")
-          .setAutoCancel(true)
-          .setPriority(NotificationCompat.PRIORITY_MAX)
-          .setDefaults(Notification.DEFAULT_VIBRATE)
-          .setContentIntent(pendingIntent)
-          .setColor(PersianGreen.hashCode())
-          .setFullScreenIntent(pendingIntent, true)
-      }
+      val builder = buildBasicNotification(
+        context,
+        glassCapacity,
+        mugCapacity,
+        bottleCapacity,
+        waterUnit,
+        dailyWaterGoal,
+        channelId
+      )
 
-      //Add Action Buttons
-      if(glassCapacity != null && glassCapacity != 0) {
-        val addWaterIntentGlass = Intent(context, AddWaterReceiver::class.java).apply {
-          putExtra("value", glassCapacity)
-          putExtra("container", Container.GLASS)
-          putExtra("daily_water_goal", dailyWaterGoal)
-        }
-        val pendingActionIntentGlass = PendingIntent.getBroadcast(context,1, addWaterIntentGlass, PendingIntent.FLAG_UPDATE_CURRENT)
-        builder?.addAction(R.drawable.glass_2, "${glassCapacity}${waterUnit}", pendingActionIntentGlass)
-      }
-      if(mugCapacity != null && mugCapacity != 0) {
-        val addWaterIntentMug = Intent(context, AddWaterReceiver::class.java).apply {
-          putExtra("value", mugCapacity)
-          putExtra("container", Container.MUG)
-          putExtra("daily_water_goal", dailyWaterGoal)
-        }
-        val pendingActionIntentMug = PendingIntent.getBroadcast(context,2, addWaterIntentMug, PendingIntent.FLAG_UPDATE_CURRENT)
-        builder?.addAction(R.drawable.mug_3, "${mugCapacity}${waterUnit}", pendingActionIntentMug)
-      }
-      if(bottleCapacity != null && bottleCapacity != 0) {
-        val addWaterIntentBottle = Intent(context, AddWaterReceiver::class.java).apply {
-          putExtra("value", bottleCapacity)
-          putExtra("container", Container.BOTTLE)
-          putExtra("daily_water_goal", dailyWaterGoal)
-        }
-        val pendingActionIntentBottle = PendingIntent.getBroadcast(context,3, addWaterIntentBottle, PendingIntent.FLAG_UPDATE_CURRENT)
-        builder?.addAction(R.drawable.bottle_4, "${bottleCapacity}${waterUnit}", pendingActionIntentBottle)
-      }
       GlobalScope.launch(Dispatchers.Main) {
         if(context!=null) {
           val db = WaterDatabase.getInstance(context).waterDatabaseDao()
@@ -143,7 +103,7 @@ class ReminderReceiver: BroadcastReceiver() {
       }
     }else{
       //Set Next Day Repeating Reminder
-      reminderPeriodStartTime.add(Calendar.DATE,1)
+      reminderPeriodStartTime.add(Calendar.DAY_OF_MONTH,1)
       if (
         reminderPeriodStart != null &&
         reminderPeriodEnd != null &&
@@ -175,6 +135,71 @@ class ReminderReceiver: BroadcastReceiver() {
         Log.e(TAG, "Failed to build Notification")
       }
     }
+  }
+
+  @ExperimentalPagerApi
+  fun buildBasicNotification(
+    context: Context?,
+    glassCapacity: Int?,
+    mugCapacity: Int?,
+    bottleCapacity: Int?,
+    waterUnit:String?,
+    dailyWaterGoal: Int?,
+    channelId: String?
+  ): NotificationCompat.Builder? {
+    val mainActivityIntent = Intent(context, MainActivity::class.java).apply {
+      flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    }
+    //Request codes are used to uniquely identify intents. They must not be the same for different intents
+    val pendingIntent = PendingIntent.getActivity(context,0,mainActivityIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+
+    //Build notification only when we need to show.
+    val builder = context?.let {
+      NotificationCompat.Builder(it, CHANNEL_ID_4)
+        //TODO(Surround setSound with if condition to handle device default sound)
+        .setSound(
+          Uri.parse("android.resource://"
+                  + context.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[channelId]))
+        .setSmallIcon(R.drawable.home_icon_glass_white)
+        .setContentTitle("It's Time To Drink Water!")
+        .setAutoCancel(true)
+        .setPriority(NotificationCompat.PRIORITY_MAX)
+        .setDefaults(Notification.DEFAULT_VIBRATE)
+        .setContentIntent(pendingIntent)
+        .setColor(PersianGreen.hashCode())
+        .setFullScreenIntent(pendingIntent, true)
+    }
+
+    //Add Action Buttons
+    if(glassCapacity != null && glassCapacity != 0) {
+      val addWaterIntentGlass = Intent(context, AddWaterReceiver::class.java).apply {
+        putExtra("value", glassCapacity)
+        putExtra("container", Container.GLASS)
+        putExtra("daily_water_goal", dailyWaterGoal)
+      }
+      val pendingActionIntentGlass = PendingIntent.getBroadcast(context,1, addWaterIntentGlass, PendingIntent.FLAG_UPDATE_CURRENT)
+      builder?.addAction(R.drawable.glass_2, "${glassCapacity}${waterUnit}", pendingActionIntentGlass)
+    }
+    if(mugCapacity != null && mugCapacity != 0) {
+      val addWaterIntentMug = Intent(context, AddWaterReceiver::class.java).apply {
+        putExtra("value", mugCapacity)
+        putExtra("container", Container.MUG)
+        putExtra("daily_water_goal", dailyWaterGoal)
+      }
+      val pendingActionIntentMug = PendingIntent.getBroadcast(context,2, addWaterIntentMug, PendingIntent.FLAG_UPDATE_CURRENT)
+      builder?.addAction(R.drawable.mug_3, "${mugCapacity}${waterUnit}", pendingActionIntentMug)
+    }
+    if(bottleCapacity != null && bottleCapacity != 0) {
+      val addWaterIntentBottle = Intent(context, AddWaterReceiver::class.java).apply {
+        putExtra("value", bottleCapacity)
+        putExtra("container", Container.BOTTLE)
+        putExtra("daily_water_goal", dailyWaterGoal)
+      }
+      val pendingActionIntentBottle = PendingIntent.getBroadcast(context,3, addWaterIntentBottle, PendingIntent.FLAG_UPDATE_CURRENT)
+      builder?.addAction(R.drawable.bottle_4, "${bottleCapacity}${waterUnit}", pendingActionIntentBottle)
+    }
+
+    return builder
   }
 
   companion object {
