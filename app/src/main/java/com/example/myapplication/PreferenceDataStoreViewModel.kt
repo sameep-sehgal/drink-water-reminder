@@ -146,14 +146,4 @@ class PreferenceDataStoreViewModel @Inject constructor(
       preferenceDataStore.setBottleCapacity(capacity)
     }
   }
-
-  //Main Settings
-
-  val appTheme = preferenceDataStore.appTheme()
-
-  fun setAppTheme(theme: String) {
-    viewModelScope.launch {
-      preferenceDataStore.setAppTheme(theme)
-    }
-  }
 }

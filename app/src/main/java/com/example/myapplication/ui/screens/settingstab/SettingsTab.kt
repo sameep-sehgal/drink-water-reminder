@@ -38,7 +38,6 @@ fun SettingsTab(
   val reminderPeriodEnd = preferenceDataStoreViewModel.reminderPeriodEnd.collectAsState(initial = ReminderPeriod.NOT_SET)
   val reminderGap = preferenceDataStoreViewModel.reminderGap.collectAsState(initial = ReminderGap.NOT_SET)
   val reminderSound = preferenceDataStoreViewModel.reminderSound.collectAsState(initial = ReminderSound.WATER_DROP)
-  val appTheme = preferenceDataStoreViewModel.appTheme.collectAsState(initial = ReminderSound.WATER_DROP)
   val reminderAfterGoalAchieved = preferenceDataStoreViewModel.reminderAfterGoalAchieved.collectAsState(initial = false)
   val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = Container.baseGlassCapacity(waterUnit.value))
   val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit.value))
@@ -80,7 +79,6 @@ fun SettingsTab(
       setDialogToShow
     )
     MainSettings(
-      appTheme.value,
       setShowDialog,
       setDialogToShow
     )
@@ -231,13 +229,6 @@ fun SettingsTab(
         context = context
       )
     }
-    if(showDialog && dialogToShow == Settings.APP_THEME){
-      SetAppThemeSettingDialog(
-        appTheme = appTheme.value,
-        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
-        setShowDialog = setShowDialog
-      )
-    }
   }
 }
 
@@ -381,20 +372,11 @@ fun ContainerSettings(
 
 @Composable
 fun MainSettings(
-  appTheme:String,
   setShowDialog :(Boolean) -> Unit,
   setDialogToShow: (String) -> Unit
 ){
   val context = LocalContext.current
   SettingsSubheading(text = "Main Settings")
-  SettingsRowSelectValue(
-    text = Settings.APP_THEME,
-    value = appTheme,
-    onSettingsRowClick = {
-      setShowDialog(true)
-      setDialogToShow(Settings.APP_THEME)
-    }
-  )
   SettingsRowNoValue(
     text = Settings.RESET_DATA,
     onSettingsRowClick = {/*TODO()*/}

@@ -33,12 +33,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.compose.foundation.isSystemInDarkTheme
-import com.example.myapplication.remindernotification.CHANNEL_ID_2
-import com.example.myapplication.remindernotification.CHANNEL_ID_3
 import com.example.myapplication.remindernotification.CHANNEL_ID_4
 import com.example.myapplication.ui.screens.historytab.HistoryTab
-import com.example.myapplication.utils.AppTheme
 import com.example.myapplication.utils.ReminderSound
 import com.google.accompanist.pager.PagerState
 
@@ -67,22 +63,13 @@ class MainActivity : ComponentActivity() {
         setContent{
           val setGoal = roomDatabaseViewModel.todaysWaterRecord.collectAsState().value.goal
           val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
-          val appTheme = preferenceDataStoreViewModel.appTheme.collectAsState(initial = AppTheme.DEFAULT)
-          var darkTheme = false
-          when(appTheme.value) {
-            AppTheme.DARK -> darkTheme = true
-            AppTheme.LIGHT -> darkTheme = false
-            AppTheme.DEFAULT -> darkTheme = isSystemInDarkTheme()
-          }
           if(setGoal == RecommendedWaterIntake.NOT_SET && goal.value!=0){
             Log.d(TAG, "onCreate: ${goal.value}")
             roomDatabaseViewModel.updateDailyWaterRecord(
               DailyWaterRecord(goal = goal.value)
             )
           }
-          ApplicationTheme(
-            darkTheme = darkTheme
-          ) {
+          ApplicationTheme {
             Surface {
               pagerState = rememberPagerState()
               Column {

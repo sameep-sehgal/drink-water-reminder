@@ -43,9 +43,6 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     val GLASS_CAPACITY = intPreferencesKey("glass_capacity")
     val MUG_CAPACITY = intPreferencesKey("mug_capacity")
     val BOTTLE_CAPACITY = intPreferencesKey("bottle_capacity")
-
-    //Main Settings
-    val APP_THEME = stringPreferencesKey("app_theme")
   }
 
   override fun isUserInfoCollected(): Flow<Boolean> =
@@ -322,25 +319,6 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   override suspend fun setBottleCapacity(capacity: Int) {
     dataStore.edit {
       it[PreferencesKeys.BOTTLE_CAPACITY] = capacity
-    }
-  }
-
-  //Main Settings
-
-  override fun appTheme(): Flow<String> =
-    dataStore.data.catch {
-      if (it is IOException) {
-        emit(emptyPreferences())
-      } else {
-        throw it
-      }
-    }.map {
-      it[PreferencesKeys.APP_THEME] ?: AppTheme.DEFAULT
-    }
-
-  override suspend fun setAppTheme(theme: String) {
-    dataStore.edit {
-      it[PreferencesKeys.APP_THEME] = theme
     }
   }
 
