@@ -1,11 +1,12 @@
 package com.example.myapplication.remindernotification
 
+import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.Notification
-import android.app.Notification.DEFAULT_SOUND
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -15,18 +16,12 @@ import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.roomdatabase.WaterDatabase
-import com.example.myapplication.data.roomdatabase.WaterDatabaseDao
-import com.example.myapplication.repository.WaterDataRepository
 import com.example.myapplication.ui.theme.PersianGreen
 import com.example.myapplication.utils.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.*
-import javax.inject.Inject
 
 //Use broadcast Receiver since app wont run when we have to show notifications
 //It will automatically show notification at desired time without running the app
@@ -35,8 +30,10 @@ class ReminderReceiver: BroadcastReceiver() {
 
   private val TAG = ReminderReceiver::class.java.simpleName
 
+  @DelicateCoroutinesApi
   @ExperimentalPagerApi
   override fun onReceive(context: Context?, intent: Intent?) {
+    if(context?.let { isAppRunning(it) } == true) return
 
     val reminderPeriodStart = intent?.getStringExtra("reminder_period_start")
     val reminderPeriodEnd = intent?.getStringExtra("reminder_period_end")
@@ -102,8 +99,10 @@ class ReminderReceiver: BroadcastReceiver() {
         }
       }
     }else{
+      Log.d(TAG, "onReceive: Set next day repeating reminder")
       //Set Next Day Repeating Reminder
-      reminderPeriodStartTime.add(Calendar.DAY_OF_MONTH,1)
+      reminderPeriodStartTime.add(Calendar.MILLISECOND,24*60*60*1000)
+      Log.d(TAG, "onReceive: ${reminderPeriodStartTime.get(Calendar.DATE)}")
       if (
         reminderPeriodStart != null &&
         reminderPeriodEnd != null &&
@@ -131,10 +130,23 @@ class ReminderReceiver: BroadcastReceiver() {
           remindAfterGoalAchieved,
           context
         )
+        Log.d(TAG, "onReceive: Reminder is Set")
       } else {
         Log.e(TAG, "Failed to build Notification")
       }
     }
+  }
+
+  private fun isAppRunning(context: Context): Boolean {
+    val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+    // The first in the list of RunningTasks is always the foreground task.
+    val appProcess = am.runningAppProcesses[0] ?: return false
+    var res = false
+    if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName.equals(context.packageName)) {
+      res = true
+    }
+    Log.d(TAG, "isAppRunning: $res Check Before launching notification")
+    return res
   }
 
   @ExperimentalPagerApi
@@ -238,6 +250,7 @@ class ReminderReceiver: BroadcastReceiver() {
       intent.putExtra("remind_after_goal_achieved",remindAfterGoalAchieved)
       val pendingIntent =
         PendingIntent.getBroadcast(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
+      Log.d("TAG", "onReceive: ${TimeString.longToString(time)} inside setReminder")
       alarmManager.setInexactRepeating(
         AlarmManager.RTC_WAKEUP,
         time,
