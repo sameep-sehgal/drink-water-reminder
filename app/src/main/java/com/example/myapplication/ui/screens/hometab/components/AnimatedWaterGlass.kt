@@ -4,9 +4,10 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,9 +18,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import com.example.myapplication.R
 
 @Composable
@@ -45,21 +43,31 @@ fun AnimatedWaterGlass(
   }
   var cc by remember { mutableStateOf(IntSize.Zero) }
 
-  Image(painter = painterResource(R.drawable.water_glass_with_bg),
-    contentDescription = "Water Glass",
-    modifier = Modifier
-      .padding(0.dp)
-      .onGloballyPositioned {
-        cc = it.size
-      }
-      .background(
-        Brush.verticalGradient(
-          colors = listOf(Color.Cyan, Color.Transparent),
-          startY = (cc.height + 45f) * (1 - currentPercentage.value + 0.01f),
-          endY = cc.height * (1 - currentPercentage.value + 0.01f)
+  Box(
+//    modifier = Modifier.fillMaxSize(),
+    contentAlignment = Alignment.Center
+  ) {
+    Image(
+      painter = painterResource(R.drawable.heart_brain_icon),
+      contentDescription = "Water Glass",
+      modifier = Modifier
+        .padding(0.dp)
+        .onGloballyPositioned {
+          cc = it.size
+        }
+        .background(
+          Brush.verticalGradient(
+            colors = listOf(Color(0xFFd2f1fc), Color.Transparent),
+            startY = (cc.height + 45f) * (1 - currentPercentage.value + 0.01f),
+            endY = cc.height * (1 - currentPercentage.value + 0.01f)
+          )
         )
-      )
-  )
+    )
+    Text(
+      text = "${(currentPercentage.value*100).toInt()}%",
+      color = MaterialTheme.colors.onPrimary
+    )
+  }
 }
 
 

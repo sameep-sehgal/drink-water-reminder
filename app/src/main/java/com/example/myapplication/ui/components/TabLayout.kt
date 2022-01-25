@@ -1,10 +1,7 @@
 package com.example.myapplication.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -26,8 +24,9 @@ import com.example.myapplication.R
 
 enum class Tabs(val title:String, val icon:Int){
   Home("Home", R.drawable.home_icon_glass_white),
+  Stats("Stats", R.drawable.stats_tab_icon),
   History("History", R.drawable.history_icon_white),
-  Settings("Settings", R.drawable.settings_icon_white)
+  Settings("Settings", R.drawable.settings_icon_white),
 }
 
 @ExperimentalPagerApi
@@ -40,11 +39,15 @@ fun DisplayTabLayout(
     Tabs.values().forEachIndexed { index, tab ->
       Tab(
         text = {
-          Row(verticalAlignment = Alignment.CenterVertically) {
+          Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+          ) {
             Icon(painter = painterResource(id = tab.icon), contentDescription = null)
             Text(text = tab.title,
               modifier = Modifier.padding(start = Dp(5f)),
-              style = Typography.subtitle1)
+              fontSize = 9.sp
+            )
           }
         },
         selected = pagerState.currentPage == index,

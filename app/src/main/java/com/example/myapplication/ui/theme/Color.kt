@@ -4,7 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-val PersianGreen = Color(0xFF00a49a)
+val PersianGreen = Color(0xFF45b3e0)
 val WaterBlueDark = Color(0xFF0079ab)
 val White = Color(0xFFFFFFFF)
 val VeryLightGray = Color(0xFFDADEDF)

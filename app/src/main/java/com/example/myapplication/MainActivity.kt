@@ -15,12 +15,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.ui.components.DisplayTabLayout
 import com.example.myapplication.ui.components.Tabs
@@ -35,6 +38,7 @@ import com.google.accompanist.pager.rememberPagerState
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.myapplication.remindernotification.CHANNEL_ID_4
 import com.example.myapplication.ui.screens.historytab.HistoryTab
+import com.example.myapplication.ui.screens.statstab.StatsTab
 import com.example.myapplication.utils.ReminderSound
 import com.google.accompanist.pager.PagerState
 
@@ -73,7 +77,33 @@ class MainActivity : ComponentActivity() {
             Surface {
               pagerState = rememberPagerState()
               Column {
-                DisplayTabLayout(pagerState)
+//                DisplayTabLayout(pagerState)
+                BottomNavigation(
+                  modifier = Modifier.height(56.dp),
+                  backgroundColor = MaterialTheme.colors.primary
+                ) {
+                  Tabs.values().forEachIndexed { i: Int, it: Tabs ->
+                    BottomNavigationItem(
+                      selected = pagerState.currentPage == i,
+                      onClick = { /*TODO*/ },
+                      icon = {Icon(painter = painterResource(id = it.icon), contentDescription = null)},
+                      label = {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                          Text(
+                            text = it.title,
+                            modifier = Modifier.padding(2.dp)
+                          )
+                          if(pagerState.currentPage == i) {
+                            Divider(
+                              thickness = 2.dp,
+                              color = Color.White
+                            )
+                          }
+                        }
+                      }
+                    )
+                  }
+                }
                 //Pager used to swipe between different tabs
                 HorizontalPager(
                   count = Tabs.values().size,
@@ -87,11 +117,14 @@ class MainActivity : ComponentActivity() {
                         preferenceDataStoreViewModel,
                         roomDatabaseViewModel
                       )
-                      1 -> HistoryTab(
+                      1 -> StatsTab(
+                        roomDatabaseViewModel
+                      )
+                      2 -> HistoryTab(
                         roomDatabaseViewModel,
                         preferenceDataStoreViewModel
                       )
-                      2 -> SettingsTab(preferenceDataStoreViewModel)
+                      3 -> SettingsTab(preferenceDataStoreViewModel)
                     }
                   }
                 }
