@@ -18,7 +18,6 @@ import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.roomdatabase.WaterDatabase
 import com.example.myapplication.ui.theme.AppColorPrimary
 import com.example.myapplication.utils.*
-import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.util.*
@@ -31,7 +30,6 @@ class ReminderReceiver: BroadcastReceiver() {
   private val TAG = ReminderReceiver::class.java.simpleName
 
   @DelicateCoroutinesApi
-  @ExperimentalPagerApi
   override fun onReceive(context: Context?, intent: Intent?) {
     if(context?.let { isAppRunning(it) } == true) return
 
@@ -149,7 +147,6 @@ class ReminderReceiver: BroadcastReceiver() {
     return res
   }
 
-  @ExperimentalPagerApi
   fun buildBasicNotification(
     context: Context?,
     glassCapacity: Int?,

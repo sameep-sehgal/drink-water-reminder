@@ -8,7 +8,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.data.roomdatabase.WaterDatabase
-import com.example.myapplication.utils.Container
 import kotlinx.coroutines.*
 
 class AddWaterReceiver: BroadcastReceiver() {
