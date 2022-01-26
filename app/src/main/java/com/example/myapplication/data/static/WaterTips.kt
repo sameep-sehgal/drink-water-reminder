@@ -12,6 +12,7 @@ object WaterTips {
     Tip("Avoid cold water as much as possible, instead drink normal or even better lukewarm water."),
     Tip("Drinking too much water is just as bad as drinking less water. Only drink the amount suggested."),
     Tip("Try to drink water while sitting instead of standing."),
+    Tip("Fruits are also high in water content. Don't forget to add them in your water intake!"),
   )
 
   fun getRandomTip(): Tip{

@@ -1,79 +1,231 @@
 package com.example.myapplication.ui.screens.hometab.components
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
+import com.example.myapplication.ui.screens.hometab.components.buttons.CustomAddWaterButton
+import com.example.myapplication.ui.screens.hometab.components.buttons.FruitButton
+import com.example.myapplication.ui.screens.hometab.components.buttons.UndoButton
 import com.example.myapplication.utils.Container
-import com.example.myapplication.utils.Units
 
 @Composable
 fun AddWaterButtonsRow(
   waterUnit:String,
   roomDatabaseViewModel: RoomDatabaseViewModel,
   dailyWaterRecord: DailyWaterRecord,
-  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
+  setShowCustomAddWaterDialog:(Boolean) -> Unit,
+  setShowFruitDialog:(Boolean) -> Unit
 ) {
   val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = Container.baseGlassCapacity(waterUnit))
   val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit))
   val bottleCapacity = preferenceDataStoreViewModel.bottleCapacity.collectAsState(initial = Container.baseBottleCapacity(waterUnit))
+  var showAddWaterButtons by remember{ mutableStateOf(false) }
+  val currentPercentage = remember { Animatable(0f) }
+  val addIconSize = 48.dp
+  LaunchedEffect(showAddWaterButtons) {
+    currentPercentage.animateTo(
+      if(showAddWaterButtons) 1f else 0f,
+      animationSpec = tween(durationMillis = 500)
+    )
+  }
 
-  val buttons = listOf(
-    listOf(Container.GLASS, glassCapacity.value, "Water"),
-    listOf(Container.MUG, mugCapacity.value, "Water"),
-    listOf(Container.BOTTLE, bottleCapacity.value, "Water"),
-  )
+  val fontSize = 12.sp
 
   Row(
     modifier = Modifier.fillMaxWidth(),
-    horizontalArrangement = Arrangement.SpaceEvenly
+    horizontalArrangement = Arrangement.SpaceEvenly,
+    verticalAlignment = Alignment.CenterVertically
   ) {
-    buttons.forEach {
-      Button(
-        onClick = {
-          roomDatabaseViewModel.insertDrinkLog(
-            DrinkLogs(amount = it[1] as Int, icon = it[0] as Int),
-          )
-          roomDatabaseViewModel.updateDailyWaterRecord(
-            DailyWaterRecord(
-              goal = dailyWaterRecord.goal,
-              currWaterAmount = dailyWaterRecord.currWaterAmount + it[1] as Int
+    if(currentPercentage.value < 0.6f){
+      Row(
+        modifier = Modifier.weight(1f),
+        horizontalArrangement = Arrangement.Center
+      ) {
+        UndoButton(onClick = { /* TODO */ })
+      }
+    }
+
+    Box(
+      modifier = Modifier,
+      contentAlignment = Alignment.TopCenter
+    ) {
+      val rowModifier = Modifier
+        .height(addIconSize)
+        .fillMaxWidth(currentPercentage.value)
+
+      Card(
+        shape = CircleShape,
+        elevation = 6.dp,
+        modifier = rowModifier
+      ){
+        Row(
+          horizontalArrangement = Arrangement.SpaceEvenly,
+          verticalAlignment = Alignment.CenterVertically,
+          modifier = Modifier.fillMaxSize()
+        ) {
+          if(currentPercentage.value>0.98f){
+            AddWaterContainerButton(
+              container = Container.GLASS,
+              waterAmount = glassCapacity.value,
+              waterUnit = waterUnit,
+              fontSize = fontSize,
+              dailyWaterRecord = dailyWaterRecord,
+              roomDatabaseViewModel = roomDatabaseViewModel
             )
-          )
-        },
-        modifier = Modifier
-          .padding(4.dp, 16.dp)
-          .clip(CircleShape)
+
+            AddWaterContainerButton(
+              container = Container.MUG,
+              waterAmount = mugCapacity.value,
+              waterUnit = waterUnit,
+              fontSize = fontSize,
+              dailyWaterRecord = dailyWaterRecord,
+              roomDatabaseViewModel = roomDatabaseViewModel
+            )
+
+            Spacer(modifier = Modifier.width(addIconSize))
+
+            AddWaterContainerButton(
+              container = Container.BOTTLE,
+              waterAmount = bottleCapacity.value,
+              waterUnit = waterUnit,
+              fontSize = fontSize,
+              dailyWaterRecord = dailyWaterRecord,
+              roomDatabaseViewModel = roomDatabaseViewModel
+            )
+
+            Row(
+              modifier = Modifier
+                .clip(CircleShape)
+                .clickable {
+                  setShowCustomAddWaterDialog(true)
+                }
+                .fillMaxHeight(),
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              Text(
+                text = "+Custom",
+                fontSize = fontSize
+              )
+            }
+          }
+        }
+      }
+
+      Card(
+        shape = CircleShape,
+        elevation = 6.dp,
+        modifier = Modifier.width(addIconSize)
       ) {
         Column(
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
-          Container.IMAGE_MAPPER[it[0] as Int]?.let { it1 -> painterResource(id = it1) }?.let { it2 ->
-            Icon(
-              painter = it2,
-              contentDescription = "container",
-              modifier = Modifier.size(24.dp)
-            )
-          }
-          Text(
-            text = "${it[1] as Int}$waterUnit",
-            fontSize = 11.sp
+          CustomAddWaterButton(
+            modifier = Modifier.rotate(45f * currentPercentage.value),
+            setShowCustomAddWaterDialog = { showAddWaterButtons = !showAddWaterButtons }
           )
         }
       }
     }
+
+    if(currentPercentage.value < 0.6f) {
+      Row(
+        modifier = Modifier.weight(1f),
+        horizontalArrangement = Arrangement.Center
+      ) {
+        FruitButton(
+          setShowFruitDialog = setShowFruitDialog
+        )
+      }
+    }
   }
 }
+
+@Composable
+fun AddWaterContainerButton(
+  container:Int,
+  waterAmount:Int,
+  waterUnit: String,
+  fontSize:TextUnit = 12.sp,
+  dailyWaterRecord: DailyWaterRecord,
+  roomDatabaseViewModel: RoomDatabaseViewModel
+) {
+
+  val myId = "inlineContent"
+  val text = buildAnnotatedString {
+    appendInlineContent(myId, "[icon]")
+    append("${waterAmount}${waterUnit}")
+  }
+
+  val inlineContent = mapOf(
+    Pair(
+      myId,
+      InlineTextContent(
+        Placeholder(
+          width = fontSize,
+          height = fontSize,
+          placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+        )
+      ) {
+        Container.IMAGE_MAPPER[container]?.let { it1 -> painterResource(id = it1) }?.let { it2 ->
+          Icon(
+            painter = it2,
+            contentDescription = "ContainerIcon $container"
+          )
+        }
+      }
+    )
+  )
+
+  Row(
+    modifier = Modifier
+      .clip(RoundedCornerShape(15.dp))
+      .clickable {
+        roomDatabaseViewModel.insertDrinkLog(
+          DrinkLogs(
+            amount = waterAmount,
+            icon = container
+          ),
+        )
+        roomDatabaseViewModel.updateDailyWaterRecord(
+          DailyWaterRecord(
+            goal = dailyWaterRecord.goal,
+            currWaterAmount = dailyWaterRecord.currWaterAmount + waterAmount
+          )
+        )
+      }
+      .fillMaxHeight(),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      text = text,
+      inlineContent = inlineContent,
+      fontSize = fontSize,
+    )
+  }
+}
+

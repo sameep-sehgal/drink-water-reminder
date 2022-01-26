@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.screens.hometab.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -21,7 +20,6 @@ import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.utils.Container
 import com.example.myapplication.utils.TimeString
 
-@ExperimentalFoundationApi
 @Composable
 fun DrinkLogsList(
   drinkLogsList: List<DrinkLogs>,
@@ -32,97 +30,95 @@ fun DrinkLogsList(
   val (showEditDrinkLogDialog, setShowEditDrinkLogDialog) =  remember { mutableStateOf(false) }
   val selectedDrinkLog =  remember { mutableStateOf(DrinkLogs(amount = 0, icon = 0)) }
 
-  Column(
-    modifier = Modifier.fillMaxWidth(),
-  ){
-    if(showEditDrinkLogDialog){
-      EditDrinkLogDialog(
-        drinkLog = selectedDrinkLog.value,
-        setShowEditDrinkLogDialog = setShowEditDrinkLogDialog,
-        roomDatabaseViewModel = roomDatabaseViewModel,
-        waterUnit = waterUnit,
-        dailyWaterRecord = dailyWaterRecord
-      )
-    }
-    drinkLogsList.forEach {
-      Box(
-        modifier = Modifier
-          .padding(vertical = 3.dp, horizontal = 16.dp)
+  if(showEditDrinkLogDialog){
+    EditDrinkLogDialog(
+      drinkLog = selectedDrinkLog.value,
+      setShowEditDrinkLogDialog = setShowEditDrinkLogDialog,
+      roomDatabaseViewModel = roomDatabaseViewModel,
+      waterUnit = waterUnit,
+      dailyWaterRecord = dailyWaterRecord
+    )
+  }
+  drinkLogsList.forEach {
+    Box(
+      modifier = Modifier
+        .padding(vertical = 3.dp, horizontal = 16.dp)
+        .fillMaxWidth()
+    ) {
+      Card(
+        shape = RoundedCornerShape(15.dp),
+        elevation = 6.dp
       ) {
-        Card(
-          shape = RoundedCornerShape(15.dp),
-          elevation = 6.dp
+        Row(
+          verticalAlignment = Alignment.CenterVertically
         ) {
           Row(
             verticalAlignment = Alignment.CenterVertically
-          ) {
-            Row(
-              verticalAlignment = Alignment.CenterVertically
-            ){
-              IconButton(
-                onClick = { /*TODO*/ }
-              ) {
-                Icon(
-                  painter = painterResource(R.drawable.clock_icon),
-                  contentDescription = "Clock Icon"
-                )
-              }
-              Text(
-                text = TimeString.longToString(it.time),
-                style = Typography.subtitle1
+          ){
+            IconButton(
+              onClick = { /*TODO*/ }
+            ) {
+              Icon(
+                painter = painterResource(R.drawable.clock_icon),
+                contentDescription = "Clock Icon"
               )
             }
-            Row(
-              modifier = Modifier.weight(1f),
-              horizontalArrangement = Arrangement.Center,
-              verticalAlignment = Alignment.CenterVertically
-            ){
-              Container.IMAGE_MAPPER[it.icon]?.let { it1 -> painterResource(it1) }
-                ?.let { it2 ->
-                  Icon(
-                    painter = it2,
-                    contentDescription = "Selected glass",
-                    modifier = Modifier
-                      .size(20.dp)
-                      .padding(2.dp, 0.dp)
-                  ) }
-              Text(text = "${it.amount}$waterUnit", style = Typography.subtitle1)
+            Text(
+              text = TimeString.longToString(it.time),
+              style = Typography.subtitle1
+            )
+          }
+          Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+          ){
+            Container.IMAGE_MAPPER[it.icon]?.let { it1 -> painterResource(it1) }
+              ?.let { it2 ->
+                Icon(
+                  painter = it2,
+                  contentDescription = "Selected glass",
+                  modifier = Modifier
+                    .size(20.dp)
+                    .padding(2.dp, 0.dp)
+                ) }
+            Text(text = "${it.amount}$waterUnit", style = Typography.subtitle1)
+          }
+          Row(
+            verticalAlignment = Alignment.CenterVertically
+          ){
+            IconButton(
+              onClick = {
+                selectedDrinkLog.value = it
+                setShowEditDrinkLogDialog(true)
+              }
+            ) {
+              Icon(
+                painter = painterResource(R.drawable.edit_icon),
+                contentDescription = "Edit Button"
+              )
             }
-            Row(
-              verticalAlignment = Alignment.CenterVertically
-            ){
-              IconButton(
-                onClick = {
-                  selectedDrinkLog.value = it
-                  setShowEditDrinkLogDialog(true)
-                }
-              ) {
-                Icon(
-                  painter = painterResource(R.drawable.edit_icon),
-                  contentDescription = "Edit Button"
-                )
-              }
-              IconButton(
-                onClick = {
-                  roomDatabaseViewModel.deleteDrinkLog(it)
-                  roomDatabaseViewModel.updateDailyWaterRecord(
-                    DailyWaterRecord(
-                      date = dailyWaterRecord.date,
-                      goal = dailyWaterRecord.goal,
-                      currWaterAmount = dailyWaterRecord.currWaterAmount - it.amount
-                    )
+            IconButton(
+              onClick = {
+                roomDatabaseViewModel.deleteDrinkLog(it)
+                roomDatabaseViewModel.updateDailyWaterRecord(
+                  DailyWaterRecord(
+                    date = dailyWaterRecord.date,
+                    goal = dailyWaterRecord.goal,
+                    currWaterAmount = dailyWaterRecord.currWaterAmount - it.amount
                   )
-                }
-              ) {
-                Icon(
-                  painter = painterResource(R.drawable.delete_icon),
-                  contentDescription = "Delete Button"
                 )
               }
+            ) {
+              Icon(
+                painter = painterResource(R.drawable.delete_icon),
+                contentDescription = "Delete Button"
+              )
             }
           }
         }
       }
     }
   }
+
 }

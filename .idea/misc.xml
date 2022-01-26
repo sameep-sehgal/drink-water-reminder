@@ -6,6 +6,7 @@
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/add_button.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/bulb_icon.xml" value="0.1685185185185185" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/cancel_icon.xml" value="0.1685185185185185" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/change_icon.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/clock_icon.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/cup_1.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/delete_icon.xml" value="0.1685185185185185" />
@@ -17,6 +18,7 @@
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/history_icon_clock_white.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/history_icon_white.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/home_icon_glass_white.xml" value="0.1" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_bell_svgrepo_com.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_heartbrain1.xml" value="0.1685185185185185" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_heartbrain2removedsmallgaps.xml" value="0.1685185185185185" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_water_glass_with_bg_2.xml" value="0.1" />
@@ -31,6 +33,7 @@
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/soda_bottle_5.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/stats_tab_icon.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/undo_button.xml" value="0.1259259259259259" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/undo_icon.xml" value="0.1685185185185185" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_100.xml" value="0.12777777777777777" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_30.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_30_to_40_animation.xml" value="0.12777777777777777" />

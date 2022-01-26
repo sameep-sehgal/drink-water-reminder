@@ -16,7 +16,7 @@ import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.roomdatabase.WaterDatabase
-import com.example.myapplication.ui.theme.PersianGreen
+import com.example.myapplication.ui.theme.AppColorPrimary
 import com.example.myapplication.utils.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
@@ -178,7 +178,7 @@ class ReminderReceiver: BroadcastReceiver() {
         .setPriority(NotificationCompat.PRIORITY_MAX)
         .setDefaults(Notification.DEFAULT_VIBRATE)
         .setContentIntent(pendingIntent)
-        .setColor(PersianGreen.hashCode())
+        .setColor(AppColorPrimary.hashCode())
         .setFullScreenIntent(pendingIntent, true)
     }
 

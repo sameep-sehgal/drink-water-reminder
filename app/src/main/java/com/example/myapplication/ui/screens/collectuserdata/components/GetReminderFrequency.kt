@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.collectuserdata
+package com.example.myapplication.ui.screens.collectuserdata.components
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -13,7 +13,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -22,9 +21,7 @@ import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.utils.ReminderFrequencyOptions
 import com.example.myapplication.utils.ReminderGap
-import com.google.accompanist.pager.ExperimentalPagerApi
 
-@ExperimentalPagerApi
 @Composable
 fun GetReminderFrequency(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
@@ -65,7 +62,7 @@ fun GetReminderFrequency(
           ) {
             Checkbox(
               checked = selectedReminderGap == it["gap"].toString().toInt(),
-              onCheckedChange = { value ->
+              onCheckedChange = { _ ->
                 setSelectedReminderGap(it["gap"].toString().toInt())
               }
             )

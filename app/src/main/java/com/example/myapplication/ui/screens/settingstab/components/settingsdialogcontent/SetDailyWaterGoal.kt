@@ -68,7 +68,7 @@ fun SetDailyWaterGoalSettingDialog(
           )
           IconButton(onClick = { selectedDailyWaterGoal.value = recommendedWaterIntake }) {
             Icon(
-              painter = painterResource(id = R.drawable.undo_button),
+              painter = painterResource(id = R.drawable.history_icon_white),
               contentDescription = "Reset To Recommended"
             )
           }

@@ -11,16 +11,16 @@ import androidx.compose.runtime.Composable
 
 @SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
-    primary = PersianGreen,
+    primary = AppColorPrimary,
     primaryVariant = darkColors().background,
-    secondary = PersianGreen,
+    secondary = AppColorSecondary,
     onPrimary = White
 )
 
 private val LightColorPalette = lightColors(
-    primary = PersianGreen,
-    primaryVariant = PersianGreen,
-    secondary = PersianGreen,
+    primary = AppColorPrimary,
+    primaryVariant = AppColorPrimary,
+    secondary = AppColorSecondary,
 
     /* Other default colors to override
     background = Color.White,

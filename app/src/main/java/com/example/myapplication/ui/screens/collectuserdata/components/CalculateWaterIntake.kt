@@ -18,10 +18,8 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.utils.*
-import com.google.accompanist.pager.ExperimentalPagerApi
 import java.util.*
 
-@ExperimentalPagerApi
 @Composable
 fun CalculateWaterIntake(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,

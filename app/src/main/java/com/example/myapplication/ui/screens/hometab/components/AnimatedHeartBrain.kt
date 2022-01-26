@@ -5,7 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -21,14 +20,12 @@ import androidx.compose.ui.Modifier
 import com.example.myapplication.R
 
 @Composable
-fun AnimatedWaterGlass(
+fun AnimatedHeartBrain(
   currWaterAmount:Int,
   goal:Int
 ){
   val currentPercentage = remember { Animatable(0f) }
   LaunchedEffect(currWaterAmount) {
-    //Run when the key(percentage) changes
-    //Percentage must be 'remembered' to detect change here
     if(currWaterAmount.toFloat()/goal < 1f){
       currentPercentage.animateTo(
         currWaterAmount.toFloat()/goal,
@@ -44,7 +41,6 @@ fun AnimatedWaterGlass(
   var cc by remember { mutableStateOf(IntSize.Zero) }
 
   Box(
-//    modifier = Modifier.fillMaxSize(),
     contentAlignment = Alignment.Center
   ) {
     Image(

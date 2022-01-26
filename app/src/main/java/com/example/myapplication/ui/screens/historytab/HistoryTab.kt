@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.screens.historytab
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,15 +15,12 @@ import com.example.myapplication.R
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.ui.screens.historytab.components.DataGraph
 import com.example.myapplication.ui.screens.hometab.components.DrinkLogsList
-import com.example.myapplication.ui.screens.hometab.components.TodaysWaterRecord
 import com.example.myapplication.ui.screens.hometab.components.buttons.BackToTopButton
 import com.example.myapplication.ui.screens.hometab.components.buttons.CustomAddWaterButton
-import com.example.myapplication.ui.theme.SelectedItemColor
 import com.example.myapplication.ui.theme.SettingsSubheadingBg
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.Units
 
-@ExperimentalFoundationApi
 @Composable
 fun HistoryTab(
   roomDatabaseViewModel: RoomDatabaseViewModel,
@@ -36,6 +32,8 @@ fun HistoryTab(
   val setSelectedDate = {date:String -> selectedDate = date}
   val selectedDrinkLogList = roomDatabaseViewModel.selectedHistoryDrinkLogs.collectAsState()
   val selectedWaterRecord = roomDatabaseViewModel.selectedHistoryWaterRecord.collectAsState()
+  val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.OZ)
+
   LaunchedEffect(key1 = selectedDate){
     roomDatabaseViewModel.getSelectedHistoryDrinkLogs(selectedDate)
     roomDatabaseViewModel.getSelectedHistoryWaterRecord(selectedDate)
@@ -44,7 +42,7 @@ fun HistoryTab(
     floatingActionButton = {
       Column(horizontalAlignment = Alignment.CenterHorizontally){
         BackToTopButton(scrollState)
-        CustomAddWaterButton(setShowCustomAddWaterDialog)
+        CustomAddWaterButton(setShowCustomAddWaterDialog = setShowCustomAddWaterDialog)
       }
     },
     floatingActionButtonPosition = FabPosition.Center
@@ -80,11 +78,15 @@ fun HistoryTab(
           horizontalArrangement = Arrangement.Center,
           verticalAlignment = Alignment.CenterVertically
         ){
-          TodaysWaterRecord(
-            currWaterAmount = selectedWaterRecord.value.currWaterAmount,
-            goal = selectedWaterRecord.value.goal,
-            waterUnit = Units.ML
-          )
+          Row {
+            Text(
+              text = "${selectedWaterRecord.value.currWaterAmount}/",
+              color = MaterialTheme.colors.primary
+            )
+            Text(
+              text = "${selectedWaterRecord.value.goal}${waterUnit.value}"
+            )
+          }
         }
         DrinkLogsList(
           drinkLogsList = selectedDrinkLogList.value,

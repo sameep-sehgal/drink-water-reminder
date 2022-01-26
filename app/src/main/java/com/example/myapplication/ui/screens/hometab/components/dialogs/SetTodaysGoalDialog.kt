@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.screens.hometab.components.dialogs
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
@@ -16,8 +15,8 @@ import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.DrinkWaterReport
 
 @Composable
-fun ReportDialog(
-  setShowReportDialog:(Boolean)->Unit,
+fun SetTodaysGoalDialog(
+  setShowSetTodaysGoalDialog:(Boolean)->Unit,
   roomDatabaseViewModel: RoomDatabaseViewModel,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   waterUnit:String
@@ -26,7 +25,7 @@ fun ReportDialog(
   ShowDialog(
     title = title,
     content = { ReportDialogContent(roomDatabaseViewModel,preferenceDataStoreViewModel,waterUnit) },
-    setShowDialog = setShowReportDialog,
+    setShowDialog = setShowSetTodaysGoalDialog,
     onConfirmButtonClick = { /*Todo*/ }
   )
 }
