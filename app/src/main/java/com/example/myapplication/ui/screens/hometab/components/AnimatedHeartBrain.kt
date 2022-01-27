@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import com.example.myapplication.R
 
 @Composable
@@ -25,26 +27,46 @@ fun AnimatedHeartBrain(
   goal:Int
 ){
   val currentPercentage = remember { Animatable(0f) }
+  val heartScaleValue = remember { Animatable(1f) }
   LaunchedEffect(currWaterAmount) {
     if(currWaterAmount.toFloat()/goal < 1f){
       currentPercentage.animateTo(
-        currWaterAmount.toFloat()/goal,
+        targetValue = currWaterAmount.toFloat()/goal,
         animationSpec = tween(durationMillis = 1000)
       )
     }else{
       currentPercentage.animateTo(
-        1f,
+        targetValue = 1f,
         animationSpec = tween(durationMillis = 1000)
       )
     }
   }
+  LaunchedEffect(currWaterAmount){
+    heartScaleValue.animateTo(
+      targetValue = 1.075f,
+      animationSpec = tween(durationMillis = 250)
+    )
+    heartScaleValue.animateTo(
+      targetValue = 1f,
+      animationSpec = tween(durationMillis = 250)
+    )
+    heartScaleValue.animateTo(
+      targetValue = 1.075f,
+      animationSpec = tween(durationMillis = 250)
+    )
+    heartScaleValue.animateTo(
+      targetValue = 1f,
+      animationSpec = tween(durationMillis = 250)
+    )
+  }
   var cc by remember { mutableStateOf(IntSize.Zero) }
 
   Box(
-    contentAlignment = Alignment.Center
+    contentAlignment = Alignment.Center,
+    modifier = Modifier.height(220.dp)
   ) {
     Image(
-      painter = painterResource(R.drawable.heart_brain_icon),
+      painter = painterResource(R.drawable.brain_icon),
       contentDescription = "Water Glass",
       modifier = Modifier
         .padding(0.dp)
@@ -59,9 +81,15 @@ fun AnimatedHeartBrain(
           )
         )
     )
+    Image(
+      painter = painterResource(id = R.drawable.heart_icon),
+      contentDescription = "Heart",
+      modifier = Modifier.scale(heartScaleValue.value)
+    )
     Text(
       text = "${(currentPercentage.value*100).toInt()}%",
-      color = MaterialTheme.colors.onPrimary
+      color = MaterialTheme.colors.onPrimary,
+      modifier = Modifier.scale(heartScaleValue.value)
     )
   }
 }

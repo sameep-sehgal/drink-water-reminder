@@ -49,12 +49,10 @@ fun HomeTab(
 
     Spacer(modifier = Modifier.size(8.dp))
 
-    Row(modifier = Modifier.height(220.dp)) {
-      AnimatedHeartBrain(
-        todaysWaterRecord.value.currWaterAmount,
-        todaysWaterRecord.value.goal
-      )
-    }
+    AnimatedHeartBrain(
+      todaysWaterRecord.value.currWaterAmount,
+      todaysWaterRecord.value.goal
+    )
 
     Spacer(modifier = Modifier.size(8.dp))
 
