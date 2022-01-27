@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.statstab.components.charts.barchart.renderer.bar
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.drawscope.DrawScope

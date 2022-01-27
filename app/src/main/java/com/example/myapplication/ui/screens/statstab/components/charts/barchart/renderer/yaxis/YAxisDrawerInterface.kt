@@ -15,7 +15,6 @@ interface YAxisDrawerInterface {
     drawScope: DrawScope,
     canvas: Canvas,
     drawableArea: Rect,
-    minValue: Float,
-    maxValue: Float
+    barDrawableArea:Rect
   )
 }

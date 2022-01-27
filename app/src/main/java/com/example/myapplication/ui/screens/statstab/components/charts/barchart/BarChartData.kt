@@ -1,39 +1,27 @@
 package com.example.myapplication.ui.screens.statstab.components.charts.barchart
 
 import androidx.compose.ui.graphics.Color
+import com.example.myapplication.ui.theme.AppColorPrimary
 
 data class BarChartData(
   val bars: List<Bar>,
   val padBy: Float = 10f,
   val startAtZero: Boolean = true
 ){
+  val maxBarValue = 100f
+
   init {
     require(padBy in 0f..100f)
-  }
-
-  private val yMinMax: Pair<Float, Float>
-    get() {
-      val min = bars.minByOrNull { it.value }?.value ?: 0f
-      val max = bars.maxByOrNull { it.value }?.value ?: 0f
-
-      return min to max
-    }
-  internal val maxYValue: Float =
-    yMinMax.second + ((yMinMax.second - yMinMax.first) * padBy / 100f)
-  internal val minYValue: Float
-    get() {
-      return if (startAtZero) {
-        0f
-      } else {
-        yMinMax.first - ((yMinMax.second - yMinMax.first) * padBy / 100f)
+    for(bar in bars) {
+      if(bar.value > maxBarValue){
+        bar.value = maxBarValue
       }
     }
-
-  val maxBarValue = bars.maxByOrNull { it.value }?.value ?: 0f
+  }
 
   data class Bar(
-    val value: Float,
-    val color: Color,
-    val label: String
+    var value: Float,
+    val label: String,
+    val color: Color = AppColorPrimary
   )
 }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartUtils.axisAreas
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartUtils.barDrawableArea
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartUtils.forEachWithArea
@@ -22,6 +23,7 @@ import com.example.myapplication.ui.screens.statstab.components.charts.barchart.
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.renderer.yaxis.YAxisDrawer
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.renderer.yaxis.YAxisDrawerInterface
 import com.example.myapplication.ui.screens.statstab.components.charts.piechart.chartAnimation
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Composable
 fun BarChart(
@@ -34,6 +36,7 @@ fun BarChart(
   labelDrawer: LabelDrawerInterface = LabelDrawer()
 ) {
   val transitionAnimation = remember(barChartData.bars) { Animatable(initialValue = 0f) }
+  val context = LocalContext.current
 
   LaunchedEffect(barChartData.bars) {
     transitionAnimation.animateTo(1f, animationSpec = animation)
@@ -66,6 +69,15 @@ fun BarChart(
           canvas = canvas,
           drawableArea = xAxisArea
         )
+
+        // Draw yAxis line
+        yAxisDrawer.drawAxisLabels(
+          drawScope = this,
+          canvas = canvas,
+          drawableArea = yAxisArea,
+          barDrawableArea = barDrawableArea
+        )
+
         // Draw each bar.
         barChartData.forEachWithArea(
           this,
@@ -83,11 +95,6 @@ fun BarChart(
       }
     }
   ) {
-    /**
-     *  Typically we could draw everything here, but because of the lack of canvas.drawText
-     *  APIs we have to use Android's `nativeCanvas` which seems to be drawn behind
-     *  Compose's canvas.
-     */
     drawIntoCanvas { canvas ->
       val (xAxisArea, yAxisArea) = axisAreas(
         drawScope = this,
@@ -106,19 +113,12 @@ fun BarChart(
         labelDrawer.drawLabel(
           drawScope = this,
           canvas = canvas,
-          label = bar.label,
+          bar = bar,
           barArea = barArea,
-          xAxisArea = xAxisArea
+          xAxisArea = xAxisArea,
+          resources = context.resources
         )
       }
-
-      yAxisDrawer.drawAxisLabels(
-        drawScope = this,
-        canvas = canvas,
-        minValue = barChartData.minYValue,
-        maxValue = barChartData.maxYValue,
-        drawableArea = yAxisArea
-      )
     }
   }
 }

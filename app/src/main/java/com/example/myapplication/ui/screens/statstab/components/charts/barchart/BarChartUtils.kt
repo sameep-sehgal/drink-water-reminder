@@ -4,9 +4,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.ui.screens.statstab.components.charts.barchart.renderer.label.LabelDrawer
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.renderer.label.LabelDrawerInterface
-import com.example.myapplication.ui.screens.statstab.components.charts.barchart.renderer.xaxis.XAxisDrawer
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.renderer.xaxis.XAxisDrawerInterface
 
 object BarChartUtils {

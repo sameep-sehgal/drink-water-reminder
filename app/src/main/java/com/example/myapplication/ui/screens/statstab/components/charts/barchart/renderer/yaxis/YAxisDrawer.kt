@@ -13,18 +13,15 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.utils.toLegacyInt
-import kotlin.math.max
-import kotlin.math.roundToInt
 
 typealias LabelFormatter = (value: Float) -> String
 
 class YAxisDrawer(
   private val labelTextSize: TextUnit = 12.sp,
-  private val labelTextColor: Color = Color.Black,
-  private val labelRatio: Int = 3,
-  private val labelValueFormatter: LabelFormatter = { value -> "%.1f".format(value) },
+  private val labelTextColor: Color = Color.Gray,
+  private val labelValueFormatter: LabelFormatter = { value -> "${value.toInt()}%" },
   private val axisLineThickness: Dp = 1.dp,
-  private val axisLineColor: Color = Color.Black
+  private val axisLineColor: Color = Color.Gray
 ) : YAxisDrawerInterface {
   private val axisLinePaint = Paint().apply {
     isAntiAlias = true
@@ -48,7 +45,7 @@ class YAxisDrawer(
     canvas.drawLine(
       p1 = Offset(
         x = x,
-        y = drawableArea.top
+        y = drawableArea.top - (labelTextSize.toPx()/2f)
       ),
       p2 = Offset(
         x = x,
@@ -64,19 +61,20 @@ class YAxisDrawer(
     drawScope: DrawScope,
     canvas: Canvas,
     drawableArea: Rect,
-    minValue: Float,
-    maxValue: Float
+    barDrawableArea: Rect
   ) = with(drawScope) {
     val labelPaint = textPaint.apply {
       textSize = labelTextSize.toPx()
       textAlign = android.graphics.Paint.Align.RIGHT
     }
-    val minLabelHeight = (labelTextSize.toPx() * labelRatio.toFloat())
     val totalHeight = drawableArea.height
-    val labelCount = max((drawableArea.height / minLabelHeight).roundToInt(), 2)
+    val labelCount = 5
+
+    val minVal = 0f
+    var value:Float
 
     for (i in 0..labelCount) {
-      val value = minValue + (i * ((maxValue - minValue) / labelCount))
+      value = minVal + i*20f
 
       val label = labelValueFormatter(value)
       val x = drawableArea.right - axisLineThickness.toPx() - (labelTextSize.toPx() / 2f)
@@ -87,6 +85,15 @@ class YAxisDrawer(
         drawableArea.bottom - (i * (totalHeight / labelCount)) + (textBounds.height() / 2f)
 
       canvas.nativeCanvas.drawText(label, x, y, labelPaint)
+      if(value > 1f){
+        canvas.nativeCanvas.drawLine(
+          drawableArea.right,
+          y - (labelTextSize.toPx() / 2.5f),
+          barDrawableArea.right,
+          y - (labelTextSize.toPx() / 2.5f),
+          labelPaint
+        )
+      }
     }
   }
 }
