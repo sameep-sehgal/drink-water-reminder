@@ -136,19 +136,22 @@ class DateString {
       return months[month-1]
     }
 
-    fun getMonthStartDate(month: Int, year: Int): String {
+    fun getMonthStartDate(date: String): String {
       val calendar = Calendar.getInstance()
-      calendar.set(Calendar.MONTH, month)
-      calendar.set(Calendar.YEAR, year)
-      calendar.set(Calendar.DAY_OF_MONTH, 1)
+      val dateList = date.split("-")
+      calendar.set(Calendar.MONTH, dateList[1].toInt()-1)
+      calendar.set(Calendar.YEAR, dateList[0].toInt())
+      calendar.set(Calendar.DATE, 1)
 
       return convertToDateString(calendar)
     }
 
-    fun getMonthEndDate(month: Int, year: Int): String {
+    fun getMonthEndDate(date: String): String {
       val calendar = Calendar.getInstance()
-      calendar.set(Calendar.MONTH, month)
-      calendar.set(Calendar.YEAR, year)
+      val dateList = date.split("-")
+      calendar.set(Calendar.MONTH, dateList[1].toInt()-1)
+      calendar.set(Calendar.YEAR, dateList[0].toInt())
+      calendar.add(Calendar.MONTH, 1)
       calendar.set(Calendar.DAY_OF_MONTH, 1)
       calendar.add(Calendar.DAY_OF_MONTH, -1)
 

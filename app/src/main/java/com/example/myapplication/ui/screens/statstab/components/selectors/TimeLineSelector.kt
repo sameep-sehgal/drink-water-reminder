@@ -22,6 +22,12 @@ fun TimeLineSelector(
     )
   }
   if(selectedStatsTimeLine == Statistics.MONTHLY){
-    MonthSelector()
+    MonthSelector(
+      startDate = startDate,
+      endDate = endDate,
+      setStartDate = setStartDate,
+      setEndDate = setEndDate,
+      firstWaterRecordDate = firstWaterRecordDate
+    )
   }
 }
