@@ -6,10 +6,17 @@ import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowSelectValue
+import com.example.myapplication.utils.Statistics
 
 @Composable
-fun RenderOtherStats() {
+fun RenderOtherStats(
+  drinkLogsCount: Int,
+  waterRecordsCount: Int,
+  goalCompletedDaysCount: Int,
+  waterRecordsList: List<DailyWaterRecord>
+) {
   Card(
     elevation = 6.dp,
     modifier = Modifier.padding(6.dp)
@@ -19,22 +26,30 @@ fun RenderOtherStats() {
     ) {
       SettingsRowSelectValue(
         text = "Average Consumption",
-        value = "2500 ml/day",
+        value = "${Statistics.calculateAverage(
+          waterRecordsList = waterRecordsList,
+          daysCount = waterRecordsCount
+        )} ml/day",
         onSettingsRowClick = {}
       )
       SettingsRowSelectValue(
         text = "Average Completion",
-        value = "87%",
+        value = "${Statistics.calculateAverageCompletion(
+          waterRecordsList = waterRecordsList
+        )}%",
         onSettingsRowClick = {}
       )
       SettingsRowSelectValue(
         text = "Drink Frequency",
-        value = "5 times/day",
+        value = "${Statistics.calculateDrinkFrequency(
+          waterRecordsCount = waterRecordsCount,
+          drinkLogsCount = drinkLogsCount
+        )} times/day",
         onSettingsRowClick = {}
       )
       SettingsRowSelectValue(
         text = "Goal Completed",
-        value = "5/7 days",
+        value = "${goalCompletedDaysCount}/${waterRecordsCount} days",
         onSettingsRowClick = {}
       )
     }

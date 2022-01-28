@@ -46,7 +46,7 @@ fun ReportDialogContent(
   val totalDays = DateString.calculateDaysDifference(firstWaterRecordDate.value, todaysDate)
 
   LaunchedEffect(key1 = true) {
-    roomDatabaseViewModel.getDrinkLogsCount()
+//    roomDatabaseViewModel.getDrinkLogsCount()
     roomDatabaseViewModel.getWaterRecordsCount()
     roomDatabaseViewModel.getWeekWaterRecordsList()
     roomDatabaseViewModel.getMonthWaterRecordsList()
@@ -61,27 +61,27 @@ fun ReportDialogContent(
                 drinkLogsCount = drinkLogsCount.value
               )} drinks/day"
     )
-    Text(
-      text = "Weekly Average: " +
-              "${Statistics.calculateAverage(weekWaterRecordsList.value, "weekly")}" +
-              waterUnit
-    )
-    Text(
-      text = "Monthly Average: " +
-              "${Statistics.calculateAverage(monthWaterRecordsList.value, "monthly")}" +
-              waterUnit
-    )
+//    Text(
+//      text = "Weekly Average: " +
+//              "${Statistics.calculateAverage(weekWaterRecordsList.value, "weekly")}" +
+//              waterUnit
+//    )
+//    Text(
+//      text = "Monthly Average: " +
+//              "${Statistics.calculateAverage(monthWaterRecordsList.value, "monthly")}" +
+//              waterUnit
+//    )
     Text(
       text = "Goal Completed: " +
               "${completedWaterRecordsCount.value}/" +
               "$totalDays days"
     )
-    Text(
-      text = "Average Completion: " +
-              "${Statistics.calculateAverageCompletion(
-                completedWaterRecordsCount = completedWaterRecordsCount.value,
-                totalDays = totalDays
-              )}%"
-    )
+//    Text(
+//      text = "Average Completion: " +
+//              "${Statistics.calculateAverageCompletion(
+//                completedWaterRecordsCount = completedWaterRecordsCount.value,
+//                totalDays = totalDays
+//              )}%"
+//    )
   }
 }

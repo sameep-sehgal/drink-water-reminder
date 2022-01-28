@@ -34,9 +34,11 @@ fun StatsTab(
   darkTheme:Boolean
 ) {
   val scrollState = rememberScrollState()
-  val waterRecordsList = roomDatabaseViewModel.waterRecordsList.collectAsState()
   val todaysDate = DateString.getTodaysDate()
-  val firstWaterRecordDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
+  var waterRecordsCount by remember{ mutableStateOf(0) }
+  val incrementWaterRecordsCount:()->Unit = { waterRecordsCount++ }
+  var goalCompletedDaysCount by remember{ mutableStateOf(0) }
+  val incrementGoalCompletedDaysCount:()->Unit = { goalCompletedDaysCount++ }
   var startDate by remember {
     mutableStateOf(DateString.getWeekStartDate(todaysDate))
   }
@@ -47,13 +49,16 @@ fun StatsTab(
   val setEndDate = {date:String -> endDate = date}
   var selectedStatsTimeLine by remember{ mutableStateOf(Statistics.WEEKLY) }
   val setSelectedStatsTimeLine = { value:String -> selectedStatsTimeLine = value }
-
   var bars by remember {
     mutableStateOf(MutableList(0) { index ->
         BarChartData.Bar(0f, "$index")
       }
     )
   }
+
+  val waterRecordsList = roomDatabaseViewModel.waterRecordsList.collectAsState()
+  val drinkLogsCount = roomDatabaseViewModel.drinkLogsCount.collectAsState()
+  val firstWaterRecordDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
 
   LaunchedEffect(
     key1 = selectedStatsTimeLine
@@ -81,6 +86,10 @@ fun StatsTab(
       startDate = startDate,
       endDate = endDate
     )
+    roomDatabaseViewModel.getDrinkLogsCount(
+      startDate = startDate,
+      endDate = endDate
+    )
   }
 
   LaunchedEffect(
@@ -88,12 +97,18 @@ fun StatsTab(
     key2 = endDate,
     key3 = startDate
   ) {
-    val dateRecordMapper = createWaterRecordHashMap(waterRecordsList = waterRecordsList.value)
+    waterRecordsCount = 0
+    goalCompletedDaysCount = 0
+    val dateRecordMapper = createWaterRecordHashMap(
+      waterRecordsList = waterRecordsList.value,
+      incrementGoalCompletedDaysCount = incrementGoalCompletedDaysCount
+    )
     bars = createBarChartData(
       startDate = startDate,
       endDate = endDate,
       dateRecordMapper = dateRecordMapper,
-      selectedStatsTimeLine = selectedStatsTimeLine
+      selectedStatsTimeLine = selectedStatsTimeLine,
+      incrementDailyWaterRecordsCount = incrementWaterRecordsCount
     )
   }
 
@@ -122,7 +137,12 @@ fun StatsTab(
 
     RenderPieChart()
 
-    RenderOtherStats()
+    RenderOtherStats(
+      drinkLogsCount = drinkLogsCount.value,
+      waterRecordsCount = waterRecordsCount,
+      goalCompletedDaysCount = goalCompletedDaysCount,
+      waterRecordsList = waterRecordsList.value
+    )
 
   }
 }

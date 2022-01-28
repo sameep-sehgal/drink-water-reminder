@@ -199,9 +199,15 @@ class RoomDatabaseViewModel @Inject constructor(
   private val _drinkLogsCount = MutableStateFlow(0)
   val drinkLogsCount : StateFlow<Int> = _drinkLogsCount.asStateFlow()
 //  var drinkLogsCount:Int = 0
-  fun getDrinkLogsCount(){
+  fun getDrinkLogsCount(
+    startDate: String,
+    endDate: String
+  ){
     viewModelScope.launch (Dispatchers.IO){
-      _drinkLogsCount.value = waterDataRepository.getDrinkLogsCount()
+      _drinkLogsCount.value = waterDataRepository.getDrinkLogsCount(
+        startDate = startDate,
+        endDate = endDate
+      )
     }
   }
 

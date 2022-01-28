@@ -48,8 +48,14 @@ class WaterDataRepository @Inject constructor(
     waterDatabaseDao.deleteDrinkLog(drinkLog)
   }
 
-  suspend fun getDrinkLogsCount(): Int {
-    return waterDatabaseDao.getDrinkLogsCount()
+  suspend fun getDrinkLogsCount(
+    startDate: String,
+    endDate: String
+  ): Int {
+    return waterDatabaseDao.getDrinkLogsCount(
+      startDate = startDate,
+      endDate = endDate
+    )
   }
 
   suspend fun getWaterRecordsCount(): Int {

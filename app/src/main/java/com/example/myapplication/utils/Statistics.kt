@@ -21,36 +21,45 @@ object Statistics {
 
   fun calculateAverage(
     waterRecordsList: List<DailyWaterRecord>,
-    type:String
+    daysCount: Int
   ) : Int {
-    var divide = 30
-    if(type == "weekly") divide = 7
+    if(daysCount == 0) return 0
 
     var sum = 0
     for(record in waterRecordsList) {
       sum += record.currWaterAmount
     }
 
-    return sum/divide
+    return sum/daysCount
   }
 
   fun calculateAverageCompletion(
-    completedWaterRecordsCount:Int,
-    totalDays:Int
+    waterRecordsList: List<DailyWaterRecord>
   ) : Int {
-    if(totalDays == 0) return 0
-    return (completedWaterRecordsCount*100)/totalDays
+    var waterSum = 0
+    var goalSum = 0
+    for(record in waterRecordsList) {
+      waterSum += record.currWaterAmount
+      goalSum += record.goal
+    }
+
+    if(goalSum == 0) return 0
+
+    return (waterSum*100)/goalSum
   }
 
   fun createWaterRecordHashMap(
-    waterRecordsList:List<DailyWaterRecord>
+    waterRecordsList:List<DailyWaterRecord>,
+    incrementGoalCompletedDaysCount:() -> Unit
   ): HashMap<String, Float> {
     val dateRecordMapper = hashMapOf<String, Float>()
     for(waterRecord in waterRecordsList) {
       val value = ((waterRecord.currWaterAmount*100).toFloat()/waterRecord.goal)
       if(waterRecord.goal != 0){
-        if(value >= 100f)
+        if(value >= 100f) {
           dateRecordMapper[waterRecord.date] = 100f
+          incrementGoalCompletedDaysCount()
+        }
         else
           dateRecordMapper[waterRecord.date] = value
       }
@@ -64,7 +73,9 @@ object Statistics {
     startDate:String,
     endDate:String,
     dateRecordMapper: HashMap<String, Float>,
-    selectedStatsTimeLine: String
+    selectedStatsTimeLine: String,
+    incrementDailyWaterRecordsCount:() -> Unit
+
   ): MutableList<BarChartData.Bar> {
     var currDate = endDate
     val bars = MutableList(0) { index ->
@@ -91,6 +102,7 @@ object Statistics {
         )
       )
       currDate = DateString.getPrevDate(currDate)
+      incrementDailyWaterRecordsCount()
     }
 
     return bars
