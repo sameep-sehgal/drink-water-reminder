@@ -13,6 +13,7 @@ import com.example.myapplication.ui.screens.statstab.components.TopStatsTabBar
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartData
 import com.example.myapplication.ui.screens.statstab.components.charts.piechart.PieChart
 import com.example.myapplication.ui.screens.statstab.components.charts.piechart.PieChartData
+import com.example.myapplication.ui.screens.statstab.components.selectors.TimeLineSelector
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.Statistics
 import com.example.myapplication.utils.Statistics.createBarChartData
@@ -53,7 +54,7 @@ fun StatsTab(
       endDate = "2022-01-31"
     }
     if(selectedStatsTimeLine == Statistics.YEARLY){
-      
+
     }
     roomDatabaseViewModel.getWaterRecordsList(
       startDate = startDate,
@@ -77,7 +78,11 @@ fun StatsTab(
 
   TopStatsTabBar(setSelectedStatsTimeLine = setSelectedStatsTimeLine)
 
-  Spacer(modifier = Modifier.size(16.dp))
+  Spacer(modifier = Modifier.size(8.dp))
+
+  TimeLineSelector(selectedStatsTimeLine = selectedStatsTimeLine)
+
+  Spacer(modifier = Modifier.size(8.dp))
 
   RenderBarChart(bars = bars)
 

@@ -24,6 +24,7 @@ fun DropdownSelect(
   selectedOption: HashMap<String,Any?>,//Must be passes down as state
   setSelectedOption:(HashMap<String,Any?>) -> Unit,
   onSelectedColor: Color = MaterialTheme.colors.primary,
+  textColor: Color = MaterialTheme.colors.onSecondary,
   showBorder: Boolean = true
   ) {
   //options must be of type {"text":"Option 1", "value":5}
@@ -39,7 +40,7 @@ fun DropdownSelect(
 
   if(showBorder) modifier = modifier.border(
     width = 1.dp,
-    color = if(expanded) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
+    color = if(expanded) onSelectedColor else textColor
   )
 
   Column {
@@ -55,12 +56,12 @@ fun DropdownSelect(
         text = selectedOption["text"].toString(),
         fontSize = 16.sp,
         modifier = Modifier.padding(4.dp),
-        color = if(expanded) onSelectedColor else MaterialTheme.colors.onSurface
+        color = if(expanded) onSelectedColor else textColor
       )
       Icon(
         icon,
         contentDescription = "dropdown",
-        tint = if(expanded) onSelectedColor else MaterialTheme.colors.onSurface
+        tint = if(expanded) onSelectedColor else textColor
       )
     }
     DropdownMenu(
