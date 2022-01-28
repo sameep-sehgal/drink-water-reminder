@@ -1,5 +1,6 @@
 package com.example.myapplication.utils
 
+import android.util.Log
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,6 +23,10 @@ class DateString {
 
     fun convertToDateString(date: Date):String {
       return dateFormat.format(date)
+    }
+
+    fun convertToDateString(calendar: Calendar):String {
+      return dateFormat.format(calendar.time)
     }
 
     fun getPrevDate(date:String):String {
@@ -79,6 +84,35 @@ class DateString {
       val end = newEnd.timeInMillis
       val start = newStart.timeInMillis
       return TimeUnit.MILLISECONDS.toDays(abs(end - start)).toInt()
+    }
+
+    fun getWeekStartDate(todaysDate: String): String {
+      val calendar = getCalendarInstance(todaysDate)
+      val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+      calendar.add(Calendar.DAY_OF_MONTH, -(dayOfWeek - 1))
+
+      Log.d("TAG", "getWeekStartDate: ${dayOfWeek} ${convertToDateString(calendar = calendar)} ${calendar.get(Calendar.DAY_OF_WEEK)}")
+      assert(calendar.get(Calendar.DAY_OF_WEEK) == 1)
+
+      return convertToDateString(calendar = calendar)
+    }
+
+    fun getWeekEndDate(todaysDate: String): String {
+      val calendar = getCalendarInstance(todaysDate)
+      val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+      calendar.add(Calendar.DAY_OF_MONTH, 7 - dayOfWeek)
+
+      assert(calendar.get(Calendar.DAY_OF_WEEK) == 7)
+
+      return convertToDateString(calendar = calendar)
+    }
+
+    fun getDayOfWeek(dayOfWeek:Int): String {
+
+      assert(dayOfWeek in 1..7)
+
+      val days = listOf("Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat")
+      return days[dayOfWeek-1]
     }
   }
 }

@@ -52,12 +52,12 @@ fun HistoryTab(
         .fillMaxWidth()
         .verticalScroll(scrollState)
     ){
-      DataGraph(
-        roomDatabaseViewModel,
-        preferenceDataStoreViewModel,
-        setSelectedDate,
-        selectedDate
-      )
+//      DataGraph(
+//        roomDatabaseViewModel,
+//        preferenceDataStoreViewModel,
+//        setSelectedDate,
+//        selectedDate
+//      )
       Row(
         modifier = Modifier
           .fillMaxWidth()

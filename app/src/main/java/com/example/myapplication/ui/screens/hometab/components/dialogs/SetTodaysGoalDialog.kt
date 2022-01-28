@@ -12,7 +12,7 @@ import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.utils.DateString
-import com.example.myapplication.utils.DrinkWaterReport
+import com.example.myapplication.utils.Statistics
 
 @Composable
 fun SetTodaysGoalDialog(
@@ -56,19 +56,19 @@ fun ReportDialogContent(
   Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
     Text(
       text = "Drink Frequency: " +
-              "${DrinkWaterReport.calculateDrinkFrequency(
+              "${Statistics.calculateDrinkFrequency(
                 waterRecordsCount = waterRecordsCount.value,
                 drinkLogsCount = drinkLogsCount.value
               )} drinks/day"
     )
     Text(
       text = "Weekly Average: " +
-              "${DrinkWaterReport.calculateAverage(weekWaterRecordsList.value, "weekly")}" +
+              "${Statistics.calculateAverage(weekWaterRecordsList.value, "weekly")}" +
               waterUnit
     )
     Text(
       text = "Monthly Average: " +
-              "${DrinkWaterReport.calculateAverage(monthWaterRecordsList.value, "monthly")}" +
+              "${Statistics.calculateAverage(monthWaterRecordsList.value, "monthly")}" +
               waterUnit
     )
     Text(
@@ -78,7 +78,7 @@ fun ReportDialogContent(
     )
     Text(
       text = "Average Completion: " +
-              "${DrinkWaterReport.calculateAverageCompletion(
+              "${Statistics.calculateAverageCompletion(
                 completedWaterRecordsCount = completedWaterRecordsCount.value,
                 totalDays = totalDays
               )}%"

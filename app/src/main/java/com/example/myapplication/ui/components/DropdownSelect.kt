@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -21,8 +22,10 @@ import androidx.compose.ui.unit.toSize
 fun DropdownSelect(
   options:List<HashMap<String,Any?>>,
   selectedOption: HashMap<String,Any?>,//Must be passes down as state
-  setSelectedOption:(HashMap<String,Any?>) -> Unit
-) {
+  setSelectedOption:(HashMap<String,Any?>) -> Unit,
+  onSelectedColor: Color = MaterialTheme.colors.primary,
+  showBorder: Boolean = true
+  ) {
   //options must be of type {"text":"Option 1", "value":5}
   var expanded by remember { mutableStateOf(false) }
   var textfieldSize by remember { mutableStateOf(Size.Zero)}
@@ -32,13 +35,16 @@ fun DropdownSelect(
   else
     Icons.Filled.KeyboardArrowDown
 
+  var modifier = Modifier.clickable { expanded = !expanded }
+
+  if(showBorder) modifier = modifier.border(
+    width = 1.dp,
+    color = if(expanded) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
+  )
 
   Column {
     Row(
-      modifier = Modifier.border(
-        width = 1.dp,
-        color = if(expanded) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
-      ).clickable { expanded = !expanded }
+      modifier = modifier
         .onGloballyPositioned { coordinates ->
         //This value is used to assign to the DropDown the same width
         textfieldSize = coordinates.size.toSize()
@@ -49,12 +55,12 @@ fun DropdownSelect(
         text = selectedOption["text"].toString(),
         fontSize = 16.sp,
         modifier = Modifier.padding(4.dp),
-        color = if(expanded) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
+        color = if(expanded) onSelectedColor else MaterialTheme.colors.onSurface
       )
       Icon(
         icon,
         contentDescription = "dropdown",
-        tint = if(expanded) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
+        tint = if(expanded) onSelectedColor else MaterialTheme.colors.onSurface
       )
     }
     DropdownMenu(

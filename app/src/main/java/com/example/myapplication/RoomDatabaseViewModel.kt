@@ -95,10 +95,26 @@ class RoomDatabaseViewModel @Inject constructor(
     viewModelScope.launch (Dispatchers.IO){
       waterDataRepository.getDailyWaterRecord(date).collect {
         Log.d(TAG, "getDailyWaterRecord $it")
-        val temp = _waterRecord.value
-        temp[date] = it
-        _waterRecord.value = temp
+        _waterRecord.value[date] = it
       }
+    }
+  }
+  private val _waterRecordsList = MutableStateFlow<List<DailyWaterRecord>>(emptyList())
+  val waterRecordsList : StateFlow<List<DailyWaterRecord>> = _waterRecordsList.asStateFlow()
+  fun getWaterRecordsList(
+    startDate:String,
+    endDate: String
+  ){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.getDailyWaterRecordsList(
+        startDate = startDate,
+        endDate = endDate
+      ).distinctUntilChanged()
+        .catch {  }
+        .collect {
+          Log.d(TAG, "getWaterRecordsList: $it")
+          _waterRecordsList.value = it
+        }
     }
   }
 
