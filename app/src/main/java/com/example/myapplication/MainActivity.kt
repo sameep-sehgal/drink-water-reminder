@@ -76,7 +76,8 @@ class MainActivity : ComponentActivity() {
                       roomDatabaseViewModel
                     )
                     1 -> StatsTab(
-                      roomDatabaseViewModel
+                      roomDatabaseViewModel = roomDatabaseViewModel,
+                      preferenceDataStoreViewModel = preferenceDataStoreViewModel
                     )
                     2 -> HistoryTab(
                       roomDatabaseViewModel,

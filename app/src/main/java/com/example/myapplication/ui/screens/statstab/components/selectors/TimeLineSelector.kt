@@ -9,14 +9,16 @@ fun TimeLineSelector(
   startDate:String,
   endDate:String,
   setStartDate:(String) -> Unit,
-  setEndDate:(String) -> Unit
+  setEndDate:(String) -> Unit,
+  firstWaterRecordDate:String
 ) {
   if(selectedStatsTimeLine == Statistics.WEEKLY){
     WeekSelector(
       startDate = startDate,
       endDate = endDate,
       setStartDate = setStartDate,
-      setEndDate = setEndDate
+      setEndDate = setEndDate,
+      firstWaterRecordDate = firstWaterRecordDate
     )
   }
   if(selectedStatsTimeLine == Statistics.MONTHLY){

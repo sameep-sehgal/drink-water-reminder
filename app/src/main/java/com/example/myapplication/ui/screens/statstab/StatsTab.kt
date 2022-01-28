@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.ui.screens.statstab.components.RenderBarChart
 import com.example.myapplication.ui.screens.statstab.components.TopStatsTabBar
@@ -21,10 +22,12 @@ import com.example.myapplication.utils.Statistics.createWaterRecordHashMap
 
 @Composable
 fun StatsTab(
-  roomDatabaseViewModel: RoomDatabaseViewModel
+  roomDatabaseViewModel: RoomDatabaseViewModel,
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ) {
   val waterRecordsList = roomDatabaseViewModel.waterRecordsList.collectAsState()
   val todaysDate = DateString.getTodaysDate()
+  val firstWaterRecordDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
   var startDate by remember {
     mutableStateOf(DateString.getWeekStartDate(todaysDate))
   }
@@ -94,7 +97,8 @@ fun StatsTab(
     startDate = startDate,
     endDate = endDate,
     setStartDate = setStartDate,
-    setEndDate = setEndDate
+    setEndDate = setEndDate,
+    firstWaterRecordDate = firstWaterRecordDate.value
   )
 
   Spacer(modifier = Modifier.size(8.dp))

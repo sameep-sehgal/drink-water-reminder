@@ -16,7 +16,8 @@ fun WeekSelector(
   startDate:String,
   endDate:String,
   setStartDate:(String) -> Unit,
-  setEndDate:(String) -> Unit
+  setEndDate:(String) -> Unit,
+  firstWaterRecordDate: String
 ) {
   val todaysDate = DateString.getTodaysDate()
   Row(
@@ -27,11 +28,15 @@ fun WeekSelector(
       modifier = Modifier.weight(1f),
       horizontalArrangement = Arrangement.End
     ) {
-      PreviousButton(onClick = {
-        val newEndDate = DateString.getPrevDate(startDate)
-        setStartDate(DateString.getWeekStartDate(newEndDate))
-        setEndDate(newEndDate)
-      })
+      if(startDate>firstWaterRecordDate) {
+        PreviousButton(onClick = {
+          val newEndDate = DateString.getPrevDate(startDate)
+          setStartDate(DateString.getWeekStartDate(newEndDate))
+          setEndDate(newEndDate)
+        })
+      }else{
+        Spacer(modifier = Modifier.size(4.dp))
+      }
     }
 
     Spacer(modifier = Modifier.size(16.dp))
