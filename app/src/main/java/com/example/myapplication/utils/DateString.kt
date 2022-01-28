@@ -29,6 +29,14 @@ class DateString {
       return dateFormat.format(calendar.time)
     }
 
+    fun convertToDateString(year:Int, month:Int, dayOfMonth:Int): String {
+      val calendar = Calendar.getInstance()
+      calendar.set(Calendar.YEAR, year)
+      calendar.set(Calendar.MONTH, month)
+      calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+      return convertToDateString(calendar)
+    }
+
     fun getPrevDate(date:String):String {
       if(date == NOT_SET) return NOT_SET
       val calendar = getCalendarInstance(date)
@@ -64,8 +72,9 @@ class DateString {
       return calculateDaysDifference(calendar1,calendar2)
     }
 
-    private fun getCalendarInstance(date:String): Calendar {
+    fun getCalendarInstance(date:String): Calendar {
       val calendar = Calendar.getInstance()
+      if(date == "") return calendar
       val dateArray = date.split("-")
       calendar.set(Calendar.YEAR, dateArray[0].toInt())
       calendar.set(Calendar.MONTH, dateArray[1].toInt() - 1) //value==0 represents January

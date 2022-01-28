@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.screens.historytab
 
+import android.widget.CalendarView
+import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,8 +10,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.size
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.R
 import com.example.myapplication.RoomDatabaseViewModel
@@ -28,11 +33,16 @@ fun HistoryTab(
 ){
   val (showCustomAddWaterDialog, setShowCustomAddWaterDialog) =  remember { mutableStateOf(false) }
   val scrollState = rememberScrollState()
-  var selectedDate by remember{ mutableStateOf(DateString.getTodaysDate()) }
+  val todaysDate = DateString.getTodaysDate()
+  var selectedDate by remember{ mutableStateOf(todaysDate) }
   val setSelectedDate = {date:String -> selectedDate = date}
   val selectedDrinkLogList = roomDatabaseViewModel.selectedHistoryDrinkLogs.collectAsState()
   val selectedWaterRecord = roomDatabaseViewModel.selectedHistoryWaterRecord.collectAsState()
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.OZ)
+  val firstWaterDataDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
+  val onCalendarDateChangeListener = CalendarView.OnDateChangeListener { view, year, month, dayOfMonth ->
+    setSelectedDate(DateString.convertToDateString(year, month, dayOfMonth))
+  }
 
   LaunchedEffect(key1 = selectedDate){
     roomDatabaseViewModel.getSelectedHistoryDrinkLogs(selectedDate)
@@ -52,12 +62,23 @@ fun HistoryTab(
         .fillMaxWidth()
         .verticalScroll(scrollState)
     ){
-//      DataGraph(
-//        roomDatabaseViewModel,
-//        preferenceDataStoreViewModel,
-//        setSelectedDate,
-//        selectedDate
-//      )
+      Column(
+        modifier = Modifier.height(300.dp).fillMaxWidth()
+      ) {
+        AndroidView(
+          factory = {
+            val calendarView = CalendarView(it)
+            calendarView.setOnDateChangeListener(onCalendarDateChangeListener)
+            calendarView
+          },
+          update = {
+            if(firstWaterDataDate.value != DateString.NOT_SET) {
+              it.minDate = DateString.getCalendarInstance(firstWaterDataDate.value).timeInMillis
+            }
+            it.maxDate = DateString.getCalendarInstance(todaysDate).timeInMillis
+          }
+        )
+      }
       Row(
         modifier = Modifier
           .fillMaxWidth()

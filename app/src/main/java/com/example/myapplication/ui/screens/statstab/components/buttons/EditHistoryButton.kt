@@ -10,10 +10,10 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun EditHistoryButton(
-  setShowEditHistoryDialog:(Boolean) -> Unit
+  onClick:() -> Unit
 ) {
   Button(
-    onClick = { setShowEditHistoryDialog(true) },
+    onClick = onClick,
     shape = CircleShape,
     contentPadding = PaddingValues(16.dp,2.dp)
   ) {

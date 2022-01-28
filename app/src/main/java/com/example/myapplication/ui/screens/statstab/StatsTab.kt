@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.statstab
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,13 +11,14 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.EditHistoryActivity
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.ui.screens.statstab.components.*
 import com.example.myapplication.ui.screens.statstab.components.buttons.EditHistoryButton
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartData
-import com.example.myapplication.ui.screens.statstab.components.dialogs.EditHistoryDialog
 import com.example.myapplication.ui.screens.statstab.components.selectors.TimeLineSelector
 import com.example.myapplication.ui.theme.SettingsSubheadingLight
 import com.example.myapplication.utils.DateString
@@ -32,6 +34,7 @@ fun StatsTab(
 ) {
   val scrollState = rememberScrollState()
   val todaysDate = DateString.getTodaysDate()
+  val context = LocalContext.current
   var waterRecordsCount by remember{ mutableStateOf(0) }
   val incrementWaterRecordsCount:()->Unit = { waterRecordsCount++ }
   var goalCompletedDaysCount by remember{ mutableStateOf(0) }
@@ -52,7 +55,6 @@ fun StatsTab(
       }
     )
   }
-  val (showEditHistoryDialog, setShowEditHistoryDialog) =  remember { mutableStateOf(false) }
 
   val waterRecordsList = roomDatabaseViewModel.waterRecordsList.collectAsState()
   val drinkLogsCount = roomDatabaseViewModel.drinkLogsCount.collectAsState()
@@ -118,7 +120,10 @@ fun StatsTab(
   Scaffold(
     floatingActionButton = {
       Column(horizontalAlignment = Alignment.CenterHorizontally){
-        EditHistoryButton(setShowEditHistoryDialog = setShowEditHistoryDialog)
+        EditHistoryButton(onClick = {
+          val i = Intent(context, EditHistoryActivity::class.java)
+          context.startActivity(i)
+        })
       }
     },
     floatingActionButtonPosition = FabPosition.End,
@@ -152,10 +157,6 @@ fun StatsTab(
       )
 
       Spacer(modifier = Modifier.size(72.dp))
-      
-      if(showEditHistoryDialog) {
-        EditHistoryDialog(setShowEditHistoryDialog = setShowEditHistoryDialog)
-      }
     }
   }
 }
