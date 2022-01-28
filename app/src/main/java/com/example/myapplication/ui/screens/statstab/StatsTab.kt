@@ -1,7 +1,11 @@
 package com.example.myapplication.ui.screens.statstab
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -10,11 +14,14 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.ui.screens.statstab.components.RenderBarChart
+import com.example.myapplication.ui.screens.statstab.components.RenderOtherStats
+import com.example.myapplication.ui.screens.statstab.components.RenderPieChart
 import com.example.myapplication.ui.screens.statstab.components.TopStatsTabBar
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartData
 import com.example.myapplication.ui.screens.statstab.components.charts.piechart.PieChart
 import com.example.myapplication.ui.screens.statstab.components.charts.piechart.PieChartData
 import com.example.myapplication.ui.screens.statstab.components.selectors.TimeLineSelector
+import com.example.myapplication.ui.theme.SettingsSubheadingLight
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.Statistics
 import com.example.myapplication.utils.Statistics.createBarChartData
@@ -23,8 +30,10 @@ import com.example.myapplication.utils.Statistics.createWaterRecordHashMap
 @Composable
 fun StatsTab(
   roomDatabaseViewModel: RoomDatabaseViewModel,
-  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
+  darkTheme:Boolean
 ) {
+  val scrollState = rememberScrollState()
   val waterRecordsList = roomDatabaseViewModel.waterRecordsList.collectAsState()
   val todaysDate = DateString.getTodaysDate()
   val firstWaterRecordDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
@@ -55,8 +64,8 @@ fun StatsTab(
       Log.d("TAG", "StatsTab: $startDate $endDate")
     }
     if(selectedStatsTimeLine == Statistics.MONTHLY) {
-      startDate = "2022-01-01"
-      endDate = "2022-01-31"
+      startDate = DateString.getMonthStartDate(todaysDate)
+      endDate = DateString.getMonthEndDate(todaysDate)
     }
     roomDatabaseViewModel.getWaterRecordsList(
       startDate = startDate,
@@ -88,38 +97,32 @@ fun StatsTab(
     )
   }
 
-  TopStatsTabBar(setSelectedStatsTimeLine = setSelectedStatsTimeLine)
-
-  Spacer(modifier = Modifier.size(8.dp))
-
-  TimeLineSelector(
-    selectedStatsTimeLine = selectedStatsTimeLine,
-    startDate = startDate,
-    endDate = endDate,
-    setStartDate = setStartDate,
-    setEndDate = setEndDate,
-    firstWaterRecordDate = firstWaterRecordDate.value
-  )
-
-  Spacer(modifier = Modifier.size(8.dp))
-
-  RenderBarChart(bars = bars)
-
-  Spacer(modifier = Modifier.size(16.dp))
+  var columnModifier: Modifier = Modifier
+  if(!darkTheme) columnModifier = columnModifier.background(color = SettingsSubheadingLight)
 
   Column(
-    modifier = Modifier.height(200.dp)
+    modifier = columnModifier
+      .fillMaxWidth()
+      .verticalScroll(scrollState)
   ) {
-    Text(text = "This is Stats Tab $selectedStatsTimeLine")
-    PieChart(
-      pieChartData = PieChartData(
-        slices = listOf(
-          PieChartData.Slice(25f, Color.Red),
-          PieChartData.Slice(42f, Color.Blue),
-          PieChartData.Slice(23f, Color.Green)
-        )
-      ),
-      sliceThickness = 50f
+    TopStatsTabBar(setSelectedStatsTimeLine = setSelectedStatsTimeLine)
+
+    Spacer(modifier = Modifier.size(8.dp))
+
+    TimeLineSelector(
+      selectedStatsTimeLine = selectedStatsTimeLine,
+      startDate = startDate,
+      endDate = endDate,
+      setStartDate = setStartDate,
+      setEndDate = setEndDate,
+      firstWaterRecordDate = firstWaterRecordDate.value
     )
+
+    RenderBarChart(bars = bars)
+
+    RenderPieChart()
+
+    RenderOtherStats()
+
   }
 }
