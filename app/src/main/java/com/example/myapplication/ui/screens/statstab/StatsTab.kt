@@ -5,21 +5,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
-import com.example.myapplication.ui.screens.statstab.components.RenderBarChart
-import com.example.myapplication.ui.screens.statstab.components.RenderOtherStats
-import com.example.myapplication.ui.screens.statstab.components.RenderPieChart
-import com.example.myapplication.ui.screens.statstab.components.TopStatsTabBar
+import com.example.myapplication.ui.screens.statstab.components.*
+import com.example.myapplication.ui.screens.statstab.components.buttons.EditHistoryButton
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartData
-import com.example.myapplication.ui.screens.statstab.components.charts.piechart.PieChart
-import com.example.myapplication.ui.screens.statstab.components.charts.piechart.PieChartData
+import com.example.myapplication.ui.screens.statstab.components.dialogs.EditHistoryDialog
 import com.example.myapplication.ui.screens.statstab.components.selectors.TimeLineSelector
 import com.example.myapplication.ui.theme.SettingsSubheadingLight
 import com.example.myapplication.utils.DateString
@@ -55,6 +52,7 @@ fun StatsTab(
       }
     )
   }
+  val (showEditHistoryDialog, setShowEditHistoryDialog) =  remember { mutableStateOf(false) }
 
   val waterRecordsList = roomDatabaseViewModel.waterRecordsList.collectAsState()
   val drinkLogsCount = roomDatabaseViewModel.drinkLogsCount.collectAsState()
@@ -112,37 +110,52 @@ fun StatsTab(
     )
   }
 
-  var columnModifier: Modifier = Modifier
+  var columnModifier:Modifier = Modifier
+    .fillMaxWidth()
+    .verticalScroll(scrollState)
   if(!darkTheme) columnModifier = columnModifier.background(color = SettingsSubheadingLight)
 
-  Column(
-    modifier = columnModifier
-      .fillMaxWidth()
-      .verticalScroll(scrollState)
+  Scaffold(
+    floatingActionButton = {
+      Column(horizontalAlignment = Alignment.CenterHorizontally){
+        EditHistoryButton(setShowEditHistoryDialog = setShowEditHistoryDialog)
+      }
+    },
+    floatingActionButtonPosition = FabPosition.End,
+    isFloatingActionButtonDocked = true
   ) {
-    TopStatsTabBar(setSelectedStatsTimeLine = setSelectedStatsTimeLine)
+    Column(
+      modifier = columnModifier
+    ) {
+      TopStatsTabBar(setSelectedStatsTimeLine = setSelectedStatsTimeLine)
 
-    Spacer(modifier = Modifier.size(8.dp))
+      Spacer(modifier = Modifier.size(8.dp))
 
-    TimeLineSelector(
-      selectedStatsTimeLine = selectedStatsTimeLine,
-      startDate = startDate,
-      endDate = endDate,
-      setStartDate = setStartDate,
-      setEndDate = setEndDate,
-      firstWaterRecordDate = firstWaterRecordDate.value
-    )
+      TimeLineSelector(
+        selectedStatsTimeLine = selectedStatsTimeLine,
+        startDate = startDate,
+        endDate = endDate,
+        setStartDate = setStartDate,
+        setEndDate = setEndDate,
+        firstWaterRecordDate = firstWaterRecordDate.value
+      )
 
-    RenderBarChart(bars = bars)
+      RenderBarChart(bars = bars)
 
-    RenderPieChart()
+      RenderPieChart()
 
-    RenderOtherStats(
-      drinkLogsCount = drinkLogsCount.value,
-      waterRecordsCount = waterRecordsCount,
-      goalCompletedDaysCount = goalCompletedDaysCount,
-      waterRecordsList = waterRecordsList.value
-    )
+      RenderOtherStats(
+        drinkLogsCount = drinkLogsCount.value,
+        waterRecordsCount = waterRecordsCount,
+        goalCompletedDaysCount = goalCompletedDaysCount,
+        waterRecordsList = waterRecordsList.value
+      )
 
+      Spacer(modifier = Modifier.size(72.dp))
+      
+      if(showEditHistoryDialog) {
+        EditHistoryDialog(setShowEditHistoryDialog = setShowEditHistoryDialog)
+      }
+    }
   }
 }
