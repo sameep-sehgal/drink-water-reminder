@@ -36,6 +36,13 @@ class DateString {
       return dateFormat.format(calendar.time)
     }
 
+    fun getNextDate(date:String):String {
+      if(date == NOT_SET) return NOT_SET
+      val calendar = getCalendarInstance(date)
+      calendar.add(Calendar.SECOND,24*60*60)
+      return dateFormat.format(calendar.time)
+    }
+
     fun clipToMMDD(date:String):String {
       //Accepts date in yyyy-mm-dd format
       val dd = date.split('-')[2]
@@ -109,10 +116,43 @@ class DateString {
 
     fun getDayOfWeek(dayOfWeek:Int): String {
 
-      assert(dayOfWeek in 1..7)
+      assert(dayOfWeek in 1..8)
 
       val days = listOf("Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat")
       return days[dayOfWeek-1]
+    }
+
+    fun getDateIntervalString(startDate:String, endDate:String): String {
+      val startDateList = startDate.split("-")
+      val endDateList = endDate.split("-")
+      return "${startDateList[2]} ${getMonthString(startDateList[1].toInt())}" +
+              " - " +
+              "${endDateList[2]} ${getMonthString(endDateList[1].toInt())}"
+    }
+
+    fun getMonthString(month:Int): String {
+      assert(month in 1..13)
+      val months = listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+      return months[month-1]
+    }
+
+    fun getMonthStartDate(month: Int, year: Int): String {
+      val calendar = Calendar.getInstance()
+      calendar.set(Calendar.MONTH, month)
+      calendar.set(Calendar.YEAR, year)
+      calendar.set(Calendar.DAY_OF_MONTH, 1)
+
+      return convertToDateString(calendar)
+    }
+
+    fun getMonthEndDate(month: Int, year: Int): String {
+      val calendar = Calendar.getInstance()
+      calendar.set(Calendar.MONTH, month)
+      calendar.set(Calendar.YEAR, year)
+      calendar.set(Calendar.DAY_OF_MONTH, 1)
+      calendar.add(Calendar.DAY_OF_MONTH, -1)
+
+      return convertToDateString(calendar)
     }
   }
 }

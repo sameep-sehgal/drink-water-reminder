@@ -28,9 +28,11 @@ fun StatsTab(
   var startDate by remember {
     mutableStateOf(DateString.getWeekStartDate(todaysDate))
   }
+  val setStartDate = {date:String -> startDate = date}
   var endDate by remember {
     mutableStateOf(DateString.getWeekEndDate(todaysDate))
   }
+  val setEndDate = {date:String -> endDate = date}
   var selectedStatsTimeLine by remember{ mutableStateOf(Statistics.WEEKLY) }
   val setSelectedStatsTimeLine = { value:String -> selectedStatsTimeLine = value }
 
@@ -53,9 +55,16 @@ fun StatsTab(
       startDate = "2022-01-01"
       endDate = "2022-01-31"
     }
-    if(selectedStatsTimeLine == Statistics.YEARLY){
+    roomDatabaseViewModel.getWaterRecordsList(
+      startDate = startDate,
+      endDate = endDate
+    )
+  }
 
-    }
+  LaunchedEffect(
+    key1 = startDate,
+    key2 = endDate
+  ) {
     roomDatabaseViewModel.getWaterRecordsList(
       startDate = startDate,
       endDate = endDate
@@ -80,7 +89,13 @@ fun StatsTab(
 
   Spacer(modifier = Modifier.size(8.dp))
 
-  TimeLineSelector(selectedStatsTimeLine = selectedStatsTimeLine)
+  TimeLineSelector(
+    selectedStatsTimeLine = selectedStatsTimeLine,
+    startDate = startDate,
+    endDate = endDate,
+    setStartDate = setStartDate,
+    setEndDate = setEndDate
+  )
 
   Spacer(modifier = Modifier.size(8.dp))
 

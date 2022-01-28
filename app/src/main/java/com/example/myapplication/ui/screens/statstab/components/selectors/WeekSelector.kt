@@ -9,25 +9,56 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.components.NextButton
 import com.example.myapplication.ui.components.PreviousButton
+import com.example.myapplication.utils.DateString
 
 @Composable
-fun WeekSelector() {
+fun WeekSelector(
+  startDate:String,
+  endDate:String,
+  setStartDate:(String) -> Unit,
+  setEndDate:(String) -> Unit
+) {
+  val todaysDate = DateString.getTodaysDate()
   Row(
-    horizontalArrangement = Arrangement.Center,
     modifier = Modifier.fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    PreviousButton(onClick = {})
+    Row(
+      modifier = Modifier.weight(1f),
+      horizontalArrangement = Arrangement.End
+    ) {
+      PreviousButton(onClick = {
+        val newEndDate = DateString.getPrevDate(startDate)
+        setStartDate(DateString.getWeekStartDate(newEndDate))
+        setEndDate(newEndDate)
+      })
+    }
 
     Spacer(modifier = Modifier.size(16.dp))
 
     Text(
-      text = "Week",
+      text = DateString.getDateIntervalString(
+        startDate = startDate,
+        endDate = endDate
+      ),
       fontSize = 16.sp
     )
 
     Spacer(modifier = Modifier.size(16.dp))
 
-    NextButton(onClick = {})
+    Row(
+      modifier = Modifier.weight(1f),
+      horizontalArrangement = Arrangement.Start
+    ) {
+      if(endDate < todaysDate) {
+        NextButton(onClick = {
+          val newStartDate = DateString.getNextDate(endDate)
+          setEndDate(DateString.getWeekEndDate(newStartDate))
+          setStartDate(newStartDate)
+        })
+      }else{
+        Spacer(modifier = Modifier.size(4.dp))
+      }
+    }
   }
 }
