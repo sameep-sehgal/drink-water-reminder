@@ -51,11 +51,11 @@ class DateString {
       return dateFormat.format(calendar.time)
     }
 
-    fun clipToMMDD(date:String):String {
-      //Accepts date in yyyy-mm-dd format
-      val dd = date.split('-')[2]
-      val mm = date.split('-')[1]
-      return "$mm/$dd"
+    fun convertToReadableString(date:String):String {
+      val dateList = date.split('-')
+      return "${dateList[2]} " +
+              "${getMonthString(date.split('-')[1].toInt())} " +
+              dateList[0]
     }
 
     fun reduceDays(date:String,days:Int):String {

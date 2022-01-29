@@ -18,7 +18,8 @@ fun CustomAddWaterDialog(
   waterUnit: String,
   setShowCustomAddWaterDialog:(Boolean)->Unit,
   roomDatabaseViewModel: RoomDatabaseViewModel,
-  dailyWaterRecord: DailyWaterRecord
+  dailyWaterRecord: DailyWaterRecord,
+  selectedDate:String = dailyWaterRecord.date
 ){
   val title = "Add Water Intake"
   var time by remember { mutableStateOf(TimeString.longToString(Calendar.getInstance().timeInMillis)) }
@@ -48,15 +49,15 @@ fun CustomAddWaterDialog(
         DrinkLogs(
           amount = amount,
           icon = icon,
-          time = calendar.timeInMillis
+          time = calendar.timeInMillis,
+          date = selectedDate
         )
       )
-      dailyWaterRecord.currWaterAmount += amount
       roomDatabaseViewModel.updateDailyWaterRecord(
         DailyWaterRecord(
-          date = dailyWaterRecord.date,
+          date = selectedDate,
           goal = dailyWaterRecord.goal,
-          currWaterAmount = dailyWaterRecord.currWaterAmount
+          currWaterAmount = dailyWaterRecord.currWaterAmount + amount
         )
       )
     }

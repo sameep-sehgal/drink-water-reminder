@@ -78,7 +78,7 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
-  private val _selectedHistoryWaterRecord = MutableStateFlow<DailyWaterRecord>(DailyWaterRecord(goal = 0, currWaterAmount = 0))
+  private val _selectedHistoryWaterRecord = MutableStateFlow(DailyWaterRecord(goal = 0, currWaterAmount = 0))
   val selectedHistoryWaterRecord : StateFlow<DailyWaterRecord> = _selectedHistoryWaterRecord.asStateFlow()
   fun getSelectedHistoryWaterRecord(date:String = DateString.getTodaysDate()){
     viewModelScope.launch (Dispatchers.IO){

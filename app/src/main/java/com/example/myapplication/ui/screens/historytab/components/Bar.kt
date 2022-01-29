@@ -99,7 +99,7 @@ fun Bar(
       }
       Divider()
       Text(
-        text = DateString.clipToMMDD(date),
+        text = DateString.convertToReadableString(date),
         fontSize = 14.sp,
         color = setSelectedTextColor(selected = selected)
       )

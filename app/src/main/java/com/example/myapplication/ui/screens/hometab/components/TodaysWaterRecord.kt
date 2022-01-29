@@ -1,7 +1,5 @@
 package com.example.myapplication.ui.screens.hometab.components
 
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,10 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.ui.components.AnimatedWaterAmount
 
 @Composable
 fun TodaysWaterRecord(
@@ -28,18 +25,13 @@ fun TodaysWaterRecord(
   waterUnit:String,
   setShowSetTodaysGoalDialog:(Boolean) -> Unit
 ) {
-  val animatedWaterAmount = animateIntAsState(
-    targetValue = currWaterAmount,
-    animationSpec = tween(durationMillis = 1000)
-  )
-
   Row(
     modifier = Modifier.padding(12.dp),
     verticalAlignment = Alignment.CenterVertically
   ) {
     WaterAmountCard(
       waterUnit = waterUnit,
-      waterAmount = animatedWaterAmount.value,
+      waterAmount = currWaterAmount,
       backgroundColor = MaterialTheme.colors.secondary,
       waterAmountTextColor = MaterialTheme.colors.primary,
       text = "You've had",
@@ -97,13 +89,11 @@ fun WaterAmountCard(
         fontSize = 12.sp,
         color = Color.DarkGray
       )
-      Text(
-        text = "${waterAmount}${waterUnit}",
-        color = waterAmountTextColor,
-        fontSize = 21.sp,
-        fontWeight = FontWeight.Bold,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1
+      AnimatedWaterAmount(
+        currWaterAmount = waterAmount,
+        waterUnit = waterUnit,
+        waterAmountTextColor = waterAmountTextColor,
+        fontSize = 21.sp
       )
     }
   }
