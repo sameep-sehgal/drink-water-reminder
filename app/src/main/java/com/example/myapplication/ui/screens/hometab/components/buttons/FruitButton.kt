@@ -34,7 +34,7 @@ fun FruitButton(
         .clickable { setShowFruitDialog(true) },
     ) {
       Text(
-        text = "+ Fruits",
+        text = "+Veg/Fruit",
         fontSize = 14.sp,
         modifier = Modifier.padding(8.dp, 2.dp)
       )

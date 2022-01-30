@@ -30,8 +30,7 @@ fun ReminderSettings(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ){
   val context = LocalContext.current
-  val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-  val nextAlarmTime = alarmManager.nextAlarmClock.triggerTime
+
   Column {
     SettingsRowSelectValue(
       text = Settings.REMINDER_PERIOD,
@@ -58,7 +57,7 @@ fun ReminderSettings(
     )
     SettingsRowSelectValue(
       text = "Next Reminder Time",
-      value = TimeString.longToString(nextAlarmTime),
+      value = "09:00",
       onSettingsRowClick = {
         setShowDialog(true)
         setDialogToShow(Settings.REMINDER_SOUND)
