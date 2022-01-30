@@ -12,5 +12,7 @@ data class VegFruit(
   @ColumnInfo(name = "water_content")
   var waterContent: Int,//value in percent
   @ColumnInfo(name = "icon")
-  var icon: Int
+  var icon: String,
+  @ColumnInfo(name = "is_fruit")
+  var isFruit:Boolean
 )
