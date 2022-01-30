@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -62,6 +63,7 @@ class ReminderReceiver: BroadcastReceiver() {
     }
 
     val currTime = Calendar.getInstance()
+    var nextReminderTime = Calendar.getInstance()
 
     if(currTime < reminderPeriodEndTime && currTime > reminderPeriodStartTime){
       //Build notification only when we need to show.
@@ -96,42 +98,110 @@ class ReminderReceiver: BroadcastReceiver() {
           }
         }
       }
+
+      nextReminderTime.add(Calendar.MILLISECOND, reminderGap!!)
     }else{
       Log.d(TAG, "onReceive: Set next day repeating reminder")
       //Set Next Day Repeating Reminder
       reminderPeriodStartTime.add(Calendar.MILLISECOND,24*60*60*1000)
+      nextReminderTime = reminderPeriodStartTime
       Log.d(TAG, "onReceive: ${reminderPeriodStartTime.get(Calendar.DATE)}")
-      if (
-        reminderPeriodStart != null &&
-        reminderPeriodEnd != null &&
-        reminderGap != null &&
-        context != null &&
-        glassCapacity != null &&
-        mugCapacity != null &&
-        bottleCapacity != null &&
-        channelId != null &&
-        waterUnit != null &&
-        dailyWaterGoal != null &&
-        remindAfterGoalAchieved != null
-      ) {
-        setReminder(
-          reminderPeriodStartTime.timeInMillis,
-          reminderPeriodStart,
-          reminderPeriodEnd,
-          reminderGap,
-          glassCapacity,
-          mugCapacity,
-          bottleCapacity,
-          channelId,
-          waterUnit,
-          dailyWaterGoal,
-          remindAfterGoalAchieved,
-          context
-        )
-        Log.d(TAG, "onReceive: Reminder is Set")
-      } else {
-        Log.e(TAG, "Failed to build Notification")
+    }
+
+    if (
+      reminderPeriodStart != null &&
+      reminderPeriodEnd != null &&
+      reminderGap != null &&
+      context != null &&
+      glassCapacity != null &&
+      mugCapacity != null &&
+      bottleCapacity != null &&
+      channelId != null &&
+      waterUnit != null &&
+      dailyWaterGoal != null &&
+      remindAfterGoalAchieved != null
+    ) {
+      setReminder(
+        nextReminderTime.timeInMillis,
+        reminderPeriodStart,
+        reminderPeriodEnd,
+        reminderGap,
+        glassCapacity,
+        mugCapacity,
+        bottleCapacity,
+        channelId,
+        waterUnit,
+        dailyWaterGoal,
+        remindAfterGoalAchieved,
+        context
+      )
+      Log.d(TAG, "onReceive: Reminder is Set")
+    } else {
+      Log.e(TAG, "Failed to build Notification")
+    }
+  }
+
+  companion object {
+    fun setReminder(
+      time:Long,
+      reminderPeriodStart:String,
+      reminderPeriodEnd:String,
+      reminderGap:Int,
+      glassCapacity:Int,
+      mugCapacity:Int,
+      bottleCapacity:Int,
+      channelId:String,
+      waterUnit:String,
+      dailyWaterGoal:Int,
+      remindAfterGoalAchieved:Boolean,
+      context: Context
+    ) {
+      if(reminderGap == ReminderGap.DONT_REMIND) {
+        cancelReminder(context)
+        return
       }
+      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+      val intent = Intent(context, ReminderReceiver::class.java)
+      //pass data to broadcast receiver using intent extras
+      //As broadcast receiver only survives for a short time reading app data from datastore is not feasable
+      //Could have used workmanager but that does not guarantee task completion at exact time
+      intent.putExtra("reminder_period_start",reminderPeriodStart)
+      intent.putExtra("reminder_period_end",reminderPeriodEnd)
+      intent.putExtra("reminder_gap",reminderGap)
+      intent.putExtra("glass_capacity",glassCapacity)
+      intent.putExtra("mug_capacity",mugCapacity)
+      intent.putExtra("bottle_capacity",bottleCapacity)
+      intent.putExtra("channel_id",channelId)
+      intent.putExtra("water_unit",waterUnit)
+      intent.putExtra("dail_water_goal",dailyWaterGoal)
+      intent.putExtra("remind_after_goal_achieved",remindAfterGoalAchieved)
+      val pendingIntent =
+        PendingIntent.getBroadcast(context, 0, intent, 0)
+      Log.d("TAG", "onReceive: ${TimeString.longToString(time)} inside setReminder")
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        alarmManager.setExactAndAllowWhileIdle(
+          AlarmManager.RTC_WAKEUP,
+          time,
+          pendingIntent
+        )
+      }else{
+        alarmManager.setExact(
+          AlarmManager.RTC_WAKEUP,
+          time,
+          pendingIntent
+        )
+      }
+    }
+
+    private fun cancelReminder(
+      context: Context
+    ) {
+      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+      val intent = Intent(context, ReminderReceiver::class.java)
+      val pendingIntent =
+        PendingIntent.getBroadcast(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
+      alarmManager.cancel(pendingIntent)
+      Log.d("TAG", "cancelReminder: Reminder Cancelled")
     }
   }
 
@@ -147,7 +217,7 @@ class ReminderReceiver: BroadcastReceiver() {
     return res
   }
 
-  fun buildBasicNotification(
+  private fun buildBasicNotification(
     context: Context?,
     glassCapacity: Int?,
     mugCapacity: Int?,
@@ -209,62 +279,5 @@ class ReminderReceiver: BroadcastReceiver() {
     }
 
     return builder
-  }
-
-  companion object {
-    fun setReminder(
-      time:Long,
-      reminderPeriodStart:String,
-      reminderPeriodEnd:String,
-      reminderGap:Int,
-      glassCapacity:Int,
-      mugCapacity:Int,
-      bottleCapacity:Int,
-      channelId:String,
-      waterUnit:String,
-      dailyWaterGoal:Int,
-      remindAfterGoalAchieved:Boolean,
-      context: Context
-    ) {
-      if(reminderGap == ReminderGap.DONT_REMIND) {
-        cancelReminder(context)
-        return
-      }
-      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-      val intent = Intent(context, ReminderReceiver::class.java)
-      //pass data to broadcast receiver using intent extras
-      //As broadcast receiver only survives for a short time reading app data from datastore is not feasable
-      //Could have used workmanager but that does not guarantee task completion at exact time
-      intent.putExtra("reminder_period_start",reminderPeriodStart)
-      intent.putExtra("reminder_period_end",reminderPeriodEnd)
-      intent.putExtra("reminder_gap",reminderGap)
-      intent.putExtra("glass_capacity",glassCapacity)
-      intent.putExtra("mug_capacity",mugCapacity)
-      intent.putExtra("bottle_capacity",bottleCapacity)
-      intent.putExtra("channel_id",channelId)
-      intent.putExtra("water_unit",waterUnit)
-      intent.putExtra("dail_water_goal",dailyWaterGoal)
-      intent.putExtra("remind_after_goal_achieved",remindAfterGoalAchieved)
-      val pendingIntent =
-        PendingIntent.getBroadcast(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
-      Log.d("TAG", "onReceive: ${TimeString.longToString(time)} inside setReminder")
-      alarmManager.setInexactRepeating(
-        AlarmManager.RTC_WAKEUP,
-        time,
-        reminderGap.toLong(),
-        pendingIntent
-      )
-    }
-
-    private fun cancelReminder(
-      context: Context
-    ) {
-      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-      val intent = Intent(context, ReminderReceiver::class.java)
-      val pendingIntent =
-        PendingIntent.getBroadcast(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
-      alarmManager.cancel(pendingIntent)
-      Log.d("TAG", "cancelReminder: Reminder Cancelled")
-    }
   }
 }
