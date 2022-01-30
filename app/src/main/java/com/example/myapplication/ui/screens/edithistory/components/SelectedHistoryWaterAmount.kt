@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.historytab.components
+package com.example.myapplication.ui.screens.edithistory.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

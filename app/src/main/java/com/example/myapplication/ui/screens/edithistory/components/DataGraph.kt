@@ -1,24 +1,8 @@
-package com.example.myapplication.ui.screens.historytab.components
+package com.example.myapplication.ui.screens.edithistory.components
 
-import android.util.Log
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.example.myapplication.PreferenceDataStoreViewModel
-import com.example.myapplication.R
 import com.example.myapplication.RoomDatabaseViewModel
-import com.example.myapplication.data.models.DailyWaterRecord
-import com.example.myapplication.utils.DateString
-import com.example.myapplication.utils.RecommendedWaterIntake
-import com.example.myapplication.utils.Units
 
 @Composable
 fun DataGraph(

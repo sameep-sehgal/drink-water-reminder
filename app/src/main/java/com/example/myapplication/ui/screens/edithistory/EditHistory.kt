@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.historytab
+package com.example.myapplication.ui.screens.edithistory
 
 import android.util.Log
 import androidx.compose.animation.animateContentSize
@@ -12,14 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
-import com.example.myapplication.ui.screens.historytab.components.*
+import com.example.myapplication.ui.screens.edithistory.components.*
 import com.example.myapplication.ui.screens.hometab.components.DrinkLogsList
 import com.example.myapplication.ui.screens.hometab.components.dialogs.CustomAddWaterDialog
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.Units
 
 @Composable
-fun HistoryTab(
+fun EditHistory(
   roomDatabaseViewModel: RoomDatabaseViewModel,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ){

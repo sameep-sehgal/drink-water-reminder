@@ -28,7 +28,8 @@ import com.example.myapplication.utils.RecommendedWaterIntake
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.myapplication.remindernotification.CHANNEL_ID_4
 import com.example.myapplication.ui.components.BottomNavBar
-import com.example.myapplication.ui.screens.historytab.HistoryTab
+import com.example.myapplication.ui.screens.edithistory.EditHistory
+import com.example.myapplication.ui.screens.remindertab.ReminderTab
 import com.example.myapplication.ui.screens.statstab.StatsTab
 import com.example.myapplication.utils.ReminderSound
 
@@ -80,11 +81,12 @@ class MainActivity : ComponentActivity() {
                       preferenceDataStoreViewModel = preferenceDataStoreViewModel,
                       darkTheme = darkTheme
                     )
-                    2 -> HistoryTab(
-                      roomDatabaseViewModel,
-                      preferenceDataStoreViewModel
+                    2 -> SettingsTab(
+                      preferenceDataStoreViewModel = preferenceDataStoreViewModel
                     )
-                    3 -> SettingsTab(preferenceDataStoreViewModel)
+                    3 -> ReminderTab(
+                      preferenceDataStoreViewModel = preferenceDataStoreViewModel
+                    )
                   }
                 }
                 BottomNavBar(

@@ -39,7 +39,8 @@ fun SettingsRowBooleanValue(
         onCheckedChange(it)
       },
       colors = SwitchDefaults.colors(
-        uncheckedThumbColor = MaterialTheme.colors.onSurface
+        uncheckedThumbColor = MaterialTheme.colors.onSurface,
+        checkedThumbColor = MaterialTheme.colors.primary
       )
     )
   }

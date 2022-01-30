@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import com.example.myapplication.ui.screens.historytab.HistoryTab
+import com.example.myapplication.ui.screens.edithistory.EditHistory
 import com.example.myapplication.ui.theme.ApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +38,7 @@ class EditHistoryActivity : ComponentActivity() {
 
           },
         ){
-          HistoryTab(
+          EditHistory(
             roomDatabaseViewModel = roomDatabaseViewModel,
             preferenceDataStoreViewModel = preferenceDataStoreViewModel
           )

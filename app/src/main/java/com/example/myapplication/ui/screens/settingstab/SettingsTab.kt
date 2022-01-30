@@ -34,11 +34,13 @@ fun SettingsTab(
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
   val recommendedWaterIntake = preferenceDataStoreViewModel.recommendedWaterIntake.collectAsState(initial = Weight.NOT_SET)
   val dailyWaterGoal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = Weight.NOT_SET)
+
   val reminderPeriodStart = preferenceDataStoreViewModel.reminderPeriodStart.collectAsState(initial = ReminderPeriod.NOT_SET)
   val reminderPeriodEnd = preferenceDataStoreViewModel.reminderPeriodEnd.collectAsState(initial = ReminderPeriod.NOT_SET)
   val reminderGap = preferenceDataStoreViewModel.reminderGap.collectAsState(initial = ReminderGap.NOT_SET)
   val reminderSound = preferenceDataStoreViewModel.reminderSound.collectAsState(initial = ReminderSound.WATER_DROP)
   val reminderAfterGoalAchieved = preferenceDataStoreViewModel.reminderAfterGoalAchieved.collectAsState(initial = false)
+
   val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = Container.baseGlassCapacity(waterUnit.value))
   val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit.value))
   val bottleCapacity = preferenceDataStoreViewModel.bottleCapacity.collectAsState(initial = Container.baseBottleCapacity(waterUnit.value))
@@ -50,16 +52,6 @@ fun SettingsTab(
   Column(
     modifier = Modifier.verticalScroll(scrollState)
   ) {
-    ReminderSettings(
-      reminderPeriodStart.value,
-      reminderPeriodEnd.value,
-      reminderGap.value,
-      reminderSound.value,
-      reminderAfterGoalAchieved.value,
-      setShowDialog,
-      setDialogToShow,
-      preferenceDataStoreViewModel
-    )
     PersonalSettings(
       gender.value,
       weight.value,
@@ -230,55 +222,6 @@ fun SettingsTab(
       )
     }
   }
-}
-
-@Composable
-fun ReminderSettings(
-  reminderPeriodStart:String,
-  reminderPeriodEnd:String,
-  reminderGap:Int,
-  reminderSound:String,
-  reminderAfterGoalAchieved:Boolean,
-  setShowDialog :(Boolean) -> Unit,
-  setDialogToShow: (String) -> Unit,
-  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
-){
-  SettingsSubheading(text = "Reminder Settings")
-  Divider()
-  Column {
-    SettingsRowSelectValue(
-      text = Settings.REMINDER_PERIOD,
-      value = "$reminderPeriodStart-$reminderPeriodEnd",
-      onSettingsRowClick = {
-        setShowDialog(true)
-        setDialogToShow(Settings.REMINDER_PERIOD)
-      }
-    )
-    SettingsRowSelectValue(
-      text = Settings.REMINDER_FREQUENCY,
-      value = "${ReminderGap.GAP_OPTION_TEXT_MAPPER[reminderGap]}",
-      onSettingsRowClick = {
-        setShowDialog(true)
-        setDialogToShow(Settings.REMINDER_FREQUENCY)
-      }
-    )
-    SettingsRowBooleanValue(
-      text = Settings.REMINDER_AFTER_GOAL_ACHEIVED,
-      value = reminderAfterGoalAchieved,
-      onCheckedChange = {
-        preferenceDataStoreViewModel.setReminderAfterGoalAchieved(it)
-      }
-    )
-    SettingsRowSelectValue(
-      text = Settings.REMINDER_SOUND,
-      value = reminderSound,
-      onSettingsRowClick = {
-        setShowDialog(true)
-        setDialogToShow(Settings.REMINDER_SOUND)
-      }
-    )
-  }
-  Divider()
 }
 
 @Composable

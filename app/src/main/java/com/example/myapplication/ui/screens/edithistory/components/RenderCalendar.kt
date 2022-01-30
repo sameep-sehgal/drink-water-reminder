@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.historytab.components
+package com.example.myapplication.ui.screens.edithistory.components
 
 import android.widget.CalendarView
 import androidx.compose.runtime.Composable
