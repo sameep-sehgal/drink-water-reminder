@@ -1,5 +1,6 @@
 package com.example.myapplication.remindernotification
 
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.Notification
@@ -81,7 +82,7 @@ class ReminderReceiver: BroadcastReceiver() {
         if(context!=null) {
           val db = WaterDatabase.getInstance(context).waterDatabaseDao()
           var todaysWaterRecord = withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
-          if(todaysWaterRecord === null){
+          if(todaysWaterRecord == null){
             //Day changes when new notification is to be shown
             dailyWaterGoal?.let { DailyWaterRecord(goal = it) }
               ?.let { db.insertDailyWaterRecord(it) }
@@ -98,7 +99,7 @@ class ReminderReceiver: BroadcastReceiver() {
           }
         }
       }
-      Log.d(TAG, "onReceive: Set alarm in $reminderGap")
+      Log.d(TAG, "onReceive: $reminderGap $reminderPeriodStart $reminderPeriodEnd $glassCapacity")
 
       nextReminderTime.add(Calendar.MILLISECOND, reminderGap!!)
     }else{
@@ -143,6 +144,7 @@ class ReminderReceiver: BroadcastReceiver() {
   }
 
   companion object {
+    @SuppressLint("UnspecifiedImmutableFlag")
     fun setReminder(
       time:Long,
       reminderPeriodStart:String,
@@ -177,7 +179,7 @@ class ReminderReceiver: BroadcastReceiver() {
       intent.putExtra("dail_water_goal",dailyWaterGoal)
       intent.putExtra("remind_after_goal_achieved",remindAfterGoalAchieved)
       val pendingIntent =
-        PendingIntent.getBroadcast(context, 0, intent, 0)
+        PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
       Log.d("TAG", "onReceive: ${TimeString.longToString(time)} inside setReminder")
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         alarmManager.setExactAndAllowWhileIdle(
@@ -194,6 +196,7 @@ class ReminderReceiver: BroadcastReceiver() {
       }
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     private fun cancelReminder(
       context: Context
     ) {
@@ -218,6 +221,7 @@ class ReminderReceiver: BroadcastReceiver() {
     return res
   }
 
+  @SuppressLint("UnspecifiedImmutableFlag")
   private fun buildBasicNotification(
     context: Context?,
     glassCapacity: Int?,
