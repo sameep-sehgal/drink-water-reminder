@@ -59,11 +59,11 @@ object VegFruits {
     VegFruit(CARROT,87, CARROT,false),
     VegFruit(CUCUMBER,96, CUCUMBER,false),
     VegFruit(LEAFY_VEGGIES,94, LEAFY_VEGGIES,false),
-    VegFruit(OLIVE,94, OLIVE,false),
-    VegFruit(ONION,94, ONION,false),
-    VegFruit(PEAS,94, PEAS,false),
+    VegFruit(OLIVE,80, OLIVE,false),
+    VegFruit(ONION,88, ONION,false),
+    VegFruit(PEAS,79, PEAS,false),
     VegFruit(PEPPER,92, PEPPER,false),
-    VegFruit(RADISH,92, RADISH,false),
+    VegFruit(RADISH,95, RADISH,false),
     VegFruit(ZUCCHINI,95, ZUCCHINI,false),
   )
 }

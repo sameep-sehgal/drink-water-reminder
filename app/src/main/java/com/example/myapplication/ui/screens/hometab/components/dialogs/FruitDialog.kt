@@ -2,6 +2,8 @@ package com.example.myapplication.ui.screens.hometab.components.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,8 +24,5 @@ fun FruitDialog(setShowFruitDialog:(Boolean)->Unit){
 
 @Composable
 fun FruitDialogContent():Unit{
-  Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
-    Text(text = "This is Fruit Dialog")
-    Text(text = "You will be able to add fruit intake")
-  }
+  
 }

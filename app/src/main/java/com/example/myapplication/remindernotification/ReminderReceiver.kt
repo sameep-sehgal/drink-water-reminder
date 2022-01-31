@@ -98,6 +98,7 @@ class ReminderReceiver: BroadcastReceiver() {
           }
         }
       }
+      Log.d(TAG, "onReceive: Set alarm in $reminderGap")
 
       nextReminderTime.add(Calendar.MILLISECOND, reminderGap!!)
     }else{
