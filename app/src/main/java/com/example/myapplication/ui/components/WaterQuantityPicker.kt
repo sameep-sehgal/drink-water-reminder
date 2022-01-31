@@ -1,15 +1,7 @@
 package com.example.myapplication.ui.components
 
 import android.widget.NumberPicker
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.myapplication.utils.RecommendedWaterIntake
 import com.example.myapplication.utils.Units
@@ -38,12 +30,7 @@ fun WaterQuantityPicker(
       numberPicker
     },
     update = {
-      it.value = amount/10
+      it.value = if(waterUnit == Units.ML) amount/10 else amount
     }
   )
-//    Text(
-//      text = waterUnit,
-//      modifier = Modifier.padding(8.dp),
-//      color = MaterialTheme.colors.onSurface
-//    )
 }
