@@ -1,5 +1,6 @@
 package com.example.myapplication.utils
 
+import com.example.myapplication.R
 import com.example.myapplication.data.models.Beverage
 
 object Beverages {
@@ -19,14 +20,14 @@ object Beverages {
   private val water = Beverage(WATER, 0)
   private val coffee = Beverage(COFFEE, 1)
   private val tea = Beverage(TEA, 2)
-  private val milk = Beverage(MILK, 0)
-  private val juice = Beverage(JUICE, 0)
-  private val beer = Beverage(BEER, 0)
+  private val milk = Beverage(MILK, 3)
+  private val juice = Beverage(JUICE, 4)
+  private val lemonade = Beverage(LEMONADE, 0)
   private val soda = Beverage(SODA, 0)
+  private val beer = Beverage(BEER, 0)
   private val smoothie = Beverage(SMOOTHIE, 0)
   private val energyDrink = Beverage(ENERGY_DRINK, 0)
   private val soup = Beverage(SOUP, 0)
-  private val lemonade = Beverage(LEMONADE, 0)
   private val wine = Beverage(WINE, 0)
 
   val defaultBeverages = listOf(
@@ -35,12 +36,27 @@ object Beverages {
     tea,
     milk,
     juice,
-    beer,
+    lemonade,
     soda,
+    beer,
     smoothie,
     energyDrink,
     soup,
-    lemonade,
     wine
+  )
+
+  val IMAGE_MAPPER = hashMapOf(
+    water.icon to R.drawable.water_icon,
+    coffee.icon to R.drawable.coffee_icon,
+    tea.icon to R.drawable.tea_icon,
+    milk.icon to R.drawable.milk_icon,
+    juice.icon to R.drawable.juice_icon,
+    lemonade.icon to R.drawable.lemonade_icon,
+    soda.icon to R.drawable.soda_icon,
+    beer.icon to R.drawable.beer_icon,
+    smoothie.icon to R.drawable.smoothie_icon,
+    energyDrink.icon to R.drawable.energy_drink_icon,
+    soup.icon to R.drawable.soup_icon,
+    wine.icon to R.drawable.wine_icon,
   )
 }
