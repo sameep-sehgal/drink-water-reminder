@@ -17,6 +17,7 @@ import com.example.myapplication.ui.screens.hometab.components.*
 import com.example.myapplication.ui.screens.hometab.components.buttons.BeverageButton
 import com.example.myapplication.ui.screens.hometab.components.dialogs.*
 import com.example.myapplication.utils.RecommendedWaterIntake
+import com.example.myapplication.utils.Beverages
 import com.example.myapplication.utils.Units
 
 @Composable
@@ -139,7 +140,11 @@ fun HomeTab(
 
     //Dialogs Code
     if(showBeverageDialog){
-      BeverageDialog(setShowBeverageDialog = setShowBeverageDialog)
+      BeverageDialog(
+        setShowBeverageDialog = setShowBeverageDialog,
+        onConfirmButtonClick = {},
+        beverageList = Beverages.defaultBeverages
+      )
     }
     if(showSetTodaysGoalDialog){
       SetWaterGoalDialog(
