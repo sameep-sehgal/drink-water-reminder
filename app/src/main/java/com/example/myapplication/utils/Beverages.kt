@@ -22,13 +22,13 @@ object Beverages {
   private val tea = Beverage(TEA, 2)
   private val milk = Beverage(MILK, 3)
   private val juice = Beverage(JUICE, 4)
-  private val lemonade = Beverage(LEMONADE, 0)
-  private val soda = Beverage(SODA, 0)
-  private val beer = Beverage(BEER, 0)
-  private val smoothie = Beverage(SMOOTHIE, 0)
-  private val energyDrink = Beverage(ENERGY_DRINK, 0)
-  private val soup = Beverage(SOUP, 0)
-  private val wine = Beverage(WINE, 0)
+  private val lemonade = Beverage(LEMONADE, 5)
+  private val soda = Beverage(SODA, 6)
+  private val beer = Beverage(BEER, 7)
+  private val smoothie = Beverage(SMOOTHIE, 8)
+  private val energyDrink = Beverage(ENERGY_DRINK, 9)
+  private val soup = Beverage(SOUP, 10)
+  private val wine = Beverage(WINE, 11)
 
   val defaultBeverages = listOf(
     water,
