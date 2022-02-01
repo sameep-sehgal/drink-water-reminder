@@ -19,7 +19,7 @@ class RecommendedWaterIntake {
     private const val PER_HOUR_ACTIVITY_WATER_INCREASE_IN_OZ = 24
     private const val PER_HOUR_ACTIVITY_WATER_INCREASE_IN_ML = 710
 
-    val VALUES_FOR_WATER_GOAL_NUMBER_PICKER = { waterUnit:String ->
+    val valuesForWaterGoalNumberPicker = { waterUnit:String ->
       val res: MutableList<String> = mutableListOf()
       if(waterUnit == Units.ML){
         for(i in MIN_WATER_LEVEL_IN_ML/10 .. MAX_WATER_LEVEL_IN_ML/10){
@@ -34,7 +34,7 @@ class RecommendedWaterIntake {
       res
     }
 
-    val VALUES_FOR_WATER_LOG_NUMBER_PICKER = { waterUnit:String ->
+    val valuesForWaterLogNumberPicker = { waterUnit:String ->
       val res: MutableList<String> = mutableListOf()
       if(waterUnit == Units.ML){
         for(i in MIN_WATER_LEVEL_IN_ML_FOR_LOG/10..MAX_WATER_LEVEL_IN_ML_FOR_LOG/10){

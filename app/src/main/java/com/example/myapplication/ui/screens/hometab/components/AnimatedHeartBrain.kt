@@ -28,7 +28,7 @@ fun AnimatedHeartBrain(
 ){
   val currentPercentage = remember { Animatable(0f) }
   val heartScaleValue = remember { Animatable(1f) }
-  LaunchedEffect(currWaterAmount) {
+  LaunchedEffect(currWaterAmount,goal) {
     if(currWaterAmount.toFloat()/goal < 1f){
       currentPercentage.animateTo(
         targetValue = currWaterAmount.toFloat()/goal,
@@ -41,7 +41,7 @@ fun AnimatedHeartBrain(
       )
     }
   }
-  LaunchedEffect(currWaterAmount){
+  LaunchedEffect(currWaterAmount,goal){
     heartScaleValue.animateTo(
       targetValue = 1.075f,
       animationSpec = tween(durationMillis = 250)

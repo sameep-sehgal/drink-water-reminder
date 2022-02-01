@@ -16,6 +16,7 @@ import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.ui.screens.hometab.components.*
 import com.example.myapplication.ui.screens.hometab.components.buttons.BeverageButton
 import com.example.myapplication.ui.screens.hometab.components.dialogs.*
+import com.example.myapplication.utils.RecommendedWaterIntake
 import com.example.myapplication.utils.Units
 
 @Composable
@@ -26,6 +27,7 @@ fun HomeTab(
   val drinkLogsList = roomDatabaseViewModel.drinkLogs.collectAsState()
   val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
+  val recommendedWaterIntake = preferenceDataStoreViewModel.recommendedWaterIntake.collectAsState(initial = RecommendedWaterIntake.NOT_SET)
   val (showBeverageDialog, setShowBeverageDialog) =  remember { mutableStateOf(false) }
   val (showSetTodaysGoalDialog, setShowSetTodaysGoalDialog) =  remember { mutableStateOf(false) }
   val (showFruitDialog, setShowFruitDialog) =  remember { mutableStateOf(false) }
@@ -140,11 +142,12 @@ fun HomeTab(
       BeverageDialog(setShowBeverageDialog = setShowBeverageDialog)
     }
     if(showSetTodaysGoalDialog){
-      SetTodaysGoalDialog(
+      SetWaterGoalDialog(
         setShowSetTodaysGoalDialog = setShowSetTodaysGoalDialog,
         roomDatabaseViewModel = roomDatabaseViewModel,
-        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
-        waterUnit = waterUnit.value
+        dailyWaterRecord = todaysWaterRecord.value,
+        waterUnit = waterUnit.value,
+        recommendedWaterIntake = recommendedWaterIntake.value
       )
     }
     if(showFruitDialog){
