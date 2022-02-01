@@ -19,18 +19,18 @@ object Beverages {
 
   const val DEFAULT = WATER
 
-  private val water = Beverage(WATER, 0)
-  private val coffee = Beverage(COFFEE, 1)
-  private val tea = Beverage(TEA, 2)
-  private val milk = Beverage(MILK, 3)
-  private val juice = Beverage(JUICE, 4)
-  private val lemonade = Beverage(LEMONADE, 5)
-  private val soda = Beverage(SODA, 6)
-  private val beer = Beverage(BEER, 7)
-  private val smoothie = Beverage(SMOOTHIE, 8)
-  private val energyDrink = Beverage(ENERGY_DRINK, 9)
-  private val soup = Beverage(SOUP, 10)
-  private val wine = Beverage(WINE, 11)
+  private val water = Beverage(name = WATER,icon = 0)
+  private val coffee = Beverage(name = COFFEE,icon = 1)
+  private val tea = Beverage(name = TEA,icon = 2)
+  private val milk = Beverage(name = MILK,icon = 3)
+  private val juice = Beverage(name = JUICE,icon = 4)
+  private val lemonade = Beverage(name = LEMONADE,icon = 5)
+  private val soda = Beverage(name = SODA,icon = 6)
+  private val beer = Beverage(name = BEER,icon = 7)
+  private val smoothie = Beverage(name = SMOOTHIE,icon = 8)
+  private val energyDrink = Beverage(name = ENERGY_DRINK,icon = 9)
+  private val soup = Beverage(name = SOUP,icon = 10)
+  private val wine = Beverage(name = WINE,icon = 11)
 
   val defaultBeverages = listOf(
     water,

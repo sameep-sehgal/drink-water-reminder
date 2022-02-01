@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.example.myapplication.data.preferencedatastore.PreferenceDataStore
 import com.example.myapplication.data.roomdatabase.WaterDatabaseDao
 import com.example.myapplication.data.roomdatabase.WaterDatabase
-import com.example.myapplication.repository.ReminderRepository
 import com.example.myapplication.repository.WaterDataRepository
 import dagger.Module
 import dagger.Provides
@@ -36,11 +35,6 @@ object AppModule {
     @Provides
     fun provideWaterDataRepository(waterDatabaseDao: WaterDatabaseDao):WaterDataRepository
         = WaterDataRepository(waterDatabaseDao = waterDatabaseDao)
-
-    @Singleton
-    @Provides
-    fun provideReminderRepository(waterDatabaseDao: WaterDatabaseDao,preferenceDataStore: PreferenceDataStore):ReminderRepository
-        = ReminderRepository(waterDatabaseDao = waterDatabaseDao, preferenceDataStore = preferenceDataStore)
 
     @Singleton
     @Provides
