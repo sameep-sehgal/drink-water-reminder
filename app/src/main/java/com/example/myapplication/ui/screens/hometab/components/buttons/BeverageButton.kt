@@ -18,7 +18,8 @@ import com.example.myapplication.R
 
 @Composable
 fun BeverageButton(
-  setShowBeverageDialog:(Boolean)->Unit
+  setShowBeverageDialog:(Boolean)->Unit,
+  beverage:String
 ) {
   Card(
     shape = RoundedCornerShape(15.dp),
@@ -35,7 +36,7 @@ fun BeverageButton(
         verticalAlignment = Alignment.CenterVertically,
         ) {
         Text(
-          text = "Water ",
+          text = "$beverage ",
           fontSize = 16.sp,
         )
         Icon(

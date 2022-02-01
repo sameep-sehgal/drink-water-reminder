@@ -9,6 +9,8 @@ interface PreferenceDataStoreInterface {
   suspend fun setIsUserInfoCollected(value:Boolean)
   fun firstWaterDataDate() :Flow<String>
   suspend fun setFirstWaterDataDate(date:String)
+  fun beverage() :Flow<String>
+  suspend fun setBeverage(selectedBeverage:String)
 
   //Personal Settings
   fun weightUnit() :Flow<String>

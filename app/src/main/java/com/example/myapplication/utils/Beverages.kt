@@ -17,6 +17,8 @@ object Beverages {
   private const val LEMONADE = "Lemonade"
   private const val WINE = "Wine"
 
+  const val DEFAULT = WATER
+
   private val water = Beverage(WATER, 0)
   private val coffee = Beverage(COFFEE, 1)
   private val tea = Beverage(TEA, 2)

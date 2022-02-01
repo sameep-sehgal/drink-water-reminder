@@ -18,12 +18,20 @@ import com.example.myapplication.ui.screens.hometab.components.BeverageCard
 fun BeverageDialog(
   setShowBeverageDialog:(Boolean)->Unit,
   onConfirmButtonClick: () -> Unit,
-  beverageList:List<Beverage>
+  beverageList:List<Beverage>,
+  setSelectedBeverage: (String) -> Unit,
+  selectedBeverage: String
 ) {
   val title = "Switch Beverage"
   ShowDialog(
     title = title,
-    content = { BeverageDialogContent(beverageList) },
+    content = {
+      BeverageDialogContent(
+        beverageList = beverageList,
+        setSelectedBeverage = setSelectedBeverage,
+        selectedBeverage = selectedBeverage
+      )
+    },
     setShowDialog = setShowBeverageDialog,
     onConfirmButtonClick = onConfirmButtonClick
   )
@@ -31,9 +39,10 @@ fun BeverageDialog(
 
 @Composable
 fun BeverageDialogContent(
-  beverageList:List<Beverage>
+  beverageList:List<Beverage>,
+  setSelectedBeverage: (String) -> Unit,
+  selectedBeverage:String
 ) {
-  var selectedDrink by remember { mutableStateOf(0) }
   val scrollState = rememberScrollState()
 
   Text("")
@@ -50,12 +59,11 @@ fun BeverageDialogContent(
       ) {
         j = 0
         while(j < 3) {
-          val index = i
-          val beverage = beverageList[i]
+          val currBeverage = beverageList[i]
           BeverageCard(
-            beverage = beverage,
-            selected = selectedDrink == index,
-            onClick = { selectedDrink = index },
+            beverage = currBeverage,
+            selected = selectedBeverage == currBeverage.name,
+            onClick = { setSelectedBeverage(currBeverage.name) },
             modifier = Modifier
               .weight(1f)
               .padding(4.dp)
