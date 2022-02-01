@@ -1,23 +1,13 @@
 package com.example.myapplication.ui.screens.remindertab
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.sp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.ui.screens.remindertab.components.ReminderSettings
 import com.example.myapplication.ui.screens.remindertab.components.TopReminderTabBar
-import com.example.myapplication.ui.screens.settingstab.components.SettingsRowBooleanValue
-import com.example.myapplication.ui.screens.settingstab.components.SettingsRowSelectValue
-import com.example.myapplication.ui.screens.settingstab.components.SettingsSubheading
 import com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent.SetReminderFrequencySettingDialog
 import com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent.SetReminderPeriodSettingDialog
 import com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent.SetReminderSoundSettingDialog
