@@ -2,28 +2,22 @@ package com.example.myapplication.data.roomdatabase
 
 import android.content.Context
 import androidx.room.*
-import androidx.room.migration.AutoMigrationSpec
 import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
-import com.example.myapplication.data.models.ReminderTimings
 
 @Database(
     entities = [DrinkLogs::class, DailyWaterRecord::class, Beverage::class],
-    version = 3,
+    version = 4,
     autoMigrations = [
         AutoMigration (
-            from = 2,
-            to = 3,
-            spec = WaterDatabase.MyAutoMigration::class
+            from = 3,
+            to = 4
         )
     ]
 )
 abstract class WaterDatabase: RoomDatabase() {
     abstract fun waterDatabaseDao() : WaterDatabaseDao
-
-    @DeleteTable(tableName = "reminder_timings")
-    class MyAutoMigration : AutoMigrationSpec
 
     companion object {
 
