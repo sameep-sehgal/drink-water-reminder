@@ -154,9 +154,9 @@ fun HomeTab(
         onConfirmButtonClick = {
           preferenceDataStoreViewModel.setBeverage(selectedChangingBeverage)
         },
-        beverageList = Beverages.defaultBeverages,
         setSelectedBeverage = setSelectedChangingBeverage,
-        selectedBeverage = selectedChangingBeverage
+        selectedBeverage = selectedChangingBeverage,
+        roomDatabaseViewModel = roomDatabaseViewModel
       )
     }
     if(showSetTodaysGoalDialog){
