@@ -28,7 +28,6 @@ import com.example.myapplication.utils.RecommendedWaterIntake
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.myapplication.remindernotification.CHANNEL_ID_4
 import com.example.myapplication.ui.components.BottomNavBar
-import com.example.myapplication.ui.screens.edithistory.EditHistory
 import com.example.myapplication.ui.screens.remindertab.ReminderTab
 import com.example.myapplication.ui.screens.statstab.StatsTab
 import com.example.myapplication.utils.ReminderSound

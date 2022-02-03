@@ -10,5 +10,7 @@ data class Beverage(
   @ColumnInfo(name = "name")
   var name: String,
   @ColumnInfo(name = "icon")
-  var icon: Int
+  var icon: Int,
+  @ColumnInfo(name = "importance", defaultValue = 0.toString())
+  var importance:Int = 0
 )

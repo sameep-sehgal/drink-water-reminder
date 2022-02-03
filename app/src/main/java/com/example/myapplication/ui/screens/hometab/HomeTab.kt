@@ -29,12 +29,19 @@ fun HomeTab(
   val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
   val recommendedWaterIntake = preferenceDataStoreViewModel.recommendedWaterIntake.collectAsState(initial = RecommendedWaterIntake.NOT_SET)
+  val beverageName = preferenceDataStoreViewModel.beverage.collectAsState(initial = Beverages.DEFAULT)
   val (showBeverageDialog, setShowBeverageDialog) =  remember { mutableStateOf(false) }
   val (showSetTodaysGoalDialog, setShowSetTodaysGoalDialog) =  remember { mutableStateOf(false) }
   val (showFruitDialog, setShowFruitDialog) =  remember { mutableStateOf(false) }
   val (showCustomAddWaterDialog, setShowCustomAddWaterDialog) =  remember { mutableStateOf(false) }
   val scrollState = rememberScrollState()
   var showAllDrinkLogs by remember{ mutableStateOf(false) }
+  val beverage = roomDatabaseViewModel.beverage.collectAsState()
+  val setBeverageName = { it:String -> preferenceDataStoreViewModel.setBeverage(it) }
+
+  LaunchedEffect(key1 = beverageName.value) {
+    roomDatabaseViewModel.getBeverage(beverageName.value)
+  }
 
   Column(horizontalAlignment = Alignment.CenterHorizontally,
     modifier = Modifier
@@ -69,7 +76,8 @@ fun HomeTab(
     ) {
 
       BeverageButton(
-        setShowBeverageDialog = setShowBeverageDialog
+        setShowBeverageDialog = setShowBeverageDialog,
+        beverage = beverage.value
       )
 
       Spacer(modifier = Modifier.size(16.dp))
@@ -80,7 +88,8 @@ fun HomeTab(
         todaysWaterRecord.value,
         preferenceDataStoreViewModel,
         setShowCustomAddWaterDialog,
-        setShowFruitDialog
+        setShowFruitDialog,
+        beverage = beverage.value
       )
 
       Spacer(modifier = Modifier.size(12.dp))
@@ -101,8 +110,8 @@ fun HomeTab(
 
     if(showAllDrinkLogs)
       columnModifier2 = columnModifier2
-      .height(200.dp)
-      .verticalScroll(scrollState2)
+        .height(200.dp)
+        .verticalScroll(scrollState2)
 
     /*TODO(Fix this columns initial height equal to 2 drinkLogs)*/
     Column(
@@ -142,8 +151,9 @@ fun HomeTab(
     if(showBeverageDialog){
       BeverageDialog(
         setShowBeverageDialog = setShowBeverageDialog,
-        onConfirmButtonClick = {},
-        beverageList = Beverages.defaultBeverages
+        setSelectedBeverage = setBeverageName,
+        selectedBeverage = beverageName.value,
+        roomDatabaseViewModel = roomDatabaseViewModel
       )
     }
     if(showSetTodaysGoalDialog){
@@ -163,7 +173,8 @@ fun HomeTab(
         waterUnit = waterUnit.value,
         setShowCustomAddWaterDialog = setShowCustomAddWaterDialog,
         dailyWaterRecord = todaysWaterRecord.value,
-        roomDatabaseViewModel = roomDatabaseViewModel
+        roomDatabaseViewModel = roomDatabaseViewModel,
+        beverage = beverage.value
       )
     }
   }

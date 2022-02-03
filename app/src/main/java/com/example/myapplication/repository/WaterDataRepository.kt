@@ -1,5 +1,6 @@
 package com.example.myapplication.repository
 
+import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.data.roomdatabase.WaterDatabaseDao
@@ -28,12 +29,24 @@ class WaterDataRepository @Inject constructor(
     return waterDatabaseDao.getDailyWaterRecordsList(endDate,startDate)
   }
 
+  fun getAllBeverages(): Flow<List<Beverage>> {
+    return waterDatabaseDao.getAllBeverages()
+  }
+
+  fun getBeverage(beverageName: String): Flow<Beverage> {
+    return waterDatabaseDao.getBeverage(beverageName)
+  }
+
   suspend fun insertDailyWaterRecord(dailyWaterRecord: DailyWaterRecord): Long {
     return waterDatabaseDao.insertDailyWaterRecord(dailyWaterRecord)
   }
 
   suspend fun insertDrinkLog(drinkLog: DrinkLogs): Long {
     return waterDatabaseDao.insertDrinkLog(drinkLog)
+  }
+
+  suspend fun insertBeverage(beverage: Beverage): Long {
+    return waterDatabaseDao.insertBeverage(beverage)
   }
 
   suspend fun updateDailyWaterRecord(dailyWaterRecord: DailyWaterRecord){
@@ -46,6 +59,10 @@ class WaterDataRepository @Inject constructor(
 
   suspend fun deleteDrinkLog(drinkLog: DrinkLogs) {
     waterDatabaseDao.deleteDrinkLog(drinkLog)
+  }
+
+  suspend fun deleteBeverage(beverage: Beverage) {
+    waterDatabaseDao.deleteBeverage(beverage)
   }
 
   suspend fun getDrinkLogsCount(

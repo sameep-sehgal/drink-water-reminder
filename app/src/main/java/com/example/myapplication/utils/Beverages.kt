@@ -17,18 +17,22 @@ object Beverages {
   private const val LEMONADE = "Lemonade"
   private const val WINE = "Wine"
 
-  private val water = Beverage(WATER, 0)
-  private val coffee = Beverage(COFFEE, 1)
-  private val tea = Beverage(TEA, 2)
-  private val milk = Beverage(MILK, 3)
-  private val juice = Beverage(JUICE, 4)
-  private val lemonade = Beverage(LEMONADE, 5)
-  private val soda = Beverage(SODA, 6)
-  private val beer = Beverage(BEER, 7)
-  private val smoothie = Beverage(SMOOTHIE, 8)
-  private val energyDrink = Beverage(ENERGY_DRINK, 9)
-  private val soup = Beverage(SOUP, 10)
-  private val wine = Beverage(WINE, 11)
+  const val DEFAULT = WATER
+  const val DEFAULT_ICON = 0
+  const val MAX_ALLOWED_COUNT = 15
+
+  private val water = Beverage(name = WATER,icon = 0, importance = 0)
+  private val coffee = Beverage(name = COFFEE,icon = 1, importance = 1)
+  private val tea = Beverage(name = TEA,icon = 2, importance = 2)
+  private val milk = Beverage(name = MILK,icon = 3, importance = 3)
+  private val juice = Beverage(name = JUICE,icon = 4, importance = 4)
+  private val lemonade = Beverage(name = LEMONADE,icon = 5, importance = 5)
+  private val soda = Beverage(name = SODA,icon = 6, importance = 6)
+  private val beer = Beverage(name = BEER,icon = 7, importance = 7)
+  private val smoothie = Beverage(name = SMOOTHIE,icon = 8, importance = 8)
+  private val energyDrink = Beverage(name = ENERGY_DRINK,icon = 9, importance = 9)
+  private val soup = Beverage(name = SOUP,icon = 10, importance = 10)
+  private val wine = Beverage(name = WINE,icon = 11, importance = 11)
 
   val defaultBeverages = listOf(
     water,
@@ -45,18 +49,18 @@ object Beverages {
     wine
   )
 
-  val IMAGE_MAPPER = hashMapOf(
-    water.icon to R.drawable.water_icon,
-    coffee.icon to R.drawable.coffee_icon,
-    tea.icon to R.drawable.tea_icon,
-    milk.icon to R.drawable.milk_icon,
-    juice.icon to R.drawable.juice_icon,
-    lemonade.icon to R.drawable.lemonade_icon,
-    soda.icon to R.drawable.soda_icon,
-    beer.icon to R.drawable.beer_icon,
-    smoothie.icon to R.drawable.smoothie_icon,
-    energyDrink.icon to R.drawable.energy_drink_icon,
-    soup.icon to R.drawable.soup_icon,
-    wine.icon to R.drawable.wine_icon,
+  val IMAGE_MAPPER = listOf(
+    R.drawable.water_icon,
+    R.drawable.coffee_icon,
+    R.drawable.tea_icon,
+    R.drawable.milk_icon,
+    R.drawable.juice_icon,
+    R.drawable.lemonade_icon,
+    R.drawable.soda_icon,
+    R.drawable.beer_icon,
+    R.drawable.smoothie_icon,
+    R.drawable.energy_drink_icon,
+    R.drawable.soup_icon,
+    R.drawable.wine_icon,
   )
 }

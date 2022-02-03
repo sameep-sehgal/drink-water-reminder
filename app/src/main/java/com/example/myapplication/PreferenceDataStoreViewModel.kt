@@ -29,6 +29,14 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
+  val beverage = preferenceDataStore.beverage()
+
+  fun setBeverage(selectedBeverage: String) {
+    viewModelScope.launch {
+      preferenceDataStore.setBeverage(selectedBeverage)
+    }
+  }
+
   //Personal Settings
 
   val gender = preferenceDataStore.gender()

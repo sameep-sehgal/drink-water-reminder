@@ -1,71 +1,148 @@
 package com.example.myapplication.ui.screens.hometab.components.dialogs
 
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.data.models.Beverage
-import com.example.myapplication.ui.components.ShowDialog
-import com.example.myapplication.ui.screens.hometab.components.BeverageCard
+import com.example.myapplication.ui.screens.hometab.components.BeverageGrid
+import com.example.myapplication.utils.Beverages
 
 @Composable
 fun BeverageDialog(
   setShowBeverageDialog:(Boolean)->Unit,
-  onConfirmButtonClick: () -> Unit,
-  beverageList:List<Beverage>
+  setSelectedBeverage: (String) -> Unit,
+  selectedBeverage: String,
+  roomDatabaseViewModel: RoomDatabaseViewModel
 ) {
-  val title = "Switch Beverage"
-  ShowDialog(
-    title = title,
-    content = { BeverageDialogContent(beverageList) },
-    setShowDialog = setShowBeverageDialog,
-    onConfirmButtonClick = onConfirmButtonClick
-  )
+  val beverageList = roomDatabaseViewModel.beverageList.collectAsState()
+
+  LaunchedEffect(key1 = true) {
+    roomDatabaseViewModel.getAllBeverages()
+  }
+
+  Dialog(
+    onDismissRequest = { setShowBeverageDialog(false) }
+  ) {
+    BeverageDialogContent(
+      beverageList = beverageList.value,
+      setSelectedBeverage = setSelectedBeverage,
+      selectedBeverage = selectedBeverage,
+      roomDatabaseViewModel = roomDatabaseViewModel,
+      setShowBeverageDialog = setShowBeverageDialog
+    )
+  }
 }
 
 @Composable
 fun BeverageDialogContent(
-  beverageList:List<Beverage>
+  beverageList:List<Beverage>,
+  setSelectedBeverage: (String) -> Unit,
+  selectedBeverage:String,
+  roomDatabaseViewModel: RoomDatabaseViewModel,
+  setShowBeverageDialog:(Boolean)->Unit,
 ) {
-  var selectedDrink by remember { mutableStateOf(0) }
-  val scrollState = rememberScrollState()
+  val (showAddBeverageDialog, setShowAddBeverageDialog) =  remember { mutableStateOf(false) }
 
-  Text("")
   Column(
-    modifier = Modifier
-      .background(MaterialTheme.colors.background)
-      .verticalScroll(scrollState)
+    modifier = Modifier.fillMaxHeight(0.85f)
   ) {
-    var i = 0
-    var j:Int
-    while(i < beverageList.size) {
-      Row(
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        j = 0
-        while(j < 3) {
-          val index = i
-          val beverage = beverageList[i]
-          BeverageCard(
-            beverage = beverage,
-            selected = selectedDrink == index,
-            onClick = { selectedDrink = index },
-            modifier = Modifier
-              .weight(1f)
-              .padding(4.dp)
-              .height(96.dp)
-          )
-          i++
-          j++
-        }
-      }
-    }
+
+    BeverageDialogTitle(setShowBeverageDialog = setShowBeverageDialog)
+
+    BeverageGrid(
+      beverageList = beverageList,
+      selectedBeverage = selectedBeverage,
+      setSelectedBeverage = setSelectedBeverage,
+      roomDatabaseViewModel = roomDatabaseViewModel,
+      modifier = Modifier.weight(1f)
+    )
+
+    AddBeverageDialogOpenButton(
+      setShowAddBeverageDialog = setShowAddBeverageDialog,
+      beverageListSize = beverageList.size
+    )
   }
 
+  if(showAddBeverageDialog){
+    AddBeverageDialog(
+      roomDatabaseViewModel = roomDatabaseViewModel,
+      setShowBeverageDialog = setShowAddBeverageDialog,
+      beverageListSize = beverageList.size
+    )
+  }
+}
+
+@Composable
+fun BeverageDialogTitle(
+  setShowBeverageDialog: (Boolean) -> Unit
+) {
+  Row(
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.SpaceBetween,
+    modifier = Modifier
+      .fillMaxWidth()
+      .background(MaterialTheme.colors.background)
+      .padding(12.dp)
+  ) {
+    Text(
+      text = "Switch Beverage",
+      fontSize = 18.sp
+    )
+    IconButton(
+      onClick = { setShowBeverageDialog(false) }
+    ) {
+      Text(
+        text = "x",
+        color = Color.Gray,
+        fontSize = 18.sp
+      )
+    }
+  }
+  Divider(
+    modifier = Modifier.fillMaxWidth()
+  )
+}
+
+@Composable
+fun AddBeverageDialogOpenButton(
+  setShowAddBeverageDialog: (Boolean) -> Unit,
+  beverageListSize:Int
+) {
+  val context = LocalContext.current
+
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .clickable {
+        if(beverageListSize >= Beverages.MAX_ALLOWED_COUNT) {
+          Toast.makeText(
+            context,
+            "Maximum ${Beverages.MAX_ALLOWED_COUNT} beverages can be added. Delete existing ones to add more.",
+            Toast.LENGTH_SHORT
+          ).show()
+        }else setShowAddBeverageDialog(true)
+      }
+      .background(MaterialTheme.colors.background),
+    horizontalArrangement = Arrangement.Center,
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      text = "+",
+      fontSize = 30.sp
+    )
+  }
 }

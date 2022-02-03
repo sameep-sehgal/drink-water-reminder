@@ -63,7 +63,8 @@ fun EditDrinkLogDialog(
           time = calendar.timeInMillis,
           amount = amount,
           icon = icon,
-          date = drinkLog.date
+          date = drinkLog.date,
+          beverage = drinkLog.beverage
         )
       )
       dailyWaterRecord.currWaterAmount -= (drinkLog.amount - amount)
