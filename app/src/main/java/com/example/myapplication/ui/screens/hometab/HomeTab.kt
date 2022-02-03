@@ -34,12 +34,10 @@ fun HomeTab(
   val (showCustomAddWaterDialog, setShowCustomAddWaterDialog) =  remember { mutableStateOf(false) }
   val scrollState = rememberScrollState()
   var showAllDrinkLogs by remember{ mutableStateOf(false) }
-  var selectedChangingBeverage by remember{ mutableStateOf(Beverages.DEFAULT) }
   val beverage = roomDatabaseViewModel.beverage.collectAsState()
-  val setSelectedChangingBeverage = { it:String -> selectedChangingBeverage = it }
+  val setBeverageName = { it:String -> preferenceDataStoreViewModel.setBeverage(it) }
 
   LaunchedEffect(key1 = beverageName.value) {
-    selectedChangingBeverage = beverageName.value
     roomDatabaseViewModel.getBeverage(beverageName.value)
   }
 
@@ -151,11 +149,8 @@ fun HomeTab(
     if(showBeverageDialog){
       BeverageDialog(
         setShowBeverageDialog = setShowBeverageDialog,
-        onConfirmButtonClick = {
-          preferenceDataStoreViewModel.setBeverage(selectedChangingBeverage)
-        },
-        setSelectedBeverage = setSelectedChangingBeverage,
-        selectedBeverage = selectedChangingBeverage,
+        setSelectedBeverage = setBeverageName,
+        selectedBeverage = beverageName.value,
         roomDatabaseViewModel = roomDatabaseViewModel
       )
     }
