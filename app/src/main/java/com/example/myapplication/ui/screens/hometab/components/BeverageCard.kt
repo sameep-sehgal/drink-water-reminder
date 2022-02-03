@@ -109,6 +109,7 @@ fun BeverageCardDropDown(
       onClick = {
         roomDatabaseViewModel.updateBeverageImportanceOnDelete(beverageList, beverage.importance)
         roomDatabaseViewModel.deleteBeverage(beverage)
+        setShowDropDown(false)
       }
     ) {
       Text(
@@ -119,10 +120,11 @@ fun BeverageCardDropDown(
     DropdownMenuItem(
       onClick = {
         roomDatabaseViewModel.updateBeverageImportance(beverageList, beverage.importance)
+        setShowDropDown(false)
       }
     ) {
       Text(
-        text = "Send To Top",
+        text = "Move To Top",
         fontSize = 12.sp
       )
     }
