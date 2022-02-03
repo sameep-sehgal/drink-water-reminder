@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.RoomDatabaseViewModel
@@ -18,7 +19,6 @@ import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.utils.Beverages
-import com.example.myapplication.utils.Container
 import com.example.myapplication.utils.TimeString
 
 @Composable
@@ -52,7 +52,10 @@ fun DrinkLog(
           )
           Text(
             text = drinkLog.beverage,
-            style = Typography.subtitle1
+            style = Typography.subtitle1,
+            modifier = Modifier.widthIn(0.dp,80.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
           )
         }
         Row(
@@ -69,7 +72,12 @@ fun DrinkLog(
                   .size(20.dp)
                   .padding(2.dp, 0.dp)
               ) }
-          Text(text = "${drinkLog.amount}$waterUnit", style = Typography.subtitle1)
+          Text(
+            text = "${drinkLog.amount}$waterUnit",
+            style = Typography.subtitle1,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+          )
         }
         Row(
           verticalAlignment = Alignment.CenterVertically

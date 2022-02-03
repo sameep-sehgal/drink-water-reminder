@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.data.models.Beverage
+import com.example.myapplication.ui.components.IconText
+import com.example.myapplication.utils.Beverages
 
 @Composable
 fun BeverageButton(
@@ -36,9 +38,11 @@ fun BeverageButton(
         modifier = Modifier.padding(16.dp,2.dp),
         verticalAlignment = Alignment.CenterVertically,
         ) {
-        Text(
-          text = "${beverage.name} ",
+        IconText(
+          text = " ${beverage.name} ",
           fontSize = 16.sp,
+          icon = Beverages.IMAGE_MAPPER[beverage.icon],
+          image = true
         )
         Icon(
           painter = painterResource(id = R.drawable.change_icon),
