@@ -8,11 +8,11 @@ import com.example.myapplication.data.models.DrinkLogs
 
 @Database(
     entities = [DrinkLogs::class, DailyWaterRecord::class, Beverage::class],
-    version = 4,
+    version = 5,
     autoMigrations = [
         AutoMigration (
-            from = 3,
-            to = 4
+            from = 4,
+            to = 5
         )
     ]
 )

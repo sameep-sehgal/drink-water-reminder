@@ -19,19 +19,20 @@ object Beverages {
 
   const val DEFAULT = WATER
   const val DEFAULT_ICON = 0
+  const val MAX_ALLOWED_COUNT = 15
 
-  private val water = Beverage(name = WATER,icon = 0)
-  private val coffee = Beverage(name = COFFEE,icon = 1)
-  private val tea = Beverage(name = TEA,icon = 2)
-  private val milk = Beverage(name = MILK,icon = 3)
-  private val juice = Beverage(name = JUICE,icon = 4)
-  private val lemonade = Beverage(name = LEMONADE,icon = 5)
-  private val soda = Beverage(name = SODA,icon = 6)
-  private val beer = Beverage(name = BEER,icon = 7)
-  private val smoothie = Beverage(name = SMOOTHIE,icon = 8)
-  private val energyDrink = Beverage(name = ENERGY_DRINK,icon = 9)
-  private val soup = Beverage(name = SOUP,icon = 10)
-  private val wine = Beverage(name = WINE,icon = 11)
+  private val water = Beverage(name = WATER,icon = 0, importance = 0)
+  private val coffee = Beverage(name = COFFEE,icon = 1, importance = 1)
+  private val tea = Beverage(name = TEA,icon = 2, importance = 2)
+  private val milk = Beverage(name = MILK,icon = 3, importance = 3)
+  private val juice = Beverage(name = JUICE,icon = 4, importance = 4)
+  private val lemonade = Beverage(name = LEMONADE,icon = 5, importance = 5)
+  private val soda = Beverage(name = SODA,icon = 6, importance = 6)
+  private val beer = Beverage(name = BEER,icon = 7, importance = 7)
+  private val smoothie = Beverage(name = SMOOTHIE,icon = 8, importance = 8)
+  private val energyDrink = Beverage(name = ENERGY_DRINK,icon = 9, importance = 9)
+  private val soup = Beverage(name = SOUP,icon = 10, importance = 10)
+  private val wine = Beverage(name = WINE,icon = 11, importance = 11)
 
   val defaultBeverages = listOf(
     water,

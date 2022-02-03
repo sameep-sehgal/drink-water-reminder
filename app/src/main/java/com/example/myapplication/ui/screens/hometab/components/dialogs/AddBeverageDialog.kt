@@ -18,6 +18,7 @@ import com.example.myapplication.utils.Beverages
 fun AddBeverageDialog(
   roomDatabaseViewModel: RoomDatabaseViewModel,
   setShowBeverageDialog:(Boolean)->Unit,
+  beverageListSize:Int
 ) {
   var beverageName by remember{ mutableStateOf("") }
   val setBeverageName = {name:String -> beverageName = name}
@@ -40,7 +41,8 @@ fun AddBeverageDialog(
       roomDatabaseViewModel.insertBeverage(
         Beverage(
           name = beverageName,
-          icon = beverageIcon
+          icon = beverageIcon,
+          importance = beverageListSize
         )
       )
     },

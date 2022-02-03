@@ -27,7 +27,8 @@ fun BeverageCard(
   selected:Boolean,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
-  roomDatabaseViewModel: RoomDatabaseViewModel
+  roomDatabaseViewModel: RoomDatabaseViewModel,
+  beverageList: List<Beverage>
 ) {
   val primaryColor = MaterialTheme.colors.primary
   val shape = RoundedCornerShape(15.dp)
@@ -47,21 +48,12 @@ fun BeverageCard(
   ) {
     Box(modifier = Modifier.fillMaxSize()) {
       if(!selected) {
-        Row(
+        BeverageCardSettingsIcon(
+          setShowDropDown = setShowDropDown,
+          showDropDown = showDropDown,
           modifier = Modifier
             .align(Alignment.TopEnd)
-            .padding(3.dp)
-            .size(18.dp)
-            .clickable { setShowDropDown(!showDropDown) },
-          verticalAlignment = Alignment.CenterVertically,
-          horizontalArrangement = Arrangement.Center
-        ) {
-          Text(
-            text = ":",
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 10.sp
-          )
-        }
+        )
       }
 
       Column(
@@ -91,7 +83,8 @@ fun BeverageCard(
           showDropDown = showDropDown,
           modifier = Modifier.align(Alignment.TopCenter),
           roomDatabaseViewModel = roomDatabaseViewModel,
-          beverage = beverage
+          beverage = beverage,
+          beverageList = beverageList
         )
       }
     }
@@ -104,7 +97,8 @@ fun BeverageCardDropDown(
   showDropDown:Boolean,
   modifier:Modifier = Modifier,
   roomDatabaseViewModel: RoomDatabaseViewModel,
-  beverage: Beverage
+  beverage: Beverage,
+  beverageList: List<Beverage>
 ) {
   DropdownMenu(
     expanded = showDropDown,
@@ -113,6 +107,7 @@ fun BeverageCardDropDown(
   ) {
     DropdownMenuItem(
       onClick = {
+        roomDatabaseViewModel.updateBeverageImportanceOnDelete(beverageList, beverage.importance)
         roomDatabaseViewModel.deleteBeverage(beverage)
       }
     ) {
@@ -122,12 +117,36 @@ fun BeverageCardDropDown(
       )
     }
     DropdownMenuItem(
-      onClick = { /*TODO*/ }
+      onClick = {
+        roomDatabaseViewModel.updateBeverageImportance(beverageList, beverage.importance)
+      }
     ) {
       Text(
         text = "Send To Top",
         fontSize = 12.sp
       )
     }
+  }
+}
+
+@Composable
+fun BeverageCardSettingsIcon(
+  setShowDropDown: (Boolean) -> Unit,
+  showDropDown: Boolean,
+  modifier: Modifier = Modifier
+) {
+  Row(
+    modifier = modifier
+      .padding(3.dp)
+      .size(18.dp)
+      .clickable { setShowDropDown(!showDropDown) },
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.Center
+  ) {
+    Text(
+      text = ":",
+      fontWeight = FontWeight.ExtraBold,
+      fontSize = 10.sp
+    )
   }
 }

@@ -96,8 +96,55 @@ class RoomDatabaseViewModel @Inject constructor(
     viewModelScope.launch(Dispatchers.IO) {
       waterDataRepository.getAllBeverages().distinctUntilChanged()
         .collect { it1 ->
-          _beverageList.value = it1
+          _beverageList.value = it1.sortedBy { it2 -> it2.importance }
         }
+    }
+  }
+
+  fun updateBeverageImportance(
+    beverageList:List<Beverage>,
+    importance:Int
+  ) {
+    viewModelScope.launch(Dispatchers.IO) {
+      for(beverage in beverageList) {
+        if(beverage.importance < importance){
+          insertBeverage(
+            Beverage(
+              name = beverage.name,
+              icon = beverage.icon,
+              importance = beverage.importance + 1
+            )
+          )
+        }
+        if(beverage.importance == importance) {
+          insertBeverage(
+            Beverage(
+              name = beverage.name,
+              icon = beverage.icon,
+              importance = 0
+            )
+          )
+        }
+      }
+    }
+  }
+
+  fun updateBeverageImportanceOnDelete(
+    beverageList:List<Beverage>,
+    importance:Int
+  ) {
+    viewModelScope.launch(Dispatchers.IO) {
+      for(beverage in beverageList) {
+        if(beverage.importance > importance){
+          insertBeverage(
+            Beverage(
+              name = beverage.name,
+              icon = beverage.icon,
+              importance = beverage.importance - 1
+            )
+          )
+        }
+      }
     }
   }
 

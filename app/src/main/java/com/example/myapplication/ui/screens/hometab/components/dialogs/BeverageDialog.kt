@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.hometab.components.dialogs
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,12 +12,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.ui.screens.hometab.components.BeverageGrid
+import com.example.myapplication.utils.Beverages
 
 @Composable
 fun BeverageDialog(
@@ -69,14 +72,16 @@ fun BeverageDialogContent(
     )
 
     AddBeverageDialogOpenButton(
-      setShowAddBeverageDialog = setShowAddBeverageDialog
+      setShowAddBeverageDialog = setShowAddBeverageDialog,
+      beverageListSize = beverageList.size
     )
   }
 
   if(showAddBeverageDialog){
     AddBeverageDialog(
       roomDatabaseViewModel = roomDatabaseViewModel,
-      setShowBeverageDialog = setShowAddBeverageDialog
+      setShowBeverageDialog = setShowAddBeverageDialog,
+      beverageListSize = beverageList.size
     )
   }
 }
@@ -114,12 +119,23 @@ fun BeverageDialogTitle(
 
 @Composable
 fun AddBeverageDialogOpenButton(
-  setShowAddBeverageDialog: (Boolean) -> Unit
+  setShowAddBeverageDialog: (Boolean) -> Unit,
+  beverageListSize:Int
 ) {
+  val context = LocalContext.current
+
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .clickable { setShowAddBeverageDialog(true) }
+      .clickable {
+        if(beverageListSize >= Beverages.MAX_ALLOWED_COUNT) {
+          Toast.makeText(
+            context,
+            "Maximum ${Beverages.MAX_ALLOWED_COUNT} beverages can be added. Delete existing ones to add more.",
+            Toast.LENGTH_SHORT
+          ).show()
+        }else setShowAddBeverageDialog(true)
+      }
       .background(MaterialTheme.colors.background),
     horizontalArrangement = Arrangement.Center,
     verticalAlignment = Alignment.CenterVertically

@@ -44,7 +44,8 @@ fun BeverageGrid(
               .weight(1f)
               .padding(4.dp)
               .height(96.dp),
-            roomDatabaseViewModel = roomDatabaseViewModel
+            roomDatabaseViewModel = roomDatabaseViewModel,
+            beverageList = beverageList
           )
           i++
           j++
