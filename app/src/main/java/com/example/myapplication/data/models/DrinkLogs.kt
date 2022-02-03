@@ -23,5 +23,5 @@ data class DrinkLogs(
     var icon:Int,
     var date:String = DateString.getTodaysDate(),
     @ColumnInfo(defaultValue = Beverages.DEFAULT)
-    var beverage:String = Beverages.DEFAULT
+    var beverage:String
 )

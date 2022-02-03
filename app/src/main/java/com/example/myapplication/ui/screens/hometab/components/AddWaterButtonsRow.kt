@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
+import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.screens.hometab.components.buttons.CustomAddWaterButton
@@ -39,7 +40,8 @@ fun AddWaterButtonsRow(
   dailyWaterRecord: DailyWaterRecord,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowCustomAddWaterDialog:(Boolean) -> Unit,
-  setShowFruitDialog:(Boolean) -> Unit
+  setShowFruitDialog:(Boolean) -> Unit,
+  beverage: Beverage
 ) {
   val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = Container.baseGlassCapacity(waterUnit))
   val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit))
@@ -95,7 +97,8 @@ fun AddWaterButtonsRow(
               waterUnit = waterUnit,
               fontSize = fontSize,
               dailyWaterRecord = dailyWaterRecord,
-              roomDatabaseViewModel = roomDatabaseViewModel
+              roomDatabaseViewModel = roomDatabaseViewModel,
+              beverage = beverage
             )
 
             AddWaterContainerButton(
@@ -104,7 +107,8 @@ fun AddWaterButtonsRow(
               waterUnit = waterUnit,
               fontSize = fontSize,
               dailyWaterRecord = dailyWaterRecord,
-              roomDatabaseViewModel = roomDatabaseViewModel
+              roomDatabaseViewModel = roomDatabaseViewModel,
+              beverage = beverage
             )
 
             Spacer(modifier = Modifier.width(addIconSize))
@@ -115,7 +119,8 @@ fun AddWaterButtonsRow(
               waterUnit = waterUnit,
               fontSize = fontSize,
               dailyWaterRecord = dailyWaterRecord,
-              roomDatabaseViewModel = roomDatabaseViewModel
+              roomDatabaseViewModel = roomDatabaseViewModel,
+              beverage = beverage
             )
 
             Row(
@@ -172,7 +177,8 @@ fun AddWaterContainerButton(
   waterUnit: String,
   fontSize:TextUnit = 12.sp,
   dailyWaterRecord: DailyWaterRecord,
-  roomDatabaseViewModel: RoomDatabaseViewModel
+  roomDatabaseViewModel: RoomDatabaseViewModel,
+  beverage: Beverage
 ) {
 
   val myId = "inlineContent"
@@ -208,7 +214,8 @@ fun AddWaterContainerButton(
         roomDatabaseViewModel.insertDrinkLog(
           DrinkLogs(
             amount = waterAmount,
-            icon = container
+            icon = beverage.icon,
+            beverage = beverage.name
           ),
         )
         roomDatabaseViewModel.updateDailyWaterRecord(

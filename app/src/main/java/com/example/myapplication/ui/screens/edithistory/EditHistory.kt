@@ -12,9 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
+import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.ui.screens.edithistory.components.*
 import com.example.myapplication.ui.screens.hometab.components.DrinkLogsList
 import com.example.myapplication.ui.screens.hometab.components.dialogs.CustomAddWaterDialog
+import com.example.myapplication.utils.Beverages
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.Units
 
@@ -93,7 +95,8 @@ fun EditHistory(
         setShowCustomAddWaterDialog = setShowCustomAddWaterDialog,
         roomDatabaseViewModel = roomDatabaseViewModel,
         dailyWaterRecord = selectedWaterRecord.value,
-        selectedDate = selectedDate
+        selectedDate = selectedDate,
+        beverage = Beverage(Beverages.DEFAULT, Beverages.DEFAULT_ICON)
       )
     }
   }

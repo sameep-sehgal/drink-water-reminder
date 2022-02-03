@@ -15,11 +15,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
+import com.example.myapplication.data.models.Beverage
 
 @Composable
 fun BeverageButton(
   setShowBeverageDialog:(Boolean)->Unit,
-  beverage:String
+  beverage: Beverage
 ) {
   Card(
     shape = RoundedCornerShape(15.dp),
@@ -36,7 +37,7 @@ fun BeverageButton(
         verticalAlignment = Alignment.CenterVertically,
         ) {
         Text(
-          text = "$beverage ",
+          text = "${beverage.name} ",
           fontSize = 16.sp,
         )
         Icon(

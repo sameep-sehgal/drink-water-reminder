@@ -27,18 +27,20 @@ fun HomeTab(
   val drinkLogsList = roomDatabaseViewModel.drinkLogs.collectAsState()
   val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
-  val beverage = preferenceDataStoreViewModel.beverage.collectAsState(initial = Beverages.DEFAULT)
+  val beverageName = preferenceDataStoreViewModel.beverage.collectAsState(initial = Beverages.DEFAULT)
   val (showBeverageDialog, setShowBeverageDialog) =  remember { mutableStateOf(false) }
   val (showSetTodaysGoalDialog, setShowSetTodaysGoalDialog) =  remember { mutableStateOf(false) }
   val (showFruitDialog, setShowFruitDialog) =  remember { mutableStateOf(false) }
   val (showCustomAddWaterDialog, setShowCustomAddWaterDialog) =  remember { mutableStateOf(false) }
   val scrollState = rememberScrollState()
   var showAllDrinkLogs by remember{ mutableStateOf(false) }
-  var selectedBeverage by remember{ mutableStateOf(Beverages.DEFAULT) }
-  val setSelectedBeverage = { it:String -> selectedBeverage = it }
+  var selectedChangingBeverage by remember{ mutableStateOf(Beverages.DEFAULT) }
+  val beverage = roomDatabaseViewModel.beverage.collectAsState()
+  val setSelectedChangingBeverage = { it:String -> selectedChangingBeverage = it }
 
-  LaunchedEffect(key1 = beverage.value) {
-    selectedBeverage = beverage.value
+  LaunchedEffect(key1 = beverageName.value) {
+    selectedChangingBeverage = beverageName.value
+    roomDatabaseViewModel.getBeverage(beverageName.value)
   }
 
   Column(horizontalAlignment = Alignment.CenterHorizontally,
@@ -86,7 +88,8 @@ fun HomeTab(
         todaysWaterRecord.value,
         preferenceDataStoreViewModel,
         setShowCustomAddWaterDialog,
-        setShowFruitDialog
+        setShowFruitDialog,
+        beverage = beverage.value
       )
 
       Spacer(modifier = Modifier.size(12.dp))
@@ -149,11 +152,11 @@ fun HomeTab(
       BeverageDialog(
         setShowBeverageDialog = setShowBeverageDialog,
         onConfirmButtonClick = {
-          preferenceDataStoreViewModel.setBeverage(selectedBeverage)
+          preferenceDataStoreViewModel.setBeverage(selectedChangingBeverage)
         },
         beverageList = Beverages.defaultBeverages,
-        setSelectedBeverage = setSelectedBeverage,
-        selectedBeverage = selectedBeverage
+        setSelectedBeverage = setSelectedChangingBeverage,
+        selectedBeverage = selectedChangingBeverage
       )
     }
     if(showSetTodaysGoalDialog){
@@ -172,7 +175,8 @@ fun HomeTab(
         waterUnit = waterUnit.value,
         setShowCustomAddWaterDialog = setShowCustomAddWaterDialog,
         dailyWaterRecord = todaysWaterRecord.value,
-        roomDatabaseViewModel = roomDatabaseViewModel
+        roomDatabaseViewModel = roomDatabaseViewModel,
+        beverage = beverage.value
       )
     }
   }

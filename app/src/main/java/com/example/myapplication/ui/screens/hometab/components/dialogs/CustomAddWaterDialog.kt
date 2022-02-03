@@ -6,6 +6,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.example.myapplication.RoomDatabaseViewModel
+import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.components.ShowDialog
@@ -19,7 +20,8 @@ fun CustomAddWaterDialog(
   setShowCustomAddWaterDialog:(Boolean)->Unit,
   roomDatabaseViewModel: RoomDatabaseViewModel,
   dailyWaterRecord: DailyWaterRecord,
-  selectedDate:String = dailyWaterRecord.date
+  selectedDate:String = dailyWaterRecord.date,
+  beverage: Beverage
 ){
   val title = "Add Water Intake"
   var time by remember { mutableStateOf(TimeString.longToString(Calendar.getInstance().timeInMillis)) }
@@ -48,9 +50,10 @@ fun CustomAddWaterDialog(
       roomDatabaseViewModel.insertDrinkLog(
         DrinkLogs(
           amount = amount,
-          icon = icon,
+          icon = beverage.icon,
           time = calendar.timeInMillis,
-          date = selectedDate
+          date = selectedDate,
+          beverage = beverage.name
         )
       )
       roomDatabaseViewModel.updateDailyWaterRecord(

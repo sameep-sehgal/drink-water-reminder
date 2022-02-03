@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.repository.WaterDataRepository
+import com.example.myapplication.utils.Beverages
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.RecommendedWaterIntake
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -75,6 +77,27 @@ class RoomDatabaseViewModel @Inject constructor(
           _todaysWaterRecord.value = it
         }
       }
+    }
+  }
+
+  private val _beverage = MutableStateFlow(Beverage(Beverages.DEFAULT, 0))
+  val beverage : StateFlow<Beverage> = _beverage.asStateFlow()
+  fun getBeverage(beverageName: String){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.getBeverage(beverageName).collect {
+        _beverage.value = it
+      }
+    }
+  }
+
+  private val _beverageList = MutableStateFlow<List<Beverage>>(emptyList())
+  val beverageList : StateFlow<List<Beverage>> =  _beverageList.asStateFlow()
+  fun getAllBeverages(){
+    viewModelScope.launch(Dispatchers.IO) {
+      waterDataRepository.getAllBeverages().distinctUntilChanged()
+        .collect { it1 ->
+          _beverageList.value = it1
+        }
     }
   }
 
@@ -168,6 +191,12 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
+  fun insertBeverage(beverage: Beverage){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.insertBeverage(beverage)
+    }
+  }
+
   fun insertDrinkLog(
     drinkLog: DrinkLogs
   ){
@@ -188,11 +217,15 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
-  fun deleteDrinkLog(
-    drinkLog: DrinkLogs
-  ){
+  fun deleteDrinkLog(drinkLog: DrinkLogs){
     viewModelScope.launch (Dispatchers.IO){
-      waterDataRepository.deleteDrinkLog(drinkLog = drinkLog)
+      waterDataRepository.deleteDrinkLog(drinkLog)
+    }
+  }
+
+  fun deleteBeverage(beverage: Beverage){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.deleteBeverage(beverage)
     }
   }
 
