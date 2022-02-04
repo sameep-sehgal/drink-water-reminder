@@ -78,9 +78,9 @@ private fun DrawChart(
 fun PieChartPreview() = PieChart(
   pieChartData = PieChartData(
     slices = listOf(
-      PieChartData.Slice(25f, Color.Red),
-      PieChartData.Slice(42f, Color.Blue),
-      PieChartData.Slice(23f, Color.Green)
+      PieChartData.Slice(25f, Color.Red, "Water"),
+      PieChartData.Slice(42f, Color.Blue, "Milk"),
+      PieChartData.Slice(23f, Color.Green, "Tea")
     )
   )
 )

@@ -147,7 +147,11 @@ fun StatsTab(
 
       RenderBarChart(bars = bars)
 
-      RenderPieChart()
+      RenderPieChart(
+        roomDatabaseViewModel = roomDatabaseViewModel,
+        startDate = startDate,
+        endDate = endDate
+      )
 
       RenderOtherStats(
         drinkLogsCount = drinkLogsCount.value,

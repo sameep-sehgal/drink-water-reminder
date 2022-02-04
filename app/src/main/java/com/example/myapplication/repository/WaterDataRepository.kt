@@ -21,8 +21,11 @@ class WaterDataRepository @Inject constructor(
     return waterDatabaseDao.getDailyWaterRecord(date)
   }
 
-  fun getDrinkLogs(date:String = DateString.getTodaysDate()): Flow<List<DrinkLogs>> {
-    return waterDatabaseDao.getDrinkLogs(date).flowOn(Dispatchers.IO).conflate()
+  fun getDrinkLogs(
+    startDate: String = DateString.getTodaysDate(),
+    endDate: String = DateString.getTodaysDate()
+  ): Flow<List<DrinkLogs>> {
+    return waterDatabaseDao.getDrinkLogs(startDate, endDate).flowOn(Dispatchers.IO).conflate()
   }
 
   fun getDailyWaterRecordsList(startDate:String, endDate:String = DateString.getTodaysDate()): Flow<List<DailyWaterRecord>> {
