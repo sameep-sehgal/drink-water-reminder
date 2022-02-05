@@ -38,9 +38,11 @@ object PieChartUtils {
     val temp = mutableListOf<PieChartData.Slice>()
     val pieChartData = mutableListOf<PieChartData.Slice>()
     val otherBeverageList = mutableListOf<PieChartData.Slice>()
+    val totalAmountDrunk = mutableListOf(PieChartData.Slice(0f, Color.Red, "Total Amount Drunk"))
 
     for(drinkLog in drinkLogsList) {
       val curr = data[drinkLog.beverage]
+      totalAmountDrunk[0].value += drinkLog.amount
       if(curr != null){
         curr.value += drinkLog.amount
       }else{
@@ -58,7 +60,7 @@ object PieChartUtils {
     temp.sortByDescending { it.value }
     temp.forEachIndexed { index, value ->
       if(index < MAX_PIES - 1) {
-        value.color = PieChartUtils.getColor(index)
+        value.color = getColor(index)
         pieChartData.add(value)
       }
       if(index == MAX_PIES - 1){
@@ -72,6 +74,6 @@ object PieChartUtils {
       }
     }
 
-    return listOf(pieChartData, otherBeverageList)
+    return listOf(pieChartData, otherBeverageList, totalAmountDrunk)
   }
 }
