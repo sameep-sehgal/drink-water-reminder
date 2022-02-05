@@ -1,6 +1,5 @@
 package com.example.myapplication.utils
 
-import android.util.Log
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartData
 
@@ -9,7 +8,6 @@ object Statistics {
   //TimeLines for statistics
   const val WEEKLY = "Weekly"
   const val MONTHLY = "Monthly"
-  const val YEARLY = "Yearly"
 
   fun calculateDrinkFrequency(
     waterRecordsCount:Int,
@@ -78,6 +76,7 @@ object Statistics {
 
   ): MutableList<BarChartData.Bar> {
     var currDate = endDate
+    val todaysDate = DateString.getTodaysDate()
     val bars = MutableList(0) { index ->
       BarChartData.Bar(0f, "$index")
     }
@@ -92,17 +91,15 @@ object Statistics {
           label =
           if(selectedStatsTimeLine == WEEKLY)
             DateString.getDayOfWeek(7 - bars.size)
-          else if(selectedStatsTimeLine == MONTHLY) {
+          else {
             val date = currDate.split("-")[2].toInt()
             if(date%2 == 0) date.toString()
             else ""
           }
-          else
-            currDate.split("-")[2]
         )
       )
+      if(currDate <= todaysDate) incrementDailyWaterRecordsCount()
       currDate = DateString.getPrevDate(currDate)
-      incrementDailyWaterRecordsCount()
     }
 
     return bars
@@ -112,7 +109,6 @@ object Statistics {
     return listOf(
       hashMapOf("text" to "$WEEKLY   ", "value" to WEEKLY),
       hashMapOf("text" to "$MONTHLY ", "value" to MONTHLY),
-      hashMapOf("text" to "$YEARLY   ", "value" to YEARLY),
     )
   }
 }
