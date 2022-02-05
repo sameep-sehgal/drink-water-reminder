@@ -20,6 +20,7 @@ fun RenderPieChart(
   roomDatabaseViewModel: RoomDatabaseViewModel,
   startDate:String,
   endDate:String,
+  waterUnit: String
 ) {
   val drinkLogsList = roomDatabaseViewModel.statsDrinkLogsList.collectAsState()
   var pieChartData by remember{ mutableStateOf(
@@ -80,7 +81,10 @@ fun RenderPieChart(
           .padding(12.dp)
       )
       Spacer(modifier = Modifier.size(8.dp))
-      PieChartBeverageList(pieChartData = pieChartData)
+      PieChartBeverageList(
+        pieChartData = pieChartData,
+        waterUnit = waterUnit
+      )
     }
   }
 }

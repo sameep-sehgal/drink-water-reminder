@@ -15,7 +15,8 @@ fun RenderOtherStats(
   drinkLogsCount: Int,
   waterRecordsCount: Int,
   goalCompletedDaysCount: Int,
-  waterRecordsList: List<DailyWaterRecord>
+  waterRecordsList: List<DailyWaterRecord>,
+  waterUnit: String
 ) {
   Card(
     elevation = 6.dp,
@@ -29,7 +30,7 @@ fun RenderOtherStats(
         value = "${Statistics.calculateAverage(
           waterRecordsList = waterRecordsList,
           daysCount = waterRecordsCount
-        )} ml/day",
+        )} $waterUnit/day",
         onSettingsRowClick = {}
       )
       SettingsRowSelectValue(
