@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PieChartBeverageList(
   pieChartData: List<PieChartData.Slice>,
+  otherBeverageList: List<PieChartData.Slice>,
   waterUnit: String
 ) {
   val listState = rememberLazyListState()

@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.statstab.components
+package com.example.myapplication.ui.screens.statstab.components.renderbarchart
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card

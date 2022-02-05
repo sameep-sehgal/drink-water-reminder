@@ -16,10 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.EditHistoryActivity
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
-import com.example.myapplication.ui.screens.statstab.components.*
 import com.example.myapplication.ui.screens.statstab.components.buttons.EditHistoryButton
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartData
-import com.example.myapplication.ui.screens.statstab.components.selectors.TimeLineSelector
+import com.example.myapplication.ui.screens.statstab.components.renderbarchart.RenderBarChart
+import com.example.myapplication.ui.screens.statstab.components.renderotherstats.RenderOtherStats
+import com.example.myapplication.ui.screens.statstab.components.renderpiechart.RenderPieChart
+import com.example.myapplication.ui.screens.statstab.components.topstatstabbar.selectors.TimeLineSelector
+import com.example.myapplication.ui.screens.statstab.components.topstatstabbar.TopStatsTabBar
 import com.example.myapplication.ui.theme.SettingsSubheadingLight
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.Statistics

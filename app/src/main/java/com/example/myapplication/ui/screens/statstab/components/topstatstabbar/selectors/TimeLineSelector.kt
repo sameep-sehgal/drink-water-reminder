@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.statstab.components.selectors
+package com.example.myapplication.ui.screens.statstab.components.topstatstabbar.selectors
 
 import androidx.compose.runtime.Composable
 import com.example.myapplication.utils.Statistics

@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.screens.statstab.components
+package com.example.myapplication.ui.screens.statstab.components.topstatstabbar
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
