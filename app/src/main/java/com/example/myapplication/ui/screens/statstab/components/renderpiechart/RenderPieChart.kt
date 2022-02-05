@@ -9,7 +9,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.RoomDatabaseViewModel
-import com.example.myapplication.ui.screens.statstab.components.PieChartBeverageList
 import com.example.myapplication.ui.screens.statstab.components.charts.piechart.PieChart
 import com.example.myapplication.ui.screens.statstab.components.charts.piechart.PieChartData
 import com.example.myapplication.ui.screens.statstab.components.charts.piechart.PieChartUtils

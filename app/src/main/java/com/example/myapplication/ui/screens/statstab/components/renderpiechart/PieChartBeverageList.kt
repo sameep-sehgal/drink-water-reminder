@@ -1,10 +1,8 @@
-package com.example.myapplication.ui.screens.statstab.components
+package com.example.myapplication.ui.screens.statstab.components.renderpiechart
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +23,7 @@ fun PieChartBeverageList(
   val scope = rememberCoroutineScope()
   var showBeverageDetails by remember { mutableStateOf(false) }
   var beverageToShow by remember { mutableStateOf(0) }
+  val setBeverageToShow = { value:Int -> beverageToShow = value }
   val setShowBeverageDetail = {value:Boolean -> showBeverageDetails = value}
 
   Row(
@@ -42,41 +41,16 @@ fun PieChartBeverageList(
       modifier = Modifier.weight(1f)
     ) {
       items(count = pieChartData.size) {
-        Button(
-          onClick = {
-            beverageToShow = it
-            setShowBeverageDetail(!showBeverageDetails)
-          },
-          shape = CircleShape,
-          colors = ButtonDefaults.textButtonColors(
-            backgroundColor = pieChartData[it].color,
-            contentColor = MaterialTheme.colors.onPrimary
-          )
-        ) {
-          Text(
-            text = pieChartData[it].name,
-            fontSize = 10.sp
-          )
-          if(beverageToShow == it) {
-            DropdownMenu(
-              expanded = showBeverageDetails,
-              onDismissRequest = { setShowBeverageDetail(false) },
-              modifier = Modifier.padding(4.dp)
-            ) {
-              Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                  text = pieChartData[it].name,
-                  fontSize = 10.sp
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                Text(
-                  text = "${pieChartData[it].value.toInt()}$waterUnit",
-                  fontSize = 10.sp
-                )
-              }
-            }
-          }
-        }
+        PieChartBeverageListButton(
+          pieChartData = pieChartData,
+          it = it,
+          waterUnit = waterUnit,
+          beverageToShow = beverageToShow,
+          setBeverageToShow = setBeverageToShow,
+          showBeverageDetails = showBeverageDetails,
+          setShowBeverageDetail = setShowBeverageDetail,
+          otherBeverageList = otherBeverageList
+        )
         Spacer(modifier = Modifier.size(8.dp))
       }
     }
