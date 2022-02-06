@@ -29,7 +29,6 @@ fun SetDailyWaterGoalSettingDialog(
   dailyWaterGoal: Int,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowDialog:(Boolean) -> Unit,
-  recommendedWaterIntake: Int,
   waterUnit:String,
   reminderGap: Int,
   reminderPeriodStart: String,
@@ -66,12 +65,6 @@ fun SetDailyWaterGoalSettingDialog(
           Text(
             text = "${selectedDailyWaterGoal.value}$waterUnit"
           )
-          IconButton(onClick = { selectedDailyWaterGoal.value = recommendedWaterIntake }) {
-            Icon(
-              painter = painterResource(id = R.drawable.history_icon_white),
-              contentDescription = "Reset To Recommended"
-            )
-          }
         }
         Slider(
           value = selectedDailyWaterGoal.value.toFloat(),

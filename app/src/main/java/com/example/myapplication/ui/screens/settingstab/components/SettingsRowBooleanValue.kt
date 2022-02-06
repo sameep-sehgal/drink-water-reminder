@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import com.example.myapplication.ui.screens.settingstab.horizontalPaddingSettings
 import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.ui.screens.settingstab.verticalPaddingSettings
@@ -15,12 +16,15 @@ import com.example.myapplication.ui.screens.settingstab.verticalPaddingSettings
 fun SettingsRowBooleanValue(
   text: String,
   value:Boolean,
-  onCheckedChange: (Boolean) -> Unit
+  onCheckedChange: (Boolean) -> Unit,
+  enabled:Boolean = true
 ) {
+  val modifier:Modifier =
+    if(enabled)
+      Modifier.clickable { onCheckedChange(!value) }
+    else Modifier.alpha(0.3f)
   Row(
-    modifier = Modifier.clickable {
-      onCheckedChange(!value)
-    },
+    modifier = modifier,
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(

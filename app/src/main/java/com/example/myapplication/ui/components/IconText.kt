@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -14,10 +15,11 @@ import androidx.compose.ui.unit.TextUnit
 
 @Composable
 fun IconText(
+  modifier: Modifier = Modifier,
   text:String,
   fontSize: TextUnit,
   icon:Int?,
-  image:Boolean = false
+  image:Boolean = false,
 ) {
   val myId = "inlineContent"
   val textIcon = buildAnnotatedString {
@@ -58,5 +60,6 @@ fun IconText(
     text = textIcon,
     inlineContent = inlineContent,
     fontSize = fontSize,
+    modifier = modifier
   )
 }

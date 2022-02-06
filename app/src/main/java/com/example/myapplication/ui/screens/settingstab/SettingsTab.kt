@@ -17,11 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.ui.screens.settingstab.components.SettingsRowBooleanValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowNoValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowSelectValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsSubheading
 import com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent.*
 import com.example.myapplication.utils.*
+import com.example.myapplication.R
 
 val horizontalPaddingSettings = 8.dp
 val verticalPaddingSettings = 16.dp
@@ -56,6 +58,12 @@ fun SettingsTab(
   val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
   val (dialogToShow, setDialogToShow) =  remember { mutableStateOf("") }
 
+  LaunchedEffect(key1 = recommendedWaterIntake.value) {
+    if(isDailyWaterGoalTrackingRecommendedIntake.value){
+      preferenceDataStoreViewModel.setDailyWaterGoal(recommendedWaterIntake.value)
+    }
+  }
+
   Column(
     modifier = Modifier.verticalScroll(scrollState)
   ) {
@@ -85,17 +93,18 @@ fun SettingsTab(
       dailyWaterGoal = dailyWaterGoal.value,
       isDailyWaterGoalTrackingRecommendedIntake = isDailyWaterGoalTrackingRecommendedIntake.value,
       setShowDialog = setShowDialog,
+      setDialogToShow = setDialogToShow,
+      preferenceDataStoreViewModel = preferenceDataStoreViewModel
+    )
+    ContainerSettings(
+      glassCapacity = glassCapacity.value,
+      mugCapacity = mugCapacity.value,
+      bottleCapacity = bottleCapacity.value,
+      waterUnit = waterUnit.value,
+      setShowDialog = setShowDialog,
       setDialogToShow = setDialogToShow
     )
-//    ContainerSettings(
-//      glassCapacity = glassCapacity.value,
-//      mugCapacity = mugCapacity.value,
-//      bottleCapacity = bottleCapacity.value,
-//      waterUnit = waterUnit.value,
-//      setShowDialog = setShowDialog,
-//      setDialogToShow = setDialogToShow
-//    )
-    MainSettings(
+    OtherSettings(
       setShowDialog,
       setDialogToShow
     )
@@ -330,10 +339,11 @@ fun HowMuchWaterToDrinkSettings(
   waterUnit:String,
   isDailyWaterGoalTrackingRecommendedIntake:Boolean,
   setShowDialog :(Boolean) -> Unit,
-  setDialogToShow: (String) -> Unit
+  setDialogToShow: (String) -> Unit,
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ) {
   Column {
-    SettingsSubheading(text = "How Much Water To Drink?")
+    SettingsSubheading(text = "Your Water Intake")
     SettingsRowSelectValue(
       text = Settings.RECOMMENDED_WATER_INTAKE,
       value = "$recommendedWaterIntake$waterUnit",
@@ -342,13 +352,22 @@ fun HowMuchWaterToDrinkSettings(
         setDialogToShow(Settings.RECOMMENDED_WATER_INTAKE)
       }
     )
+    SettingsRowBooleanValue(
+      text = "Set To Recommended Value",
+      value = isDailyWaterGoalTrackingRecommendedIntake,
+      onCheckedChange = {
+        preferenceDataStoreViewModel.setIsDailyWaterGoalTrackingRecommendedIntake(it)
+        if(it) preferenceDataStoreViewModel.setDailyWaterGoal(recommendedWaterIntake)
+      }
+    )
     SettingsRowSelectValue(
       text = Settings.DAILY_WATER_GOAL,
       value = "$dailyWaterGoal$waterUnit",
       onSettingsRowClick = {
         setShowDialog(true)
         setDialogToShow(Settings.DAILY_WATER_GOAL)
-      }
+      },
+      enabled = !isDailyWaterGoalTrackingRecommendedIntake
     )
   }
 }
@@ -362,7 +381,7 @@ fun ContainerSettings(
   setShowDialog :(Boolean) -> Unit,
   setDialogToShow: (String) -> Unit
 ){
-  SettingsSubheading(text = "Containers")
+  SettingsSubheading(text = "Configure Intake Buttons")
   SettingsRowSelectValue(
     text = "Glass",
     value = "$glassCapacity$waterUnit",
@@ -390,14 +409,14 @@ fun ContainerSettings(
 }
 
 @Composable
-fun MainSettings(
+fun OtherSettings(
   setShowDialog :(Boolean) -> Unit,
   setDialogToShow: (String) -> Unit
 ){
   val context = LocalContext.current
   SettingsSubheading(text = "Other Settings")
   SettingsRowNoValue(
-    text = Settings.RESET_DATA,
+    text = Settings.PRIVACY_POLICY,
     onSettingsRowClick = {/*TODO()*/}
   )
   SettingsRowNoValue(
