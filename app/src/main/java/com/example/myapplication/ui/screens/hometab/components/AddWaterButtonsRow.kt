@@ -23,7 +23,6 @@ import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.components.IconText
 import com.example.myapplication.ui.screens.hometab.components.buttons.CustomAddWaterButton
-import com.example.myapplication.ui.screens.hometab.components.buttons.FruitButton
 import com.example.myapplication.ui.screens.hometab.components.buttons.UndoButton
 import com.example.myapplication.utils.Container
 
@@ -35,7 +34,8 @@ fun AddWaterButtonsRow(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowCustomAddWaterDialog:(Boolean) -> Unit,
   setShowFruitDialog:(Boolean) -> Unit,
-  beverage: Beverage
+  beverage: Beverage,
+  mostRecentDrinkLog: DrinkLogs?,
 ) {
   val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = Container.baseGlassCapacity(waterUnit))
   val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit))
@@ -62,7 +62,20 @@ fun AddWaterButtonsRow(
         modifier = Modifier.weight(1f),
         horizontalArrangement = Arrangement.Center
       ) {
-        UndoButton(onClick = { /* TODO */ })
+        UndoButton(
+          onClick = {
+            if(mostRecentDrinkLog != null) {
+              roomDatabaseViewModel.updateDailyWaterRecord(
+                DailyWaterRecord(
+                  date = dailyWaterRecord.date,
+                  goal = dailyWaterRecord.goal,
+                  currWaterAmount = dailyWaterRecord.currWaterAmount - mostRecentDrinkLog.amount
+                )
+              )
+              roomDatabaseViewModel.deleteDrinkLog(mostRecentDrinkLog)
+            }
+          }
+        )
       }
     }
 
@@ -156,9 +169,7 @@ fun AddWaterButtonsRow(
         modifier = Modifier.weight(1f),
         horizontalArrangement = Arrangement.Center
       ) {
-        FruitButton(
-          setShowFruitDialog = setShowFruitDialog
-        )
+        Spacer(modifier = Modifier.size(20.dp))
       }
     }
   }
