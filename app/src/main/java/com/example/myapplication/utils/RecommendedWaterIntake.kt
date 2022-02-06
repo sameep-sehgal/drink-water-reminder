@@ -56,11 +56,13 @@ class RecommendedWaterIntake {
       return DEFAULT_CUSTOM_ADD_WATER_VALUE_IN_OZ
     }
 
-    fun calculateBaseWaterIntake(
+    fun calculateRecommendedWaterIntake(
       gender:String,
       weight:Int,
       weightUnit:String,
       waterUnit:String,
+      activityLevel: String,
+      weather: String
     ):Int{
       val weightInLb = if(weightUnit == Units.KG) Weight.kgToLb(weight) else weight
       val waterIntakeInOz: Int

@@ -35,12 +35,16 @@ fun CalculateWaterIntake(
   val reminderPeriodStart = preferenceDataStoreViewModel.reminderPeriodStart.collectAsState(initial = ReminderPeriod.NOT_SET)
   val reminderPeriodEnd = preferenceDataStoreViewModel.reminderPeriodEnd.collectAsState(initial = ReminderPeriod.NOT_SET)
   val reminderGap = preferenceDataStoreViewModel.reminderGap.collectAsState(initial = ReminderGap.NOT_SET)
+  val activityLevel = preferenceDataStoreViewModel.activityLevel.collectAsState(initial = ActivityLevel.LIGHTLY_ACTIVE)
+  val weather = preferenceDataStoreViewModel.weather.collectAsState(initial = Weather.NORMAL)
   val recommendedWaterIntake =
-    RecommendedWaterIntake.calculateBaseWaterIntake(
+    RecommendedWaterIntake.calculateRecommendedWaterIntake(
       gender = gender.value,
       weight = weight.value,
       weightUnit = weightUnit.value,
-      waterUnit = waterUnit.value
+      waterUnit = waterUnit.value,
+      activityLevel = activityLevel.value,
+      weather = weather.value
     )
 
   Column(

@@ -4,12 +4,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowNoValue
@@ -28,8 +33,12 @@ fun SettingsTab(
   val scrollState = rememberScrollState()
   val gender = preferenceDataStoreViewModel.gender.collectAsState(initial = Gender.NOT_SET)
   val weight = preferenceDataStoreViewModel.weight.collectAsState(initial = Weight.NOT_SET)
+  val activityLevel = preferenceDataStoreViewModel.activityLevel.collectAsState(initial = ActivityLevel.LIGHTLY_ACTIVE)
+  val weather = preferenceDataStoreViewModel.weather.collectAsState(initial = Weather.NORMAL)
   val weightUnit = preferenceDataStoreViewModel.weightUnit.collectAsState(initial = Units.KG)
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
+
+  val isDailyWaterGoalTrackingRecommendedIntake = preferenceDataStoreViewModel.isDailyWaterGoalTrackingRecommendedIntake.collectAsState(initial = true)
   val recommendedWaterIntake = preferenceDataStoreViewModel.recommendedWaterIntake.collectAsState(initial = Weight.NOT_SET)
   val dailyWaterGoal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = Weight.NOT_SET)
 
@@ -50,24 +59,42 @@ fun SettingsTab(
   Column(
     modifier = Modifier.verticalScroll(scrollState)
   ) {
+    TopAppBar(
+      backgroundColor = MaterialTheme.colors.primary
+    ) {
+      Text(
+        text = "Settings",
+        fontSize = 18.sp,
+        color = MaterialTheme.colors.onPrimary,
+        modifier = Modifier.padding(8.dp, 0.dp)
+      )
+    }
+
     PersonalSettings(
-      gender.value,
-      weight.value,
-      weightUnit.value,
-      recommendedWaterIntake.value,
-      waterUnit.value,
-      dailyWaterGoal.value,
-      setShowDialog,
-      setDialogToShow
+      gender = gender.value,
+      weight = weight.value,
+      activityLevel = activityLevel.value,
+      weather = weather.value,
+      weightUnit = weightUnit.value,
+      setShowDialog = setShowDialog,
+      setDialogToShow = setDialogToShow
     )
-    ContainerSettings(
-      glassCapacity.value,
-      mugCapacity.value,
-      bottleCapacity.value,
-      waterUnit.value,
-      setShowDialog,
-      setDialogToShow
+    HowMuchWaterToDrinkSettings(
+      recommendedWaterIntake = recommendedWaterIntake.value,
+      waterUnit = waterUnit.value,
+      dailyWaterGoal = dailyWaterGoal.value,
+      isDailyWaterGoalTrackingRecommendedIntake = isDailyWaterGoalTrackingRecommendedIntake.value,
+      setShowDialog = setShowDialog,
+      setDialogToShow = setDialogToShow
     )
+//    ContainerSettings(
+//      glassCapacity = glassCapacity.value,
+//      mugCapacity = mugCapacity.value,
+//      bottleCapacity = bottleCapacity.value,
+//      waterUnit = waterUnit.value,
+//      setShowDialog = setShowDialog,
+//      setDialogToShow = setDialogToShow
+//    )
     MainSettings(
       setShowDialog,
       setDialogToShow
@@ -132,6 +159,8 @@ fun SettingsTab(
         weight = weight.value,
         weightUnit = weightUnit.value,
         waterUnit = waterUnit.value,
+        activityLevel = activityLevel.value,
+        weather = weather.value
       )
     }
     if(showDialog && dialogToShow == Settings.WEIGHT){
@@ -141,7 +170,33 @@ fun SettingsTab(
         setShowDialog = setShowDialog,
         weight = weight.value,
         weightUnit = weightUnit.value,
-        waterUnit = waterUnit.value
+        waterUnit = waterUnit.value,
+        activityLevel = activityLevel.value,
+        weather = weather.value
+      )
+    }
+    if(showDialog && dialogToShow == Settings.ACTIVITY_LEVEL){
+      SetActivityLevel(
+        gender = gender.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog,
+        weight = weight.value,
+        weightUnit = weightUnit.value,
+        waterUnit = waterUnit.value,
+        activityLevel = activityLevel.value,
+        weather = weather.value
+      )
+    }
+    if(showDialog && dialogToShow == Settings.WEATHER){
+      SetWeather(
+        gender = gender.value,
+        preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+        setShowDialog = setShowDialog,
+        weight = weight.value,
+        weightUnit = weightUnit.value,
+        waterUnit = waterUnit.value,
+        activityLevel = activityLevel.value,
+        weather = weather.value
       )
     }
     if(showDialog && dialogToShow == Settings.DAILY_WATER_GOAL){
@@ -226,14 +281,12 @@ fun SettingsTab(
 fun PersonalSettings(
   gender:String,
   weight:Int,
+  activityLevel:String,
+  weather:String,
   weightUnit:String,
-  recommendedWaterIntake:Int,
-  waterUnit:String,
-  dailyWaterGoal:Int,
   setShowDialog :(Boolean) -> Unit,
   setDialogToShow: (String) -> Unit
 ){
-  SettingsSubheading(text = "Personal Settings")
   Column {
     SettingsRowSelectValue(
       text = Settings.GENDER,
@@ -251,11 +304,36 @@ fun PersonalSettings(
         setDialogToShow(Settings.WEIGHT)
       }
     )
-//    SettingsRowSelectValue(
-//      text = "Units",
-//      value = "kg/ml",
-//      onSettingsRowClick = { /*TODO()*/ }
-//    )
+    SettingsRowSelectValue(
+      text = Settings.ACTIVITY_LEVEL,
+      value = activityLevel,
+      onSettingsRowClick = {
+        setShowDialog(true)
+        setDialogToShow(Settings.ACTIVITY_LEVEL)
+      }
+    )
+    SettingsRowSelectValue(
+      text = Settings.WEATHER,
+      value = weather,
+      onSettingsRowClick = {
+        setShowDialog(true)
+        setDialogToShow(Settings.WEATHER)
+      }
+    )
+  }
+}
+
+@Composable
+fun HowMuchWaterToDrinkSettings(
+  recommendedWaterIntake:Int,
+  dailyWaterGoal:Int,
+  waterUnit:String,
+  isDailyWaterGoalTrackingRecommendedIntake:Boolean,
+  setShowDialog :(Boolean) -> Unit,
+  setDialogToShow: (String) -> Unit
+) {
+  Column {
+    SettingsSubheading(text = "How Much Water To Drink?")
     SettingsRowSelectValue(
       text = Settings.RECOMMENDED_WATER_INTAKE,
       value = "$recommendedWaterIntake$waterUnit",
@@ -317,7 +395,7 @@ fun MainSettings(
   setDialogToShow: (String) -> Unit
 ){
   val context = LocalContext.current
-  SettingsSubheading(text = "Main Settings")
+  SettingsSubheading(text = "Other Settings")
   SettingsRowNoValue(
     text = Settings.RESET_DATA,
     onSettingsRowClick = {/*TODO()*/}

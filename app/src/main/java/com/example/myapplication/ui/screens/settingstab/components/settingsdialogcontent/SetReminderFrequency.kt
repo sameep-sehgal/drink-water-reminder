@@ -53,7 +53,6 @@ fun SetReminderFrequencySettingDialog(
           Row(
             modifier = Modifier.clickable {
               setSelectedReminderGap(it["gap"].toString().toInt())
-              Log.d("TAG", "GetReminderFrequency: $selectedReminderGap")
             }.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
           ) {

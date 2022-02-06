@@ -25,7 +25,9 @@ fun SetGenderSettingDialog(
   setShowDialog:(Boolean) -> Unit,
   weight:Int,
   weightUnit:String,
-  waterUnit:String
+  waterUnit:String,
+  activityLevel:String,
+  weather:String,
 ) {
   val selectedGender = remember { mutableStateOf(gender) }
 
@@ -69,11 +71,13 @@ fun SetGenderSettingDialog(
     setShowDialog = setShowDialog,
     onConfirmButtonClick = {
       preferenceDataStoreViewModel.setGender(selectedGender.value)
-      val newIntake = RecommendedWaterIntake.calculateBaseWaterIntake(
+      val newIntake = RecommendedWaterIntake.calculateRecommendedWaterIntake(
         gender = selectedGender.value,
         weight = weight,
         weightUnit = weightUnit,
-        waterUnit = waterUnit
+        waterUnit = waterUnit,
+        activityLevel = activityLevel,
+        weather = weather
       )
       preferenceDataStoreViewModel.setRecommendedWaterIntake(newIntake)
     }

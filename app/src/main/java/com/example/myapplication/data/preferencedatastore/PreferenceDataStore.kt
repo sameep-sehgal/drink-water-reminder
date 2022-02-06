@@ -164,7 +164,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.GENDER] ?: Weather.NORMAL
+      it[PreferencesKeys.WEATHER] ?: Weather.NORMAL
     }
 
   override suspend fun setWeather(weather: String) {

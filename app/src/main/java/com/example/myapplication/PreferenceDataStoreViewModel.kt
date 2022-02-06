@@ -55,6 +55,22 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
+  val activityLevel = preferenceDataStore.activityLevel()
+
+  fun setActivityLevel(activityLevel: String) {
+    viewModelScope.launch {
+      preferenceDataStore.setActivityLevel(activityLevel)
+    }
+  }
+
+  val weather = preferenceDataStore.weather()
+
+  fun setWeather(weather: String) {
+    viewModelScope.launch {
+      preferenceDataStore.setWeather(weather)
+    }
+  }
+
   val weightUnit = preferenceDataStore.weightUnit()
 
   fun setWeightUnit(unit: String) {
@@ -68,6 +84,16 @@ class PreferenceDataStoreViewModel @Inject constructor(
   fun setWaterUnit(unit: String) {
     viewModelScope.launch {
       preferenceDataStore.setWaterUnit(unit)
+    }
+  }
+
+  //How much water to drink
+
+  val isDailyWaterGoalTrackingRecommendedIntake = preferenceDataStore.isDailyWaterGoalTrackingRecommendedIntake()
+
+  fun setIsDailyWaterGoalTrackingRecommendedIntake(value: Boolean) {
+    viewModelScope.launch {
+      preferenceDataStore.setIsDailyWaterGoalTrackingRecommendedIntake(value)
     }
   }
 
@@ -88,6 +114,14 @@ class PreferenceDataStoreViewModel @Inject constructor(
   }
 
   //Reminder Settings
+
+  val isReminderOn = preferenceDataStore.isReminderOn()
+
+  fun setIsReminderOn(value: Boolean) {
+    viewModelScope.launch {
+      preferenceDataStore.setIsReminderOn(value)
+    }
+  }
 
   val reminderPeriodStart = preferenceDataStore.reminderPeriodStart()
 
