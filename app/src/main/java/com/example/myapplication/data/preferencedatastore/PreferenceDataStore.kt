@@ -28,12 +28,18 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     //Personal Settings
     val GENDER = stringPreferencesKey("gender")
     val WEIGHT = intPreferencesKey("weight")
+    val ACTIVITY_LEVEL = stringPreferencesKey("activity_level")
+    val WEATHER = stringPreferencesKey("weather")
     val WEIGHT_UNIT = stringPreferencesKey("weight_unit")
     val WATER_UNIT = stringPreferencesKey("water_unit")
+
+    //How much water to drink
+    val IS_DAILY_WATER_GOAL_TRACKING_RECOMMENDED_INTAKE = booleanPreferencesKey("is_daily_water_goal_tracking_recommended_intake")
     val RECOMMENDED_WATER_INTAKE = intPreferencesKey("recommended_water_intake")
     val DAILY_WATER_GOAL = intPreferencesKey("daily_water_goal")
 
     //Reminder Settings
+    val IS_REMINDER_ON = booleanPreferencesKey("is_reminder_on")
     val REMINDER_PERIOD_START = stringPreferencesKey("reminder_period_start")
     val REMINDER_PERIOD_END = stringPreferencesKey("reminder_period_end")
     val REMINDER_GAP = intPreferencesKey("reminder_gap")
@@ -133,6 +139,40 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     }
   }
 
+  override fun activityLevel(): Flow<String> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.ACTIVITY_LEVEL] ?: ActivityLevel.LIGHTLY_ACTIVE
+    }
+
+  override suspend fun setActivityLevel(activityLevel: String) {
+    dataStore.edit {
+      it[PreferencesKeys.ACTIVITY_LEVEL] = activityLevel
+    }
+  }
+
+  override fun weather(): Flow<String> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.GENDER] ?: Weather.NORMAL
+    }
+
+  override suspend fun setWeather(weather: String) {
+    dataStore.edit {
+      it[PreferencesKeys.WEATHER] = weather
+    }
+  }
+
   override fun weightUnit(): Flow<String> =
     dataStore.data.catch {
       if (it is IOException) {
@@ -164,6 +204,25 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   override suspend fun setWaterUnit(unit: String)  {
     dataStore.edit {
       it[PreferencesKeys.WATER_UNIT] = unit
+    }
+  }
+
+  //How Much Water To Drink
+
+  override fun isDailyWaterGoalTrackingRecommendedIntake(): Flow<Boolean> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.IS_DAILY_WATER_GOAL_TRACKING_RECOMMENDED_INTAKE] ?: true
+    }
+
+  override suspend fun setIsDailyWaterGoalTrackingRecommendedIntake(value: Boolean) {
+    dataStore.edit {
+      it[PreferencesKeys.IS_DAILY_WATER_GOAL_TRACKING_RECOMMENDED_INTAKE] = value
     }
   }
 
@@ -202,6 +261,23 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   }
 
   //Reminder Settings
+
+  override fun isReminderOn(): Flow<Boolean> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.IS_REMINDER_ON] ?: true
+    }
+
+  override suspend fun setIsReminderOn(value: Boolean) {
+    dataStore.edit {
+      it[PreferencesKeys.IS_REMINDER_ON] = value
+    }
+  }
 
   override fun reminderPeriodStart(): Flow<String> =
     dataStore.data.catch {

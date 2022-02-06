@@ -1,5 +1,7 @@
 package com.example.myapplication.data.preferencedatastore
 
+import com.example.myapplication.utils.ActivityLevel
+import com.example.myapplication.utils.Weather
 import kotlinx.coroutines.flow.Flow
 
 
@@ -21,12 +23,22 @@ interface PreferenceDataStoreInterface {
   suspend fun setGender(gender:String)
   fun weight() :Flow<Int>
   suspend fun setWeight(amount:Int)
+  fun activityLevel() :Flow<String>
+  suspend fun setActivityLevel(activityLevel:String)
+  fun weather() :Flow<String>
+  suspend fun setWeather(weather: String)
+
+  //How Much Water To Drink
+  fun isDailyWaterGoalTrackingRecommendedIntake() :Flow<Boolean>
+  suspend fun setIsDailyWaterGoalTrackingRecommendedIntake(value:Boolean)
   fun recommendedWaterIntake() :Flow<Int>
   suspend fun setRecommendedWaterIntake(amount:Int)
   fun dailyWaterGoal() :Flow<Int>
   suspend fun setDailyWaterGoal(amount:Int)
 
   //Reminder Settings
+  fun isReminderOn() :Flow<Boolean>
+  suspend fun setIsReminderOn(value:Boolean)
   fun reminderPeriodStart() :Flow<String>
   suspend fun setReminderPeriodStart(time:String)
   fun reminderPeriodEnd() :Flow<String>
