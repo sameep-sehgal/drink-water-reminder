@@ -29,8 +29,6 @@ class RoomDatabaseViewModel @Inject constructor(
   fun refreshData() {
     getTodaysWaterRecord()
     getDrinkLogs()
-    getSelectedHistoryDrinkLogs(DateString.getTodaysDate())
-    getSelectedHistoryWaterRecord(DateString.getTodaysDate())
   }
 
   private val _drinkLogs = MutableStateFlow<List<DrinkLogs>>(emptyList())
@@ -68,11 +66,11 @@ class RoomDatabaseViewModel @Inject constructor(
   }
 
   private val _selectedHistoryDrinkLogs = MutableStateFlow<List<DrinkLogs>>(emptyList())
-  val selectedHistoryDrinkLogs : StateFlow<List<DrinkLogs>> =  _selectedHistoryDrinkLogs.asStateFlow()
+  val selectedHistoryDrinkLogs : StateFlow<List<DrinkLogs>?> =  _selectedHistoryDrinkLogs.asStateFlow()
 
   fun getSelectedHistoryDrinkLogs(date:String){
     viewModelScope.launch(Dispatchers.IO) {
-      waterDataRepository.getDrinkLogs(date).distinctUntilChanged()
+      waterDataRepository.getDrinkLogs(startDate = date, endDate = date).distinctUntilChanged()
         .catch { e->
           Log.e("getSelectedHistoryDLogs", "error before collecting from Flow")
         }
@@ -169,7 +167,7 @@ class RoomDatabaseViewModel @Inject constructor(
   }
 
   private val _selectedHistoryWaterRecord = MutableStateFlow(DailyWaterRecord(goal = 0, currWaterAmount = 0))
-  val selectedHistoryWaterRecord : StateFlow<DailyWaterRecord> = _selectedHistoryWaterRecord.asStateFlow()
+  val selectedHistoryWaterRecord : StateFlow<DailyWaterRecord?> = _selectedHistoryWaterRecord.asStateFlow()
   fun getSelectedHistoryWaterRecord(date:String = DateString.getTodaysDate()){
     viewModelScope.launch (Dispatchers.IO){
       waterDataRepository.getDailyWaterRecord(date).collect {

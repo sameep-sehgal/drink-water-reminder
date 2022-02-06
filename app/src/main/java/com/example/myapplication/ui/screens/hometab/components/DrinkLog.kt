@@ -63,15 +63,13 @@ fun DrinkLog(
           horizontalArrangement = Arrangement.Center,
           verticalAlignment = Alignment.CenterVertically
         ){
-          Beverages.IMAGE_MAPPER[drinkLog.icon]?.let { it1 -> painterResource(it1) }
-            ?.let { it2 ->
-              Image(
-                painter = it2,
-                contentDescription = "Selected glass",
-                modifier = Modifier
-                  .size(20.dp)
-                  .padding(2.dp, 0.dp)
-              ) }
+          Image(
+            painter = painterResource(id = Beverages.getBeverageImage(drinkLog.icon)),
+            contentDescription = "Selected glass",
+            modifier = Modifier
+              .size(20.dp)
+              .padding(2.dp, 0.dp)
+          )
           Text(
             text = "${drinkLog.amount}$waterUnit",
             style = Typography.subtitle1,

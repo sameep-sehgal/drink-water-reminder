@@ -40,7 +40,7 @@ fun BeverageButton(
         IconText(
           text = " ${beverage.name} ",
           fontSize = 16.sp,
-          icon = Beverages.IMAGE_MAPPER[beverage.icon],
+          icon = Beverages.getBeverageImage(beverage.icon),
           image = true
         )
         Icon(

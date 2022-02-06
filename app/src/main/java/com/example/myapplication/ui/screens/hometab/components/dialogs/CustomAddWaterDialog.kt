@@ -47,6 +47,9 @@ fun CustomAddWaterDialog(
       val calendar = Calendar.getInstance()
       calendar.set(Calendar.HOUR_OF_DAY, time.split(":")[0].toInt())
       calendar.set(Calendar.MINUTE, time.split(":")[1].toInt())
+      calendar.set(Calendar.DATE, selectedDate.split("-")[2].toInt())
+      calendar.set(Calendar.MONTH, selectedDate.split("-")[1].toInt() - 1)
+      calendar.set(Calendar.YEAR, selectedDate.split("-")[0].toInt())
       roomDatabaseViewModel.insertDrinkLog(
         DrinkLogs(
           amount = amount,

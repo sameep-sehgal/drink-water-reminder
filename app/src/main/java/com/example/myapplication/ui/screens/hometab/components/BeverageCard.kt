@@ -62,7 +62,7 @@ fun BeverageCard(
         modifier = Modifier.align(Alignment.Center)
       ) {
         Image(
-          painter = painterResource(id = Beverages.IMAGE_MAPPER[beverage.icon]),
+          painter = painterResource(id = Beverages.getBeverageImage(beverage.icon)),
           contentDescription = "${beverage.name} icon",
           modifier = Modifier.size(40.dp)
         )

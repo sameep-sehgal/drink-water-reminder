@@ -63,4 +63,10 @@ object Beverages {
     R.drawable.soup_icon,
     R.drawable.wine_icon,
   )
+
+  fun getBeverageImage(index:Int): Int {
+    if(index >= IMAGE_MAPPER.size) return R.drawable.water_icon
+
+    return IMAGE_MAPPER[index]
+  }
 }

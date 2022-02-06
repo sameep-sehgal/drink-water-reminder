@@ -57,6 +57,10 @@ fun EditDrinkLogDialog(
     onConfirmButtonClick = {
       calendar.set(Calendar.HOUR_OF_DAY, time.split(':')[0].toInt())
       calendar.set(Calendar.MINUTE, time.split(':')[1].toInt())
+      val selectedDate = dailyWaterRecord.date
+      calendar.set(Calendar.DATE, selectedDate.split("-")[2].toInt())
+      calendar.set(Calendar.MONTH, selectedDate.split("-")[1].toInt() - 1)
+      calendar.set(Calendar.YEAR, selectedDate.split("-")[0].toInt())
       roomDatabaseViewModel.updateDrinkLog(
         DrinkLogs(
           id = drinkLog.id,
