@@ -65,13 +65,18 @@ class RecommendedWaterIntake {
       weather: String
     ):Int{
       val weightInLb = if(weightUnit == Units.KG) Weight.kgToLb(weight) else weight
-      val waterIntakeInOz: Int
+      var waterIntakeInOz: Int
 
       if(gender == Gender.MALE){
         waterIntakeInOz = (0.5f * weightInLb).toInt()
       }else{
         waterIntakeInOz = (0.45f * weightInLb).toInt()
       }
+      val activityAmount = addForActivity(activityLevel,waterIntakeInOz)
+      val weatherAmount = addForWeather(weather,waterIntakeInOz)
+
+      waterIntakeInOz += activityAmount
+      waterIntakeInOz += weatherAmount
 
       if(waterUnit == Units.OZ)
         return waterIntakeInOz
@@ -80,32 +85,30 @@ class RecommendedWaterIntake {
       return roundTo10(waterIntakeInMl)
     }
 
-    fun addForActivity(
-      activityMinutes:Int,
-      waterUnit:String
+    private fun addForActivity(
+      activityLevel: String,
+      baseWaterIntake: Int
     ):Int {
-      var res = ((activityMinutes/60f) * PER_HOUR_ACTIVITY_WATER_INCREASE_IN_ML).toInt()
-      if(waterUnit == Units.OZ)
-        res = ((activityMinutes/60f) * PER_HOUR_ACTIVITY_WATER_INCREASE_IN_OZ).toInt()
+      var res = 0
 
-      return roundTo10(res)
+      (ActivityLevel.PERCENTAGE_CHANGE_MAPPER[activityLevel]?.times(baseWaterIntake))?.let{
+        res = it.toInt()
+      }
+
+      return res
     }
 
-    fun addForWeather(
+    private fun addForWeather(
       weather: String,
       baseWaterIntake:Int
     ):Int {
       var res = 0
-      if(weather == Weather.HOT)
-        res = (0.15f*baseWaterIntake).toInt()
 
-      if(weather == Weather.WARM)
-        res = (0.075f*baseWaterIntake).toInt()
+      (Weather.PERCENTAGE_CHANGE_MAPPER[weather]?.times(baseWaterIntake))?.let{
+        res = it.toInt()
+      }
 
-      if(weather == Weather.COLD)
-        res = ((-0.075f)*baseWaterIntake).toInt()
-
-      return roundTo10(res)
+      return res
     }
 
     fun roundTo10(num:Int) :Int{

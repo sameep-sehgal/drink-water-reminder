@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Checkbox
@@ -40,25 +41,27 @@ fun SetActivityLevel(
   ShowDialog(
     title = "Set ${Settings.ACTIVITY_LEVEL}",
     content = {
-              options.forEach {
-                Row(
-                  modifier = Modifier
-                    .clickable {
-                      setSelectedActivityLevel(it)
-                    }
-                    .fillMaxWidth(),
-                  verticalAlignment = Alignment.CenterVertically
-                ) {
-                  Checkbox(
-                    checked = selectedActivityLevel == it,
-                    onCheckedChange = { _ ->
-                      setSelectedActivityLevel(it)
-                    }
-                  )
-                  Text(
-                    text = it,
-                    style = Typography.subtitle1
-                  )
+              Column {
+                options.forEach {
+                  Row(
+                    modifier = Modifier
+                      .clickable {
+                        setSelectedActivityLevel(it)
+                      }
+                      .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                  ) {
+                    Checkbox(
+                      checked = selectedActivityLevel == it,
+                      onCheckedChange = { _ ->
+                        setSelectedActivityLevel(it)
+                      }
+                    )
+                    Text(
+                      text = it,
+                      style = Typography.subtitle1
+                    )
+                  }
                 }
               }
     },
