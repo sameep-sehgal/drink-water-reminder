@@ -87,7 +87,7 @@ fun SettingsTab(
       setShowDialog = setShowDialog,
       setDialogToShow = setDialogToShow
     )
-    HowMuchWaterToDrinkSettings(
+    YourWaterIntakeSettings(
       recommendedWaterIntake = recommendedWaterIntake.value,
       waterUnit = waterUnit.value,
       dailyWaterGoal = dailyWaterGoal.value,
@@ -213,7 +213,6 @@ fun SettingsTab(
         dailyWaterGoal = dailyWaterGoal.value,
         preferenceDataStoreViewModel = preferenceDataStoreViewModel,
         setShowDialog = setShowDialog,
-        recommendedWaterIntake = recommendedWaterIntake.value,
         reminderPeriodStart = reminderPeriodStart.value,
         reminderPeriodEnd = reminderPeriodEnd.value,
         reminderGap = reminderGap.value,
@@ -333,7 +332,7 @@ fun PersonalSettings(
 }
 
 @Composable
-fun HowMuchWaterToDrinkSettings(
+fun YourWaterIntakeSettings(
   recommendedWaterIntake:Int,
   dailyWaterGoal:Int,
   waterUnit:String,
@@ -388,7 +387,8 @@ fun ContainerSettings(
     onSettingsRowClick = {
       setShowDialog(true)
       setDialogToShow(Settings.GLASS_CAPACITY)
-    }
+    },
+    icon = R.drawable.glass_2
   )
   SettingsRowSelectValue(
     text = "Mug",
@@ -396,7 +396,8 @@ fun ContainerSettings(
     onSettingsRowClick = {
       setShowDialog(true)
       setDialogToShow(Settings.MUG_CAPACITY)
-    }
+    },
+    icon = R.drawable.mug_3
   )
   SettingsRowSelectValue(
     text = "Bottle",
@@ -404,7 +405,8 @@ fun ContainerSettings(
     onSettingsRowClick = {
       setShowDialog(true)
       setDialogToShow(Settings.BOTTLE_CAPACITY)
-    }
+    },
+    icon = R.drawable.bottle_4
   )
 }
 

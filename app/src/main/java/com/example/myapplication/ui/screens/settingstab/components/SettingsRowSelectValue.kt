@@ -20,7 +20,8 @@ fun SettingsRowSelectValue(
   text: String,
   value:String,
   onSettingsRowClick: () -> Unit,
-  enabled:Boolean = true
+  enabled:Boolean = true,
+  icon:Int? = null
 ) {
   val modifier:Modifier =
     if(enabled)
@@ -31,17 +32,30 @@ fun SettingsRowSelectValue(
     modifier = modifier,
     verticalAlignment = Alignment.CenterVertically
   ) {
-    Text(
-      modifier = Modifier
-        .weight(1f)
-        .padding(
-          horizontal = horizontalPaddingSettings,
-          vertical = verticalPaddingSettings
-        ),
-      text = text,
-      style = Typography.subtitle1
-    )
-
+    if(icon == null) {
+      Text(
+        modifier = Modifier
+          .weight(1f)
+          .padding(
+            horizontal = horizontalPaddingSettings,
+            vertical = verticalPaddingSettings
+          ),
+        text = text,
+        style = Typography.subtitle1
+      )
+    } else {
+      IconText(
+        text = text,
+        fontSize = 15.sp,
+        icon = icon,
+        modifier = Modifier
+          .weight(1f)
+          .padding(
+            horizontal = horizontalPaddingSettings,
+            vertical = verticalPaddingSettings
+          )
+      )
+    }
     Text(
       modifier = Modifier
         .padding(
