@@ -12,7 +12,8 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun TopReminderTabBar(
-  onCheckedChange:(Boolean) -> Unit
+  onCheckedChange:(Boolean) -> Unit,
+  isReminderOn:Boolean
 ) {
   val onPrimaryColor = MaterialTheme.colors.onPrimary
 
@@ -30,7 +31,7 @@ fun TopReminderTabBar(
         modifier = Modifier.weight(1f)
       )
       Switch(
-        checked = false,
+        checked = isReminderOn,
         onCheckedChange = onCheckedChange,
         colors = SwitchDefaults.colors(
           checkedThumbColor = onPrimaryColor
