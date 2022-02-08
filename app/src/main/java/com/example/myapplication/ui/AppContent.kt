@@ -3,7 +3,6 @@ package com.example.myapplication.ui
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -24,27 +23,25 @@ fun MainAppContent(
   roomDatabaseViewModel: RoomDatabaseViewModel,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ) {
-  val setGoal = roomDatabaseViewModel.todaysWaterRecord.collectAsState().value.goal
+  val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
   var selectedTab by remember { mutableStateOf(0) }
   val setSelectedTab = { it:Int -> selectedTab = it }
   val darkTheme = isSystemInDarkTheme()
-
-  if(setGoal == RecommendedWaterIntake.NOT_SET && goal.value!=0){
+  if(todaysWaterRecord.value.goal == RecommendedWaterIntake.NOT_SET && goal.value!=0){
     roomDatabaseViewModel.updateDailyWaterRecord(
       DailyWaterRecord(goal = goal.value)
     )
   }
   ApplicationTheme {
-    Scaffold(
-      bottomBar = {}
-    ) {
+    Surface {
       Column(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(1f)) {
           when(selectedTab) {
             0 -> HomeTab(
-              preferenceDataStoreViewModel,
-              roomDatabaseViewModel
+              preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+              roomDatabaseViewModel = roomDatabaseViewModel,
+              todaysWaterRecord = todaysWaterRecord
             )
             1 -> StatsTab(
               roomDatabaseViewModel = roomDatabaseViewModel,

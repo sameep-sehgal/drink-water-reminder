@@ -8,11 +8,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
+import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.ui.screens.hometab.components.*
 import com.example.myapplication.ui.screens.hometab.components.buttons.BeverageButton
 import com.example.myapplication.ui.screens.hometab.components.dialogs.*
@@ -23,10 +23,10 @@ import com.example.myapplication.utils.Units
 @Composable
 fun HomeTab(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
-  roomDatabaseViewModel: RoomDatabaseViewModel
+  roomDatabaseViewModel: RoomDatabaseViewModel,
+  todaysWaterRecord: State<DailyWaterRecord>
 ){
   val drinkLogsList = roomDatabaseViewModel.drinkLogs.collectAsState()
-  val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
   val recommendedWaterIntake = preferenceDataStoreViewModel.recommendedWaterIntake.collectAsState(initial = RecommendedWaterIntake.NOT_SET)
   val beverageName = preferenceDataStoreViewModel.beverage.collectAsState(initial = Beverages.DEFAULT)
