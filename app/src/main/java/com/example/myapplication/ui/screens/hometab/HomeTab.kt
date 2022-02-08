@@ -32,7 +32,6 @@ fun HomeTab(
   val beverageName = preferenceDataStoreViewModel.beverage.collectAsState(initial = Beverages.DEFAULT)
   val (showBeverageDialog, setShowBeverageDialog) =  remember { mutableStateOf(false) }
   val (showSetTodaysGoalDialog, setShowSetTodaysGoalDialog) =  remember { mutableStateOf(false) }
-  val (showFruitDialog, setShowFruitDialog) =  remember { mutableStateOf(false) }
   val (showCustomAddWaterDialog, setShowCustomAddWaterDialog) =  remember { mutableStateOf(false) }
   val scrollState = rememberScrollState()
   var showAllDrinkLogs by remember{ mutableStateOf(false) }
@@ -163,9 +162,6 @@ fun HomeTab(
         waterUnit = waterUnit.value,
         recommendedWaterIntake = recommendedWaterIntake.value
       )
-    }
-    if(showFruitDialog){
-      FruitDialog(setShowFruitDialog = setShowFruitDialog)
     }
     if(showCustomAddWaterDialog){
       CustomAddWaterDialog(
