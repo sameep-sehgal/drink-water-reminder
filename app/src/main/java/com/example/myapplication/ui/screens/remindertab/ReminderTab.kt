@@ -1,9 +1,11 @@
 package com.example.myapplication.ui.screens.remindertab
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.ui.screens.remindertab.components.ReminderSettings
@@ -18,6 +20,9 @@ fun ReminderTab(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ) {
   val context = LocalContext.current
+  val columnAlpha by remember {
+    mutableStateOf(Animatable(0f))
+  }
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
   val dailyWaterGoal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = Weight.NOT_SET)
   val isReminderOn = preferenceDataStoreViewModel.isReminderOn.collectAsState(initial = true)
@@ -33,6 +38,13 @@ fun ReminderTab(
   val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit.value))
   val bottleCapacity = preferenceDataStoreViewModel.bottleCapacity.collectAsState(initial = Container.baseBottleCapacity(waterUnit.value))
 
+  LaunchedEffect(key1 = true){
+    columnAlpha.animateTo(
+      targetValue = 1f,
+      animationSpec = tween(durationMillis = 800)
+    )
+  }
+
   TopReminderTabBar(
     onCheckedChange = {
       preferenceDataStoreViewModel.setIsReminderOn(it)
@@ -40,16 +52,20 @@ fun ReminderTab(
     isReminderOn = isReminderOn.value
   )
 
-  ReminderSettings(
-    reminderPeriodStart = reminderPeriodStart.value,
-    reminderPeriodEnd = reminderPeriodEnd.value,
-    reminderGap = reminderGap.value,
-    reminderAfterGoalAchieved = reminderAfterGoalAchieved.value,
-    setShowDialog = setShowDialog,
-    setDialogToShow = setDialogToShow,
-    preferenceDataStoreViewModel = preferenceDataStoreViewModel,
-    isReminderOn = isReminderOn.value
-  )
+  Column(
+    modifier = Modifier.alpha(columnAlpha.value)
+  ) {
+    ReminderSettings(
+      reminderPeriodStart = reminderPeriodStart.value,
+      reminderPeriodEnd = reminderPeriodEnd.value,
+      reminderGap = reminderGap.value,
+      reminderAfterGoalAchieved = reminderAfterGoalAchieved.value,
+      setShowDialog = setShowDialog,
+      setDialogToShow = setDialogToShow,
+      preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+      isReminderOn = isReminderOn.value
+    )
+  }
 
   if(showDialog && dialogToShow == Settings.REMINDER_PERIOD){
     SetReminderPeriodSettingDialog(

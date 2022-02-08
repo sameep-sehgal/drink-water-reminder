@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.components.IconText
 import com.example.myapplication.ui.screens.settingstab.horizontalPaddingSettings
@@ -21,7 +22,9 @@ fun SettingsRowSelectValue(
   value:String,
   onSettingsRowClick: () -> Unit,
   enabled:Boolean = true,
-  icon:Int? = null
+  icon:Int? = null,
+  valueFontSize:TextUnit = 13.sp,
+  textFontSize:TextUnit = 15.sp
 ) {
   val modifier:Modifier =
     if(enabled)
@@ -41,12 +44,12 @@ fun SettingsRowSelectValue(
             vertical = verticalPaddingSettings
           ),
         text = text,
-        style = Typography.subtitle1
+        fontSize = textFontSize
       )
     } else {
       IconText(
         text = text,
-        fontSize = 15.sp,
+        fontSize = textFontSize,
         icon = icon,
         modifier = Modifier
           .weight(1f)
@@ -63,8 +66,8 @@ fun SettingsRowSelectValue(
           vertical = verticalPaddingSettings
         ),
       text = value,
-      style = Typography.subtitle1,
-      color = MaterialTheme.colors.primary
+      color = MaterialTheme.colors.primary,
+      fontSize = valueFontSize
     )
   }
 }

@@ -3,6 +3,8 @@ package com.example.myapplication.ui.screens.settingstab
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -12,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +36,9 @@ fun SettingsTab(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ){
   val scrollState = rememberScrollState()
+  val columnAlpha by remember {
+    mutableStateOf(Animatable(0f))
+  }
   val gender = preferenceDataStoreViewModel.gender.collectAsState(initial = Gender.NOT_SET)
   val weight = preferenceDataStoreViewModel.weight.collectAsState(initial = Weight.NOT_SET)
   val activityLevel = preferenceDataStoreViewModel.activityLevel.collectAsState(initial = ActivityLevel.LIGHTLY_ACTIVE)
@@ -64,20 +70,28 @@ fun SettingsTab(
     }
   }
 
-  Column(
-    modifier = Modifier.verticalScroll(scrollState)
-  ) {
-    TopAppBar(
-      backgroundColor = MaterialTheme.colors.primary
-    ) {
-      Text(
-        text = "Settings",
-        fontSize = 18.sp,
-        color = MaterialTheme.colors.onPrimary,
-        modifier = Modifier.padding(8.dp, 0.dp)
-      )
-    }
+  LaunchedEffect(key1 = true){
+    columnAlpha.animateTo(
+      targetValue = 1f,
+      animationSpec = tween(durationMillis = 800)
+    )
+  }
 
+  TopAppBar(
+    backgroundColor = MaterialTheme.colors.primary
+  ) {
+    Text(
+      text = "Settings",
+      fontSize = 18.sp,
+      color = MaterialTheme.colors.onPrimary,
+      modifier = Modifier.padding(8.dp, 0.dp)
+    )
+  }
+
+
+  Column(
+    modifier = Modifier.verticalScroll(scrollState).alpha(columnAlpha.value)
+  ) {
     PersonalSettings(
       gender = gender.value,
       weight = weight.value,
@@ -104,10 +118,7 @@ fun SettingsTab(
       setShowDialog = setShowDialog,
       setDialogToShow = setDialogToShow
     )
-    OtherSettings(
-      setShowDialog,
-      setDialogToShow
-    )
+    OtherSettings()
 
     if(showDialog && dialogToShow == Settings.REMINDER_PERIOD){
       SetReminderPeriodSettingDialog(
@@ -349,7 +360,8 @@ fun YourWaterIntakeSettings(
       onSettingsRowClick = {
         setShowDialog(true)
         setDialogToShow(Settings.RECOMMENDED_WATER_INTAKE)
-      }
+      },
+      enabled = isDailyWaterGoalTrackingRecommendedIntake
     )
     SettingsRowBooleanValue(
       text = "Set To Recommended Value",
@@ -411,10 +423,7 @@ fun ContainerSettings(
 }
 
 @Composable
-fun OtherSettings(
-  setShowDialog :(Boolean) -> Unit,
-  setDialogToShow: (String) -> Unit
-){
+fun OtherSettings(){
   val context = LocalContext.current
   SettingsSubheading(text = "Other Settings")
   SettingsRowNoValue(

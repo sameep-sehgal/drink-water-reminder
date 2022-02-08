@@ -28,8 +28,6 @@ object ReminderFrequencyOptions {
           "gap" to ReminderGap.TWO_AND_HALF_HOURS),
     hashMapOf<String,Any>("text" to THREE_HOURS,
           "gap" to ReminderGap.THREE_HOURS),
-    hashMapOf<String,Any>("text" to DONT_REMIND,
-          "gap" to ReminderGap.DONT_REMIND),
   )
 
 }
