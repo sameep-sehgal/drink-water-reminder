@@ -120,7 +120,8 @@ fun CollectUserData(
         6 -> GetReminderPeriod(
           preferenceDataStoreViewModel,
           reminderPeriodStart.value,
-          reminderPeriodEnd.value
+          reminderPeriodEnd.value,
+          isReminderOn.value
         )
         7 -> CalculateWaterIntake(
           recommendedWaterIntake, waterUnit.value

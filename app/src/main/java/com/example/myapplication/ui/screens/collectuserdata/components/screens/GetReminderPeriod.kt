@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.ui.components.OptionRow
 import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.utils.*
 
@@ -19,7 +20,8 @@ import com.example.myapplication.utils.*
 fun GetReminderPeriod(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   reminderPeriodStart: String,
-  reminderPeriodEnd: String
+  reminderPeriodEnd: String,
+  isReminderOn:Boolean
 ) {
   val setSelectedReminderTimingStart = { time:String ->
     preferenceDataStoreViewModel.setReminderPeriodStart(time)
@@ -60,7 +62,7 @@ fun GetReminderPeriod(
   )
   Row(
     verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.SpaceEvenly
+    horizontalArrangement = Arrangement.SpaceEvenly,
   ) {
     Column(
       modifier = Modifier.weight(1f),
@@ -91,7 +93,8 @@ fun GetReminderPeriod(
             numberPicker
           },
           update = { view ->
-            view.value = reminderPeriodStart.split(":")[0].toInt() //To attach state variable
+            view.value = reminderPeriodStart.split(":")[0].toInt()
+            view.isEnabled = isReminderOn
           }
         )
         Text(text = ":")
@@ -112,7 +115,8 @@ fun GetReminderPeriod(
             numberPicker
           },
           update = { view ->
-            view.value = reminderPeriodStart.split(":")[1].toInt() //To attach state variable
+            view.value = reminderPeriodStart.split(":")[1].toInt()
+            view.isEnabled = isReminderOn
           }
         )
       }
@@ -146,7 +150,8 @@ fun GetReminderPeriod(
             numberPicker
           },
           update = { view ->
-            view.value = reminderPeriodEnd.split(":")[0].toInt() //To attach state variable
+            view.value = reminderPeriodEnd.split(":")[0].toInt()
+            view.isEnabled = isReminderOn
           }
         )
         Text(text = ":")
@@ -167,7 +172,8 @@ fun GetReminderPeriod(
             numberPicker
           },
           update = { view ->
-            view.value = reminderPeriodEnd.split(":")[1].toInt() //To attach state variable
+            view.value = reminderPeriodEnd.split(":")[1].toInt()
+            view.isEnabled = isReminderOn
           }
         )
       }
@@ -178,16 +184,38 @@ fun GetReminderPeriod(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center
   ) {
-    Text(
-      text = "You will receive reminders between ",
-      style = Typography.subtitle1,
-      textAlign = TextAlign.Center
-    )
-    Text(
-      text = "$reminderPeriodStart and $reminderPeriodEnd",
-      style = Typography.subtitle1,
-      textAlign = TextAlign.Center,
-      fontWeight = FontWeight.Bold
-    )
+    if(isReminderOn) {
+      Text(
+        text = "You will receive reminders between ",
+        style = Typography.subtitle1,
+        textAlign = TextAlign.Center
+      )
+      Text(
+        text = "$reminderPeriodStart and $reminderPeriodEnd",
+        style = Typography.subtitle1,
+        textAlign = TextAlign.Center,
+        fontWeight = FontWeight.Bold
+      )
+    }else {
+      Text(
+        text = "You will NOT receive reminders",
+        style = Typography.subtitle1,
+        textAlign = TextAlign.Center
+      )
+      Text(
+        text = "",
+        style = Typography.subtitle1,
+      )
+    }
   }
+
+  Spacer(modifier = Modifier.size(16.dp))
+
+  OptionRow(
+    selected = !isReminderOn,
+    onClick = {
+      preferenceDataStoreViewModel.setIsReminderOn(!isReminderOn)
+    },
+    text = "Don't Remind"
+  )
 }

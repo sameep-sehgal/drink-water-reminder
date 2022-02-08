@@ -50,7 +50,10 @@ fun CalculateWaterIntakeButtonsRow(
     }
     Button(
       onClick = {
-        onLetsGoButtonClick()
+        scope.launch {
+          columnAlpha.animateTo(0f)
+          onLetsGoButtonClick()
+        }
       },
       shape = CircleShape
     ) {
