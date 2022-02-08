@@ -1,22 +1,15 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
 import android.content.Context
-import android.util.Log
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.remindernotification.ReminderReceiver
+import com.example.myapplication.ui.components.OptionRow
 import com.example.myapplication.ui.components.ShowDialog
-import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.utils.ReminderFrequencyOptions
 import com.example.myapplication.utils.Settings
 import java.util.*
@@ -50,23 +43,11 @@ fun SetReminderFrequencySettingDialog(
         modifier = Modifier.verticalScroll(scrollState)
       ) {
         ReminderFrequencyOptions.OPTIONS.forEach {
-          Row(
-            modifier = Modifier.clickable {
-              setSelectedReminderGap(it["gap"].toString().toInt())
-            }.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-          ) {
-            Checkbox(
-              checked = selectedReminderGap == it["gap"].toString().toInt(),
-              onCheckedChange = { value ->
-                setSelectedReminderGap(it["gap"].toString().toInt())
-              }
-            )
-            Text(
-              text = it["text"].toString(),
-              style = Typography.subtitle1
-            )
-          }
+          OptionRow(
+            selected = selectedReminderGap == it["gap"].toString().toInt(),
+            onClick = { setSelectedReminderGap(it["gap"].toString().toInt()) },
+            text = it["text"].toString()
+          )
         }
       }
     },

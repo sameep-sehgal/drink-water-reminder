@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.ui.components.OptionRow
 import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.utils.Gender
@@ -36,34 +37,11 @@ fun SetGenderSettingDialog(
     content = {
       //Bring Show Dialog here
       Column {
-        Row(
-          modifier = Modifier.clickable {
-            selectedGender.value = Gender.MALE
-          }.fillMaxWidth(),
-          verticalAlignment = Alignment.CenterVertically
-        ) {
-          Checkbox(
-            checked = selectedGender.value == Gender.MALE,
-            onCheckedChange = {selectedGender.value = Gender.MALE}
-          )
-          Text(
-            text = Gender.MALE,
-            style = Typography.subtitle1
-          )
-        }
-        Row(
-          modifier = Modifier.clickable {
-            selectedGender.value = Gender.FEMALE
-          }.fillMaxWidth(),
-          verticalAlignment = Alignment.CenterVertically
-        ) {
-          Checkbox(
-            checked = selectedGender.value == Gender.FEMALE,
-            onCheckedChange = {selectedGender.value = Gender.FEMALE}
-          )
-          Text(
-            text = Gender.FEMALE,
-            style = Typography.subtitle1
+        Gender.OPTIONS.forEach {
+          OptionRow(
+            selected = selectedGender.value == it,
+            onClick = { selectedGender.value = it },
+            text = it
           )
         }
       }

@@ -1,17 +1,10 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.ui.components.OptionRow
 import com.example.myapplication.ui.components.ShowDialog
-import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.utils.ActivityLevel
 import com.example.myapplication.utils.RecommendedWaterIntake
 import com.example.myapplication.utils.Settings
@@ -27,12 +20,6 @@ fun SetActivityLevel(
   weather:String,
   gender: String,
 ) {
-  val options = listOf(
-    ActivityLevel.VERY_ACTIVE,
-    ActivityLevel.MODERATELY_ACTIVE,
-    ActivityLevel.LIGHTLY_ACTIVE,
-    ActivityLevel.SEDENTARY
-  )
   var selectedActivityLevel by remember {
     mutableStateOf(activityLevel)
   }
@@ -41,29 +28,15 @@ fun SetActivityLevel(
   ShowDialog(
     title = "Set ${Settings.ACTIVITY_LEVEL}",
     content = {
-              Column {
-                options.forEach {
-                  Row(
-                    modifier = Modifier
-                      .clickable {
-                        setSelectedActivityLevel(it)
-                      }
-                      .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                  ) {
-                    Checkbox(
-                      checked = selectedActivityLevel == it,
-                      onCheckedChange = { _ ->
-                        setSelectedActivityLevel(it)
-                      }
-                    )
-                    Text(
-                      text = it,
-                      style = Typography.subtitle1
-                    )
-                  }
-                }
-              }
+      Column {
+        ActivityLevel.OPTIONS.forEach {
+          OptionRow(
+            selected = selectedActivityLevel == it,
+            onClick = { setSelectedActivityLevel(it) },
+            text = it
+          )
+        }
+      }
     },
     setShowDialog = setShowDialog,
     onConfirmButtonClick = {
