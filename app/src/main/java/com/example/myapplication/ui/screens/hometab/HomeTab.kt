@@ -56,14 +56,14 @@ fun HomeTab(
       setShowSetTodaysGoalDialog = setShowSetTodaysGoalDialog
     )
 
-    Spacer(modifier = Modifier.size(8.dp))
+    Spacer(modifier = Modifier.size(16.dp))
 
     AnimatedHeartBrain(
       todaysWaterRecord.value.currWaterAmount,
       todaysWaterRecord.value.goal
     )
 
-    Spacer(modifier = Modifier.size(8.dp))
+    Spacer(modifier = Modifier.size(20.dp))
 
     var columnModifier = Modifier.animateContentSize()
 
@@ -79,7 +79,7 @@ fun HomeTab(
         beverage = beverage.value
       )
 
-      Spacer(modifier = Modifier.size(16.dp))
+      Spacer(modifier = Modifier.size(20.dp))
 
       AddWaterButtonsRow(
         waterUnit = waterUnit.value,
@@ -87,21 +87,13 @@ fun HomeTab(
         dailyWaterRecord = todaysWaterRecord.value,
         preferenceDataStoreViewModel = preferenceDataStoreViewModel,
         setShowCustomAddWaterDialog = setShowCustomAddWaterDialog,
-        beverage = beverage.value
+        beverage = beverage.value,
+        mostRecentDrinkLog = if(drinkLogsList.value.isNotEmpty()) drinkLogsList.value[0] else null
       )
 
       Spacer(modifier = Modifier.size(12.dp))
 
     }
-
-    Text(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(4.dp),
-      text = "Today's Logs",
-      textAlign = TextAlign.Center,
-      fontSize = 18.sp
-    )
 
     var columnModifier2 = Modifier.animateContentSize()
     val scrollState2 = rememberScrollState()
@@ -115,35 +107,40 @@ fun HomeTab(
     Column(
       modifier = columnModifier2
     ) {
-      DrinkLogsList(
-        drinkLogsList =
-        if(drinkLogsList.value.size>2 && !showAllDrinkLogs)
-          drinkLogsList.value.subList(0,2)
-        else drinkLogsList.value,
-        roomDatabaseViewModel = roomDatabaseViewModel,
-        waterUnit = waterUnit.value,
-        dailyWaterRecord = todaysWaterRecord.value
-      )
+      if(showAllDrinkLogs) {
+        Text(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+          text = "Today's Logs",
+          textAlign = TextAlign.Center,
+          fontSize = 18.sp
+        )
+        DrinkLogsList(
+          drinkLogsList = drinkLogsList.value,
+          roomDatabaseViewModel = roomDatabaseViewModel,
+          waterUnit = waterUnit.value,
+          dailyWaterRecord = todaysWaterRecord.value
+        )
+      } else {
+        Spacer(modifier = Modifier.size(8.dp))
+      }
     }
 
-    if(drinkLogsList.value.size > 2) {
-      Text(
-        text =
-        if(!showAllDrinkLogs)
-          "View All"
-        else "Collapse",
-        textDecoration = TextDecoration.Underline,
-        color = MaterialTheme.colors.primary,
-        fontSize = 12.sp,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-          .clickable{
-            showAllDrinkLogs = !showAllDrinkLogs
-          }
-      )
-    }
-
-
+    Text(
+      text =
+      if(!showAllDrinkLogs)
+        "View Today's Logs"
+      else "Collapse",
+      textDecoration = TextDecoration.Underline,
+      color = MaterialTheme.colors.primary,
+      fontSize = 13.sp,
+      textAlign = TextAlign.Center,
+      modifier = Modifier
+        .clickable{
+          showAllDrinkLogs = !showAllDrinkLogs
+        }
+    )
 
     //Dialogs Code
     if(showBeverageDialog){
