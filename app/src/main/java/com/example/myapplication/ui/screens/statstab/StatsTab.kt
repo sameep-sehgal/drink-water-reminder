@@ -113,7 +113,9 @@ fun StatsTab(
       endDate = endDate,
       dateRecordMapper = dateRecordMapper,
       selectedStatsTimeLine = selectedStatsTimeLine,
-      incrementDailyWaterRecordsCount = incrementWaterRecordsCount
+      incrementDailyWaterRecordsCount = incrementWaterRecordsCount,
+      todaysDate = todaysDate,
+      firstWaterDataDate = firstWaterRecordDate.value
     )
   }
 

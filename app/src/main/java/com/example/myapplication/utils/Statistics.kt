@@ -72,11 +72,11 @@ object Statistics {
     endDate:String,
     dateRecordMapper: HashMap<String, Float>,
     selectedStatsTimeLine: String,
-    incrementDailyWaterRecordsCount:() -> Unit
-
+    incrementDailyWaterRecordsCount:() -> Unit,
+    todaysDate: String,
+    firstWaterDataDate: String
   ): MutableList<BarChartData.Bar> {
     var currDate = endDate
-    val todaysDate = DateString.getTodaysDate()
     val bars = MutableList(0) { index ->
       BarChartData.Bar(0f, "$index")
     }
@@ -98,7 +98,8 @@ object Statistics {
           }
         )
       )
-      if(currDate <= todaysDate) incrementDailyWaterRecordsCount()
+      if(currDate <= todaysDate && currDate >= firstWaterDataDate)
+        incrementDailyWaterRecordsCount()
       currDate = DateString.getPrevDate(currDate)
     }
 
