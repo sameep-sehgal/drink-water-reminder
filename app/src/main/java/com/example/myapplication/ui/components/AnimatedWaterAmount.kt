@@ -21,7 +21,7 @@ fun AnimatedWaterAmount(
 ) {
   val animatedWaterAmount = animateIntAsState(
     targetValue = currWaterAmount,
-    animationSpec = tween(durationMillis = 1000)
+    animationSpec = tween(durationMillis = 600)
   )
   Text(
     text = "${animatedWaterAmount.value}${waterUnit}",

@@ -41,7 +41,7 @@ fun ReminderTab(
   LaunchedEffect(key1 = true){
     columnAlpha.animateTo(
       targetValue = 1f,
-      animationSpec = tween(durationMillis = 800)
+      animationSpec = tween(durationMillis = 400)
     )
   }
 

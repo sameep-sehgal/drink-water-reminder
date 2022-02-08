@@ -132,7 +132,6 @@ fun HomeTab(
       if(!showAllDrinkLogs)
         "View Today's Logs"
       else "Collapse",
-      textDecoration = TextDecoration.Underline,
       color = MaterialTheme.colors.primary,
       fontSize = 13.sp,
       textAlign = TextAlign.Center,

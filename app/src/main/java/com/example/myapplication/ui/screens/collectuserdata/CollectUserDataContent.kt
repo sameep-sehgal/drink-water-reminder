@@ -19,7 +19,7 @@ import com.example.myapplication.utils.*
 import java.util.*
 
 @Composable
-fun CollectUserData(
+fun CollectUserDataContent(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   roomDatabaseViewModel: RoomDatabaseViewModel
 ) {
