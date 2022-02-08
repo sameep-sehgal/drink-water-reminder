@@ -85,12 +85,10 @@ fun HomeTab(
       AddWaterButtonsRow(
         waterUnit = waterUnit.value,
         roomDatabaseViewModel = roomDatabaseViewModel,
-        todaysWaterRecord.value,
+        dailyWaterRecord = todaysWaterRecord.value,
         preferenceDataStoreViewModel = preferenceDataStoreViewModel,
         setShowCustomAddWaterDialog = setShowCustomAddWaterDialog,
-        setShowFruitDialog,
-        beverage = beverage.value,
-        mostRecentDrinkLog = if(drinkLogsList.value.isNotEmpty()) drinkLogsList.value[0] else null
+        beverage = beverage.value
       )
 
       Spacer(modifier = Modifier.size(12.dp))
