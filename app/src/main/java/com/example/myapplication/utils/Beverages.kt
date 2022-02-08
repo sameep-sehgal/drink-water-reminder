@@ -20,6 +20,7 @@ object Beverages {
   const val DEFAULT = WATER
   const val DEFAULT_ICON = 0
   const val MAX_ALLOWED_COUNT = 15
+  const val MAX_BEVERAGE_NAME_LENGTH = 20
 
   private val water = Beverage(name = WATER,icon = 0, importance = 0)
   private val coffee = Beverage(name = COFFEE,icon = 1, importance = 1)

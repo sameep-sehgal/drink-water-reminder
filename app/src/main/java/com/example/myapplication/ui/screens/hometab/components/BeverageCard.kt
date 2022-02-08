@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.RoomDatabaseViewModel
@@ -73,7 +74,9 @@ fun BeverageCard(
           modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp, 6.dp, 0.dp, 0.dp),
-          color = if(selected) primaryColor else MaterialTheme.colors.onSurface
+          color = if(selected) primaryColor else MaterialTheme.colors.onSurface,
+          maxLines = 2,
+          overflow = TextOverflow.Ellipsis
         )
       }
 

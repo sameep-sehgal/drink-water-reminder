@@ -26,20 +26,16 @@ fun CustomAddWaterDialog(
   val title = "Add Water Intake"
   var time by remember { mutableStateOf(TimeString.longToString(Calendar.getInstance().timeInMillis)) }
   var amount by remember { mutableStateOf(RecommendedWaterIntake.defaultCustomAddWaterIntake(waterUnit)) }
-  var icon by remember { mutableStateOf(RecommendedWaterIntake.DEFAULT_CUSTOM_ADD_WATER_CONTAINTER) }
   val setTime = {value:String -> time = value}
   val setAmount = {value:Int -> amount = value}
-  val setIcon = {value:Int -> icon = value}
 
   ShowDialog(
     title = title,
     content = { CustomAddWaterDialogContent(
       time = time,
       amount = amount,
-      icon = icon,
       setTime = setTime,
       setAmount = setAmount,
-      setIcon = setIcon,
       waterUnit = waterUnit
     ) },
     setShowDialog = setShowCustomAddWaterDialog,
@@ -74,20 +70,16 @@ fun CustomAddWaterDialog(
 fun CustomAddWaterDialogContent(
   time:String,
   amount:Int,
-  icon:Int,
   setTime:(String) -> Unit,
   setAmount:(Int) -> Unit,
-  setIcon:(Int) -> Unit,
   waterUnit:String
 ){
   Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
     EditDrinkLogDialogContent(
       time = time,
       amount = amount,
-      icon = icon,
       setTime = setTime,
       setAmount = setAmount,
-      setIcon = setIcon,
       waterUnit = waterUnit
     )
   }

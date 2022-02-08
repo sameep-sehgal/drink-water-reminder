@@ -18,11 +18,8 @@ import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.utils.TimeString
 import com.example.myapplication.R
 import com.example.myapplication.data.models.DailyWaterRecord
-import com.example.myapplication.ui.components.DropdownSelect
 import com.example.myapplication.ui.components.WaterQuantityPicker
-import com.example.myapplication.utils.Container
 import java.util.*
-import kotlin.collections.HashMap
 
 @Composable
 fun EditDrinkLogDialog(
@@ -36,10 +33,8 @@ fun EditDrinkLogDialog(
   calendar.time = Date(drinkLog.time)
   var time by remember { mutableStateOf(TimeString.longToString(drinkLog.time)) }
   var amount by remember { mutableStateOf(drinkLog.amount)}
-  var icon by remember { mutableStateOf(drinkLog.icon)}
   val setTime = {value:String -> time = value}
   val setAmount = {value:Int -> amount = value}
-  val setIcon = {value:Int -> icon = value}
 
   val title = "Edit Record"
   ShowDialog(
@@ -47,10 +42,8 @@ fun EditDrinkLogDialog(
     content = { EditDrinkLogDialogContent(
       time = time,
       amount = amount,
-      icon = icon,
       setTime = setTime,
       setAmount = setAmount,
-      setIcon = setIcon,
       waterUnit = waterUnit
     )},
     setShowDialog = setShowEditDrinkLogDialog,
@@ -66,7 +59,7 @@ fun EditDrinkLogDialog(
           id = drinkLog.id,
           time = calendar.timeInMillis,
           amount = amount,
-          icon = icon,
+          icon = drinkLog.icon,
           date = drinkLog.date,
           beverage = drinkLog.beverage
         )
@@ -87,15 +80,13 @@ fun EditDrinkLogDialog(
 fun EditDrinkLogDialogContent(
   time:String,
   amount:Int,
-  icon:Int,
   setTime:(String) -> Unit,
   setAmount:(Int) -> Unit,
-  setIcon:(Int) -> Unit,
   waterUnit:String
 ){
   val (showTimePicker, setShowTimePicker) =  remember { mutableStateOf(false) }
   val timePickerDialogListener: TimePickerDialog.OnTimeSetListener =
-    TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+    TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
       setTime(TimeString.HHMMIntToString(hourOfDay, minute))
       //Change in UI
       setShowTimePicker(false)
@@ -103,18 +94,6 @@ fun EditDrinkLogDialogContent(
 
   val timePickerDialogDismissListener = DialogInterface.OnDismissListener {
     setShowTimePicker(false)
-  }
-
-//  val numberPickerChangeListener = NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
-//    if(waterUnit == Units.ML){
-//      setAmount(newVal*10)
-//    }else {
-//      setAmount(newVal)
-//    }
-//  }
-
-  val setSelectedOptionDropdown = { option:HashMap<String,Any?> ->
-    setIcon(option["value"] as Int)
   }
 
 
@@ -163,43 +142,16 @@ fun EditDrinkLogDialogContent(
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.Center
     ) {
-      Column(
-        modifier = Modifier.weight(1f),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-      ) {
-        Container.IMAGE_MAPPER[icon]?.let { painterResource(id = it) }?.let {
-          Icon(
-            painter = it,
-            contentDescription = "container",
-            modifier = Modifier
-              .size(64.dp)
-              .padding(0.dp, 8.dp)
-          )
-        }
-        DropdownSelect(
-          options = Container.OPTIONS_FOR_DROPDOWN,
-          selectedOption = Container.getSelectedOptionForDropdown(icon),
-          setSelectedOption = setSelectedOptionDropdown
-        )
-      }
-      Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.weight(1f)
-      ) {
-        WaterQuantityPicker(
-          waterUnit = waterUnit,
-          amount = amount,
-          setAmount = setAmount
-        )
-        Text(
-          text = waterUnit,
-          modifier = Modifier.padding(8.dp),
-          color = MaterialTheme.colors.onSurface
-        )
-      }
+      WaterQuantityPicker(
+        waterUnit = waterUnit,
+        amount = amount,
+        setAmount = setAmount
+      )
+      Text(
+        text = waterUnit,
+        modifier = Modifier.padding(8.dp),
+        color = MaterialTheme.colors.onSurface
+      )
     }
-//    IconSelector() TODO
   }
 }
