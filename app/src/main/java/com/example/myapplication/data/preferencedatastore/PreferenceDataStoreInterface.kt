@@ -16,7 +16,7 @@ interface PreferenceDataStoreInterface {
 
   //Personal Settings
   fun weightUnit() :Flow<String>
-  suspend fun setWeightUnit(units:String)
+  suspend fun setWeightUnit(unit:String)
   fun waterUnit() :Flow<String>
   suspend fun setWaterUnit(unit:String)
   fun gender() :Flow<String>

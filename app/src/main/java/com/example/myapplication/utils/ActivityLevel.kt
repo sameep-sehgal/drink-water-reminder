@@ -12,4 +12,11 @@ object ActivityLevel {
     LIGHTLY_ACTIVE to 0.05f,
     SEDENTARY to 0f,
   )
+
+  val OPTIONS = listOf(
+    VERY_ACTIVE,
+    MODERATELY_ACTIVE,
+    LIGHTLY_ACTIVE,
+    SEDENTARY
+  )
 }

@@ -113,7 +113,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.GENDER] ?: Gender.NOT_SET
+      it[PreferencesKeys.GENDER] ?: Gender.MALE
     }
 
   override suspend fun setGender(gender: String) {
@@ -130,12 +130,12 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.WEIGHT] ?: Weight.NOT_SET
+      it[PreferencesKeys.WEIGHT] ?: Weight.DEFAULT_WEIGHT_KG
     }
 
-  override suspend fun setWeight(weight: Int) {
+  override suspend fun setWeight(amount: Int) {
     dataStore.edit {
-      it[PreferencesKeys.WEIGHT] = weight
+      it[PreferencesKeys.WEIGHT] = amount
     }
   }
 
@@ -207,7 +207,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     }
   }
 
-  //How Much Water To Drink
+  //Your Water Intake Settings
 
   override fun isDailyWaterGoalTrackingRecommendedIntake(): Flow<Boolean> =
     dataStore.data.catch {
@@ -287,7 +287,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.REMINDER_PERIOD_START] ?: ReminderPeriod.NOT_SET
+      it[PreferencesKeys.REMINDER_PERIOD_START] ?: ReminderPeriod.DEFAULT_REMINDER_PERIOD_START
     }
 
   override suspend fun setReminderPeriodStart(time: String) {
@@ -304,7 +304,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.REMINDER_PERIOD_END] ?: ReminderPeriod.NOT_SET
+      it[PreferencesKeys.REMINDER_PERIOD_END] ?: ReminderPeriod.DEFAULT_REMINDER_PERIOD_END
     }
 
   override suspend fun setReminderPeriodEnd(time: String) {
@@ -321,7 +321,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.REMINDER_GAP] ?: ReminderGap.NOT_SET
+      it[PreferencesKeys.REMINDER_GAP] ?: ReminderGap.ONE_HOUR
     }
 
   override suspend fun setReminderGap(gapTime: Int) {

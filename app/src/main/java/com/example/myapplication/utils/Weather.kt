@@ -12,4 +12,11 @@ object Weather{
     NORMAL to 0f,
     COLD to -0.075f,
   )
+
+  val OPTIONS = listOf(
+    HOT,
+    WARM,
+    NORMAL,
+    COLD
+  )
 }

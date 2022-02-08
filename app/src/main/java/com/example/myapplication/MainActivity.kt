@@ -101,8 +101,10 @@ class MainActivity : ComponentActivity() {
         setContent {
           ApplicationTheme {
             Surface {
-              Log.d(TAG, "onCreate: $TAG")
-              CollectUserData(preferenceDataStoreViewModel)
+              CollectUserData(
+                preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+                roomDatabaseViewModel = roomDatabaseViewModel
+              )
             }
           }
         }
