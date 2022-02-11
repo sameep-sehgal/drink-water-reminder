@@ -7,27 +7,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.example.myapplication.PreferenceDataStoreViewModel
-import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.components.OptionRow
 import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.utils.ReminderFrequencyOptions
+import com.example.myapplication.utils.ReminderReceiverUtil
 import com.example.myapplication.utils.Settings
-import java.util.*
 
 @Composable
 fun SetReminderFrequencySettingDialog(
   reminderGap: Int,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowDialog:(Boolean) -> Unit,
-  reminderPeriodStart: String,
-  reminderPeriodEnd: String,
-  glassCapacity:Int,
-  mugCapacity:Int,
-  bottleCapacity:Int,
-  reminderSound: String,
-  dailyWaterGoal: Int,
-  remindAfterGoalAchieved: Boolean,
-  waterUnit: String,
   context: Context
 ) {
   var selectedReminderGap by  remember { mutableStateOf(reminderGap) }
@@ -54,20 +44,8 @@ fun SetReminderFrequencySettingDialog(
     setShowDialog = setShowDialog,
     onConfirmButtonClick = {
       preferenceDataStoreViewModel.setReminderGap(selectedReminderGap)
-      val calendar = Calendar.getInstance()
-      calendar.add(Calendar.MILLISECOND, 10000) //TODO(Change back to reminder gap)
-      ReminderReceiver.setReminder(
-        time = calendar.timeInMillis,
-        reminderPeriodStart = reminderPeriodStart,
-        reminderPeriodEnd = reminderPeriodEnd,
+      ReminderReceiverUtil.setReminder(
         reminderGap = selectedReminderGap,
-        glassCapacity = glassCapacity,
-        mugCapacity = mugCapacity,
-        bottleCapacity = bottleCapacity,
-        channelId = reminderSound,
-        waterUnit = waterUnit,
-        dailyWaterGoal = dailyWaterGoal,
-        remindAfterGoalAchieved = remindAfterGoalAchieved,
         context = context
       )
     }

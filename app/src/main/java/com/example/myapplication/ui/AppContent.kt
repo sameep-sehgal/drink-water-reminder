@@ -49,7 +49,9 @@ fun MainAppContent(
               darkTheme = darkTheme
             )
             2 -> SettingsTab(
-              preferenceDataStoreViewModel = preferenceDataStoreViewModel
+              preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+              roomDatabaseViewModel = roomDatabaseViewModel,
+              todaysWaterRecord = todaysWaterRecord.value
             )
             3 -> ReminderTab(
               preferenceDataStoreViewModel = preferenceDataStoreViewModel

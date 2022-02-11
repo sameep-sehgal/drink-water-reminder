@@ -13,7 +13,7 @@ import kotlinx.coroutines.*
 
 class AddWaterReceiver: BroadcastReceiver() {
 
-  private val TAG = ReminderReceiver::class.java.simpleName
+  private val TAG = AddWaterReceiver::class.java.simpleName
 
   @DelicateCoroutinesApi
   override fun onReceive(context: Context?, intent: Intent?) {

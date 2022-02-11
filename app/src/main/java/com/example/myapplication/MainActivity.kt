@@ -14,7 +14,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import dagger.hilt.android.AndroidEntryPoint
-import com.example.myapplication.remindernotification.CHANNEL_ID_4
+import com.example.myapplication.remindernotification.CHANNEL_ID_5
 import com.example.myapplication.ui.CollectUserData
 import com.example.myapplication.ui.MainAppContent
 import com.example.myapplication.utils.ReminderSound
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 //    notificationManager?.deleteNotificationChannel(CHANNEL_ID_3)
-    createNotificationChannel(CHANNEL_ID_4)
+    createNotificationChannel(CHANNEL_ID_5)
 //    notificationManager?.notificationChannels?.forEach {
 //      Log.d(TAG, "onCreate: $it")
 //    }
@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
         description = descriptionText
         lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         if(channelId != ReminderSound.DEVICE_DEFAULT) {
-          val sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[ReminderSound.WATER_DROP])
+          val sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[ReminderSound.POURING_WATER])
           val attributes = AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .setUsage(AudioAttributes.USAGE_NOTIFICATION)

@@ -12,7 +12,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
-import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.screens.collectuserdata.components.*
 import com.example.myapplication.ui.screens.collectuserdata.components.screens.*
 import com.example.myapplication.utils.*
@@ -52,22 +51,7 @@ fun CollectUserDataContent(
     val baseMugCapacity = Container.baseMugCapacity(waterUnit.value)
     val baseBottleCapacity = Container.baseBottleCapacity(waterUnit.value)
     //Set Repeating Reminder
-    val calendar = Calendar.getInstance()
-    calendar.add(Calendar.MILLISECOND, reminderGap.value)
-    ReminderReceiver.setReminder(
-      calendar.timeInMillis,
-      reminderPeriodStart.value,
-      reminderPeriodEnd.value,
-      reminderGap.value,
-      baseGlassCapacity,
-      baseMugCapacity,
-      baseBottleCapacity,
-      ReminderSound.DEFAULT_CHANNEL_ID,
-      waterUnit.value,
-      recommendedWaterIntake ,
-      true,
-      context
-    )
+    ReminderReceiverUtil.setReminder(reminderGap = reminderGap.value, context = context)
 
     preferenceDataStoreViewModel.setGlassCapacity(baseGlassCapacity)
     preferenceDataStoreViewModel.setMugCapacity(baseMugCapacity)

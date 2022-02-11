@@ -20,7 +20,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   private val dataStore = context.dataStore
 
   //preference keys
-  private object PreferencesKeys {
+  object PreferencesKeys {
     val IS_USER_INFO_COLLECTED = booleanPreferencesKey("is_user_info_collected")
     val FIRST_WATER_DATA_DATE = stringPreferencesKey("first_water_data_date")
     val BEVERAGE = stringPreferencesKey("beverage")
