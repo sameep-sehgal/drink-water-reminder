@@ -355,7 +355,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.REMINDER_SOUND] ?: ReminderSound.POURING_WATER
+      it[PreferencesKeys.REMINDER_SOUND] ?: ""
     }
 
   override suspend fun setReminderSound(sound: String) {

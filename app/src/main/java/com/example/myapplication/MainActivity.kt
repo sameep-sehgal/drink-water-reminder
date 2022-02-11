@@ -14,11 +14,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import dagger.hilt.android.AndroidEntryPoint
-import com.example.myapplication.remindernotification.CHANNEL_ID_5
+import com.example.myapplication.remindernotification.NOTIFICATION_CHANNEL
 import com.example.myapplication.ui.CollectUserData
 import com.example.myapplication.ui.MainAppContent
-import com.example.myapplication.utils.ReminderSound
-
 
 @AndroidEntryPoint //This annotation gives access to Hilt dependencies in the composables
 class MainActivity : ComponentActivity() {
@@ -30,11 +28,12 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//    notificationManager?.deleteNotificationChannel(CHANNEL_ID_3)
-    createNotificationChannel(CHANNEL_ID_5)
-//    notificationManager?.notificationChannels?.forEach {
-//      Log.d(TAG, "onCreate: $it")
-//    }
+//    notificationManager?.deleteNotificationChannel(CHANNEL_ID_4)
+//    notificationManager?.deleteNotificationChannel(CHANNEL_ID_5)
+    notificationManager?.notificationChannels?.forEach {
+      notificationManager?.deleteNotificationChannel(it.id)
+    }
+    createNotificationChannel()
     preferenceDataStoreViewModel.isUserInfoCollected.observe(this){
       if(it == true) {
         setContent {
@@ -60,23 +59,20 @@ class MainActivity : ComponentActivity() {
     roomDatabaseViewModel.refreshData()
   }
 
-  private fun createNotificationChannel(channelId: String) {
+  private fun createNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//      Log.d(TAG, "createNotificationChannel: ${sound}")
       val name = "Drink Water Reminder"
       val descriptionText = "Drink Water Reminder"
       val importance = NotificationManager.IMPORTANCE_HIGH
-      val channel = NotificationChannel(channelId, name, importance).apply {
+      val channel = NotificationChannel(NOTIFICATION_CHANNEL, name, importance).apply {
         description = descriptionText
         lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-        if(channelId != ReminderSound.DEVICE_DEFAULT) {
-          val sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[ReminderSound.POURING_WATER])
-          val attributes = AudioAttributes.Builder()
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-            .build()
-          setSound(sound,attributes)
-        }
+        val sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.water)
+        val attributes = AudioAttributes.Builder()
+          .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+          .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+          .build()
+        setSound(sound,attributes)
       }
 
       notificationManager?.createNotificationChannel(channel)

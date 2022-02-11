@@ -73,8 +73,7 @@ class ReminderReceiver: BroadcastReceiver() {
             mugCapacity = mugCapacity,
             bottleCapacity = bottleCapacity,
             waterUnit = waterUnit,
-            dailyWaterGoal = dailyWaterGoal,
-            channelId = CHANNEL_ID_4
+            dailyWaterGoal = dailyWaterGoal
           )
           Log.d("TAG", "onReceive: Builder $builder")
           if(builder != null) {

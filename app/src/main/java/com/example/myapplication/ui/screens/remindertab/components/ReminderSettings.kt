@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.PreferenceDataStoreViewModel
-import com.example.myapplication.remindernotification.CHANNEL_ID_4
+import com.example.myapplication.remindernotification.NOTIFICATION_CHANNEL
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowBooleanValue
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowNoValueWithSubtitle
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowSelectValue
@@ -65,7 +65,7 @@ fun ReminderSettings(
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
           intent = Intent(android.provider.Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
             .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)
-            .putExtra(android.provider.Settings.EXTRA_CHANNEL_ID, CHANNEL_ID_4)
+            .putExtra(android.provider.Settings.EXTRA_CHANNEL_ID, NOTIFICATION_CHANNEL)
         }else{
           intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

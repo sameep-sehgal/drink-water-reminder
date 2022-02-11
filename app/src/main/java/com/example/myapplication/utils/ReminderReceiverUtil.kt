@@ -17,10 +17,7 @@ import androidx.core.app.NotificationCompat
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.data.models.DailyWaterRecord
-import com.example.myapplication.remindernotification.AddWaterReceiver
-import com.example.myapplication.remindernotification.BootReceiver
-import com.example.myapplication.remindernotification.CHANNEL_ID_4
-import com.example.myapplication.remindernotification.ReminderReceiver
+import com.example.myapplication.remindernotification.*
 import com.example.myapplication.ui.theme.AppColorPrimary
 import java.util.*
 
@@ -136,8 +133,7 @@ object ReminderReceiverUtil {
     mugCapacity: Int?,
     bottleCapacity: Int?,
     waterUnit:String?,
-    dailyWaterGoal: Int?,
-    channelId: String?
+    dailyWaterGoal: Int?
   ): NotificationCompat.Builder? {
     val mainActivityIntent = Intent(context, MainActivity::class.java).apply {
       flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -147,11 +143,10 @@ object ReminderReceiverUtil {
 
     //Build notification only when we need to show.
     val builder = context?.let {
-      NotificationCompat.Builder(it, CHANNEL_ID_4)
-        //TODO(Surround setSound with if condition to handle device default sound)
+      NotificationCompat.Builder(it, NOTIFICATION_CHANNEL)
         .setSound(
           Uri.parse("android.resource://"
-                  + context.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[channelId]))
+                  + context.packageName + "/" + R.raw.water))
         .setSmallIcon(R.drawable.home_icon_glass_white)
         .setContentTitle("It's Time To Drink Water!")
         .setAutoCancel(true)
