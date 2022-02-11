@@ -17,13 +17,13 @@ object PieChartUtils {
 
   private val COLORS = listOf(
     Color(0xFF45b3e0),
-    Color(0xFF00bcd8),
-    Color(0xFF00c3c0),
-    Color(0xFF00c79b),
-    Color(0xFF55c86e),
-    Color(0xFF91c33e),
-    Color(0xFFc9b906),
-    Color(0xFFffa600),
+    Color(0xFF30a0c1),
+    Color(0xFF228da3),
+    Color(0xFF1c7986),
+    Color(0xFF1a666b),
+    Color(0xFF195353),
+    Color(0xFF17413c),
+    Color(0xFF16342d),
   )
 
   private fun getColor(index:Int): Color {
