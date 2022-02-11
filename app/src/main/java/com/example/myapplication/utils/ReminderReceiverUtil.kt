@@ -147,7 +147,7 @@ object ReminderReceiverUtil {
         .setSound(
           Uri.parse("android.resource://"
                   + context.packageName + "/" + R.raw.water))
-        .setSmallIcon(R.drawable.home_icon_glass_white)
+        .setSmallIcon(R.drawable.water_drop_icon)
         .setContentTitle("It's Time To Drink Water!")
         .setAutoCancel(true)
         .setPriority(NotificationCompat.PRIORITY_MAX)

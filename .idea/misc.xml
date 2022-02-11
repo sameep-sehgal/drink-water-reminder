@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/add_button.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/bottle_4.xml" value="0.14166666666666666" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/brain_icon.xml" value="0.15833333333333333" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/bulb_icon.xml" value="0.1685185185185185" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/cancel_icon.xml" value="0.1685185185185185" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/change_icon.xml" value="0.1" />
@@ -23,6 +24,7 @@
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_bell_svgrepo_com.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_heartbrain1.xml" value="0.1685185185185185" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_heartbrain2removedsmallgaps.xml" value="0.1685185185185185" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_launcher_2_foreground.xml" value="0.15833333333333333" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.14166666666666666" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/ic_water_glass_with_bg_2.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/male_icon.xml" value="0.1" />
@@ -37,6 +39,7 @@
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/stats_tab_icon.xml" value="0.1828125" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/undo_button.xml" value="0.1259259259259259" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/undo_icon.xml" value="0.1685185185185185" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_drop_icon.xml" value="0.15833333333333333" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_100.xml" value="0.12777777777777777" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_30.xml" value="0.1" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/water_glass_30_to_40_animation.xml" value="0.12777777777777777" />
@@ -46,6 +49,8 @@
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/weather_button.xml" value="0.1259259259259259" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/workout_button.xml" value="0.1259259259259259" />
         <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/workout_button_white.xml" value="0.1259259259259259" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.15833333333333333" />
+        <entry key="..\:/Users/samee/AndroidStudioProjects/MyApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher_2.xml" value="0.15833333333333333" />
       </map>
     </option>
   </component>
