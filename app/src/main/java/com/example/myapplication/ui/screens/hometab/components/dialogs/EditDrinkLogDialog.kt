@@ -17,8 +17,10 @@ import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.utils.TimeString
 import com.example.myapplication.R
+import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.ui.components.WaterQuantityPicker
+import com.example.myapplication.ui.screens.hometab.components.buttons.BeverageButton
 import java.util.*
 
 @Composable
@@ -82,7 +84,9 @@ fun EditDrinkLogDialogContent(
   amount:Int,
   setTime:(String) -> Unit,
   setAmount:(Int) -> Unit,
-  waterUnit:String
+  waterUnit:String,
+  beverage:Beverage? = null,
+  setShowBeverageDialog: (Boolean) -> Unit = {}
 ){
   val (showTimePicker, setShowTimePicker) =  remember { mutableStateOf(false) }
   val timePickerDialogListener: TimePickerDialog.OnTimeSetListener =
@@ -108,6 +112,14 @@ fun EditDrinkLogDialogContent(
         defaultTime = time
       )
     }
+    if(beverage != null) {
+      BeverageButton(
+        setShowBeverageDialog = setShowBeverageDialog,
+        beverage = beverage
+      )
+      Spacer(modifier = Modifier.size(8.dp))
+    }
+
     Row(
       modifier = Modifier.fillMaxWidth(),
       horizontalArrangement = Arrangement.Center,

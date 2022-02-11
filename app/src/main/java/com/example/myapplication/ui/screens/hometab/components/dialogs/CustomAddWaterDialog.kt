@@ -21,9 +21,11 @@ fun CustomAddWaterDialog(
   roomDatabaseViewModel: RoomDatabaseViewModel,
   dailyWaterRecord: DailyWaterRecord,
   selectedDate:String = dailyWaterRecord.date,
-  beverage: Beverage
+  beverage: Beverage,
+  showBeverageButton: Boolean = false,
+  setShowBeverageDialog: (Boolean) -> Unit = {}
 ){
-  val title = "Add Water Intake"
+  val title = "Add ${beverage.name} Intake"
   var time by remember { mutableStateOf(TimeString.longToString(Calendar.getInstance().timeInMillis)) }
   var amount by remember { mutableStateOf(RecommendedWaterIntake.defaultCustomAddWaterIntake(waterUnit)) }
   val setTime = {value:String -> time = value}
@@ -36,7 +38,9 @@ fun CustomAddWaterDialog(
       amount = amount,
       setTime = setTime,
       setAmount = setAmount,
-      waterUnit = waterUnit
+      waterUnit = waterUnit,
+      beverage = if(showBeverageButton) beverage else null,
+      setShowBeverageDialog = setShowBeverageDialog
     ) },
     setShowDialog = setShowCustomAddWaterDialog,
     onConfirmButtonClick = {
@@ -72,7 +76,9 @@ fun CustomAddWaterDialogContent(
   amount:Int,
   setTime:(String) -> Unit,
   setAmount:(Int) -> Unit,
-  waterUnit:String
+  waterUnit:String,
+  beverage: Beverage? = null,
+  setShowBeverageDialog: (Boolean) -> Unit = {}
 ){
   Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
     EditDrinkLogDialogContent(
@@ -80,7 +86,9 @@ fun CustomAddWaterDialogContent(
       amount = amount,
       setTime = setTime,
       setAmount = setAmount,
-      waterUnit = waterUnit
+      waterUnit = waterUnit,
+      beverage = beverage,
+      setShowBeverageDialog = setShowBeverageDialog
     )
   }
 }

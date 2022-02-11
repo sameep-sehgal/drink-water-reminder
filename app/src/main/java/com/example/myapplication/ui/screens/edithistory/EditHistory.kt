@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
-import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.ui.screens.edithistory.components.*
 import com.example.myapplication.ui.screens.hometab.components.DrinkLogsList
+import com.example.myapplication.ui.screens.hometab.components.dialogs.BeverageDialog
 import com.example.myapplication.ui.screens.hometab.components.dialogs.CustomAddWaterDialog
 import com.example.myapplication.utils.Beverages
 import com.example.myapplication.utils.DateString
@@ -28,6 +28,7 @@ fun EditHistory(
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ){
   val (showCustomAddWaterDialog, setShowCustomAddWaterDialog) =  remember { mutableStateOf(false) }
+  val (showBeverageDialog, setShowBeverageDialog) =  remember { mutableStateOf(false) }
   val scrollState = rememberScrollState()
   val todaysDate = DateString.getTodaysDate()
   var selectedDate by remember{ mutableStateOf(todaysDate) }
@@ -37,6 +38,13 @@ fun EditHistory(
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.OZ)
   val firstWaterDataDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
   val dailyWaterGoal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = RecommendedWaterIntake.NOT_SET)
+  val beverageName = preferenceDataStoreViewModel.beverage.collectAsState(initial = Beverages.DEFAULT)
+  val setBeverageName = { it:String -> preferenceDataStoreViewModel.setBeverage(it) }
+  val beverage = roomDatabaseViewModel.beverage.collectAsState()
+
+  LaunchedEffect(key1 = beverageName.value) {
+    roomDatabaseViewModel.getBeverage(beverageName.value)
+  }
 
   LaunchedEffect(
     key1 = selectedDate
@@ -120,7 +128,17 @@ fun EditHistory(
         roomDatabaseViewModel = roomDatabaseViewModel,
         dailyWaterRecord = selectedWaterRecord.value!!,
         selectedDate = selectedDate,
-        beverage = Beverage(Beverages.DEFAULT, Beverages.DEFAULT_ICON)
+        beverage = beverage.value,
+        showBeverageButton = true,
+        setShowBeverageDialog = setShowBeverageDialog
+      )
+    }
+    if(showBeverageDialog){
+      BeverageDialog(
+        setShowBeverageDialog = setShowBeverageDialog,
+        setSelectedBeverage = setBeverageName,
+        selectedBeverage = beverageName.value,
+        roomDatabaseViewModel = roomDatabaseViewModel
       )
     }
   }
