@@ -17,6 +17,10 @@ import com.example.myapplication.ui.screens.settingstab.SettingsTab
 import com.example.myapplication.ui.screens.statstab.StatsTab
 import com.example.myapplication.ui.theme.ApplicationTheme
 import com.example.myapplication.utils.RecommendedWaterIntake
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainAppContent(
@@ -28,6 +32,8 @@ fun MainAppContent(
   var selectedTab by remember { mutableStateOf(0) }
   val setSelectedTab = { it:Int -> selectedTab = it }
   val darkTheme = isSystemInDarkTheme()
+  val scope = rememberCoroutineScope()
+  val swipeRefreshState = rememberSwipeRefreshState(false)
   if(todaysWaterRecord.value.goal == RecommendedWaterIntake.NOT_SET && goal.value!=0){
     roomDatabaseViewModel.updateDailyWaterRecord(
       DailyWaterRecord(goal = goal.value)
@@ -38,11 +44,25 @@ fun MainAppContent(
       Column(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(1f)) {
           when(selectedTab) {
-            0 -> HomeTab(
-              preferenceDataStoreViewModel = preferenceDataStoreViewModel,
-              roomDatabaseViewModel = roomDatabaseViewModel,
-              todaysWaterRecord = todaysWaterRecord
-            )
+            0 -> {
+              SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = {
+                  scope.launch {
+                    swipeRefreshState.isRefreshing = true
+                    roomDatabaseViewModel.refreshData()
+                    delay(1000)
+                    swipeRefreshState.isRefreshing = false
+                  }
+                }
+              ) {
+                HomeTab(
+                  preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+                  roomDatabaseViewModel = roomDatabaseViewModel,
+                  todaysWaterRecord = todaysWaterRecord
+                )
+              }
+            }
             1 -> StatsTab(
               roomDatabaseViewModel = roomDatabaseViewModel,
               preferenceDataStoreViewModel = preferenceDataStoreViewModel,
