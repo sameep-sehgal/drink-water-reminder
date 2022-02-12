@@ -18,6 +18,7 @@ import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.LightGray
 import com.example.myapplication.ui.theme.VeryLightGray
+import com.example.myapplication.utils.ActivityLevel
 import com.example.myapplication.utils.Gender
 
 @Composable
@@ -27,6 +28,12 @@ fun GetGender(
 ) {
   val setSelectedGender = {value:String ->
     if(value != gender) preferenceDataStoreViewModel.setGender(value)
+  }
+
+  LaunchedEffect(key1 = true) {
+    //Save default value in DataStore
+    if(gender == Gender.MALE)
+      setSelectedGender(Gender.MALE)
   }
 
   Text(

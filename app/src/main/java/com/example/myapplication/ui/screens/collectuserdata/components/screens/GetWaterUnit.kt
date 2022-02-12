@@ -10,6 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.myapplication.PreferenceDataStoreViewModel
+import com.example.myapplication.utils.ActivityLevel
 import com.example.myapplication.utils.Units
 
 @Composable
@@ -28,6 +29,12 @@ fun GetWaterUnit(
     else {
       setSelectedWaterUnit(Units.OZ)
     }
+  }
+
+  LaunchedEffect(key1 = true) {
+    //Save default value in DataStore
+    if(waterUnit == Units.ML)
+      setSelectedWaterUnit(Units.ML)
   }
 
   Text(

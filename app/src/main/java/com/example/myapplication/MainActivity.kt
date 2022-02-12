@@ -27,8 +27,6 @@ class MainActivity : ComponentActivity() {
   @RequiresApi(Build.VERSION_CODES.O)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-//    notificationManager?.deleteNotificationChannel(CHANNEL_ID_4)
-//    notificationManager?.deleteNotificationChannel(CHANNEL_ID_5)
 //    notificationManager?.notificationChannels?.forEach {
 //      notificationManager?.deleteNotificationChannel(it.id)
 //    }

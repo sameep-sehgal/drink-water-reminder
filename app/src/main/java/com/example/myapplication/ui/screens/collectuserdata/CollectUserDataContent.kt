@@ -15,7 +15,6 @@ import com.example.myapplication.RoomDatabaseViewModel
 import com.example.myapplication.ui.screens.collectuserdata.components.*
 import com.example.myapplication.ui.screens.collectuserdata.components.screens.*
 import com.example.myapplication.utils.*
-import java.util.*
 
 @Composable
 fun CollectUserDataContent(
@@ -46,19 +45,28 @@ fun CollectUserDataContent(
   val onLetsGoButtonClick = {
     preferenceDataStoreViewModel.setRecommendedWaterIntake(recommendedWaterIntake)
     preferenceDataStoreViewModel.setDailyWaterGoal(recommendedWaterIntake)
+    preferenceDataStoreViewModel.setIsDailyWaterGoalTrackingRecommendedIntake(true)
 
     val baseGlassCapacity = Container.baseGlassCapacity(waterUnit.value)
     val baseMugCapacity = Container.baseMugCapacity(waterUnit.value)
     val baseBottleCapacity = Container.baseBottleCapacity(waterUnit.value)
     //Set Repeating Reminder
-    ReminderReceiverUtil.setReminder(reminderGap = reminderGap.value, context = context)
+    preferenceDataStoreViewModel.setReminderGap(ReminderGap.ONE_HOUR)
+    preferenceDataStoreViewModel.setReminderAfterGoalAchieved(false)
+    if(isReminderOn.value) {
+      ReminderReceiverUtil.setReminder(
+        reminderGap = reminderGap.value,
+        context = context
+      )
+    }
 
     preferenceDataStoreViewModel.setGlassCapacity(baseGlassCapacity)
     preferenceDataStoreViewModel.setMugCapacity(baseMugCapacity)
     preferenceDataStoreViewModel.setBottleCapacity(baseBottleCapacity)
     preferenceDataStoreViewModel.setFirstWaterDataDate(DateString.getTodaysDate())
+    preferenceDataStoreViewModel.setBeverage(Beverages.DEFAULT)
 
-    //Insert Default Beveraged in Database
+    //Insert Default Beverages in Database
     Beverages.defaultBeverages.forEach {
       roomDatabaseViewModel.insertBeverage(it)
     }

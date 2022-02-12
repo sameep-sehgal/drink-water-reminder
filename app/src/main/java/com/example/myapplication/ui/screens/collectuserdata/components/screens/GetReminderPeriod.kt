@@ -54,6 +54,19 @@ fun GetReminderPeriod(
     setSelectedReminderTimingEnd(newTime)
   }
 
+  LaunchedEffect(key1 = true) {
+    //Save default value in DataStore
+    if(reminderPeriodStart == ReminderPeriod.DEFAULT_REMINDER_PERIOD_START) {
+      setSelectedReminderTimingStart(ReminderPeriod.DEFAULT_REMINDER_PERIOD_START)
+    }
+    if(reminderPeriodEnd == ReminderPeriod.DEFAULT_REMINDER_PERIOD_END) {
+      setSelectedReminderTimingEnd(ReminderPeriod.DEFAULT_REMINDER_PERIOD_END)
+    }
+    if(isReminderOn) {
+      preferenceDataStoreViewModel.setIsReminderOn(true)
+    }
+  }
+
   Text(
     modifier = Modifier.padding(0.dp,16.dp),
     text = "Select Reminder Period",

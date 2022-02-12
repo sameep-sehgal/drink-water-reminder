@@ -21,6 +21,12 @@ fun GetActivityLevel(
     if(value != activityLevel) preferenceDataStoreViewModel.setActivityLevel(value)
   }
 
+  LaunchedEffect(key1 = true) {
+    //Save default value in DataStore
+    if(activityLevel == ActivityLevel.LIGHTLY_ACTIVE)
+      setSelectedActivityLevel(ActivityLevel.LIGHTLY_ACTIVE)
+  }
+
   Text(
     modifier = Modifier.padding(0.dp,8.dp),
     text = "Select Your Activity Level",

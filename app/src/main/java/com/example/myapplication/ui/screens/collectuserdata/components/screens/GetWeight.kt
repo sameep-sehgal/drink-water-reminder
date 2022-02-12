@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.R
+import com.example.myapplication.utils.ActivityLevel
 import com.example.myapplication.utils.Units
 import com.example.myapplication.utils.Weight
 
@@ -43,6 +44,14 @@ fun GetWeight(
   }
   val weightPickerChangeListener = NumberPicker.OnValueChangeListener { _, _, newVal ->
     setSelectedWeight(newVal)
+  }
+
+  LaunchedEffect(key1 = true) {
+    //Save default value in DataStore
+    if(weight == Weight.DEFAULT_WEIGHT_KG)
+      setSelectedWeight(Weight.DEFAULT_WEIGHT_KG)
+    if(weightUnit == Units.KG)
+      setSelectedWeightUnit(Units.KG)
   }
 
   Text(

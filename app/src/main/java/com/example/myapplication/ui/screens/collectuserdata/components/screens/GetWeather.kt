@@ -10,6 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.ui.components.OptionRow
+import com.example.myapplication.utils.ActivityLevel
 import com.example.myapplication.utils.Weather
 
 @Composable
@@ -19,6 +20,12 @@ fun GetWeather(
 ) {
   val setSelectedWeather = { value:String ->
     preferenceDataStoreViewModel.setWeather(value)
+  }
+
+  LaunchedEffect(key1 = true) {
+    //Save default value in DataStore
+    if(weather == Weather.NORMAL)
+      setSelectedWeather(Weather.NORMAL)
   }
 
   Text(
