@@ -1,7 +1,6 @@
 package com.example.myapplication.utils
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.Notification
 import android.app.PendingIntent
@@ -22,28 +21,13 @@ import com.example.myapplication.ui.theme.AppColorPrimary
 import java.util.*
 
 object ReminderReceiverUtil {
-  private fun isAppRunning(context: Context): Boolean {
-    val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-    // The first in the list of RunningTasks is always the foreground task.
-    val appProcess = am.runningAppProcesses[0] ?: return false
-    var res = false
-    if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName.equals(context.packageName)) {
-      res = true
-    }
-    Log.d("TAG", "isAppRunning: $res Check Before launching notification")
-    return res
-  }
-
   fun shallNotify(
     reminderPeriodStart:String?,
     reminderPeriodEnd:String?,
     remindAfterGoalAchieved:Boolean?,
     todaysWaterRecord:DailyWaterRecord,
-    context: Context,
     currTime:Calendar = Calendar.getInstance()
   ): Boolean {
-    if(isAppRunning(context = context)) return false
-
     var reminderPeriodStartTime: Calendar = Calendar.getInstance()
     var reminderPeriodEndTime: Calendar = Calendar.getInstance()
     if(reminderPeriodStart != null) {

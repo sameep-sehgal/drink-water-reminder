@@ -63,8 +63,7 @@ class ReminderReceiver: BroadcastReceiver() {
           reminderPeriodEnd = reminderPeriodEnd,
           reminderPeriodStart = reminderPeriodStart,
           remindAfterGoalAchieved = remindAfterGoalAchieved,
-          todaysWaterRecord = todaysWaterRecord,
-          context = context
+          todaysWaterRecord = todaysWaterRecord
         )) {
           Log.d("TAG", "onReceive: Shall Notify == true")
           val builder = ReminderReceiverUtil.buildBasicNotification(
