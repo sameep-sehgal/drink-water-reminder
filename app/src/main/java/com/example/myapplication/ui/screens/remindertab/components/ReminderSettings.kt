@@ -84,7 +84,7 @@ fun ReminderSettings(
 
   SettingsRowNoValueWithSubtitle(
     text = "Reset Notification",
-    subtitle = "Click here and we will reset notification settings",
+    subtitle = "Click here if notifications have stopped working.",
     onSettingsRowClick = {
       ReminderReceiverUtil.setReminder(
         reminderGap, context

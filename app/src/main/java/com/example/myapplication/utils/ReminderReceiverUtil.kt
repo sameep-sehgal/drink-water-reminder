@@ -78,9 +78,9 @@ object ReminderReceiverUtil {
       PendingIntent.getBroadcast(context, 5, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
     Log.d("TAG", "onReceive: ${pendingIntent.creatorPackage} ${intent.component} inside setReminder")
-    Log.d("TAG", "onReceive: ${checkAlarm(context)} ${reminderGap} $context inside setReminder")
+    Log.d("TAG", "onReceive: ${alarmManager} ${reminderGap} $context inside setReminder")
 
-    alarmManager.setRepeating(
+    alarmManager.setInexactRepeating(
       AlarmManager.ELAPSED_REALTIME_WAKEUP,
       SystemClock.elapsedRealtime() + 1000, //TODO
       reminderGap.toLong(),
@@ -196,7 +196,7 @@ object ReminderReceiverUtil {
     return PendingIntent.getBroadcast(
       context, 5,
       alarmIntent,
-      PendingIntent.FLAG_UPDATE_CURRENT
+      PendingIntent.FLAG_NO_CREATE
     ) != null
   }
 }

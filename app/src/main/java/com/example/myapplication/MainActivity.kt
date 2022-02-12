@@ -27,12 +27,11 @@ class MainActivity : ComponentActivity() {
   @RequiresApi(Build.VERSION_CODES.O)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 //    notificationManager?.deleteNotificationChannel(CHANNEL_ID_4)
 //    notificationManager?.deleteNotificationChannel(CHANNEL_ID_5)
-    notificationManager?.notificationChannels?.forEach {
-      notificationManager?.deleteNotificationChannel(it.id)
-    }
+//    notificationManager?.notificationChannels?.forEach {
+//      notificationManager?.deleteNotificationChannel(it.id)
+//    }
     createNotificationChannel()
     preferenceDataStoreViewModel.isUserInfoCollected.observe(this){
       if(it == true) {
@@ -61,6 +60,7 @@ class MainActivity : ComponentActivity() {
 
   private fun createNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
       val name = "Drink Water Reminder"
       val descriptionText = "Drink Water Reminder"
       val importance = NotificationManager.IMPORTANCE_HIGH

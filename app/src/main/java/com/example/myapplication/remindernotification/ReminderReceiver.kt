@@ -41,7 +41,7 @@ class ReminderReceiver: BroadcastReceiver() {
         waterUnit = it[PreferenceDataStore.PreferencesKeys.WATER_UNIT]
         remindAfterGoalAchieved = it[PreferenceDataStore.PreferencesKeys.REMINDER_AFTER_GOAL_ACHIEVED]
         dailyWaterGoal = it[PreferenceDataStore.PreferencesKeys.DAILY_WATER_GOAL]
-        Log.d("TAG", "onReceive: ${waterUnit} inside datastore")
+        Log.d("TAG", "onReceive: ${bottleCapacity} inside datastore")
         true
       }
 
