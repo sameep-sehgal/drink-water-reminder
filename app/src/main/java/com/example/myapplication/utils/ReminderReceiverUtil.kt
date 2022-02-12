@@ -39,7 +39,8 @@ object ReminderReceiverUtil {
     reminderPeriodEnd:String?,
     remindAfterGoalAchieved:Boolean?,
     todaysWaterRecord:DailyWaterRecord,
-    context: Context
+    context: Context,
+    currTime:Calendar = Calendar.getInstance()
   ): Boolean {
     if(isAppRunning(context = context)) return false
 
@@ -56,8 +57,6 @@ object ReminderReceiverUtil {
       //Case -- reminderPeriodEnd = "02:00" and reminderPeriodStart = "10:00"
       reminderPeriodEndTime.add(Calendar.DAY_OF_MONTH,1)
     }
-
-    val currTime = Calendar.getInstance()
 
     if(currTime < reminderPeriodEndTime && currTime > reminderPeriodStartTime)
       if (!(!remindAfterGoalAchieved!! && todaysWaterRecord.isGoalAchieved))

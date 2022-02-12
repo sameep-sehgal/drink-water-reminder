@@ -2,16 +2,18 @@ package com.example.myapplication.ui.screens.remindertab.components
 
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.remindernotification.NOTIFICATION_CHANNEL
-import com.example.myapplication.ui.screens.settingstab.components.SettingsRowBooleanValue
+import com.example.myapplication.ui.screens.settingstab.components.*
 import com.example.myapplication.ui.screens.settingstab.components.SettingsRowNoValueWithSubtitle
-import com.example.myapplication.ui.screens.settingstab.components.SettingsRowSelectValue
-import com.example.myapplication.ui.screens.settingstab.components.SettingsSubheading
 import com.example.myapplication.utils.ReminderGap
+import com.example.myapplication.utils.ReminderReceiverUtil
 import com.example.myapplication.utils.Settings
 
 @Composable
@@ -26,6 +28,7 @@ fun ReminderSettings(
   isReminderOn:Boolean
 ){
   val context = LocalContext.current
+  val (showNotificationNotWorkingDialog, setShowNotificationNotWorkingDialog) =  remember { mutableStateOf(false) }
 
   Column {
     SettingsRowSelectValue(
@@ -80,9 +83,24 @@ fun ReminderSettings(
   }
 
   SettingsRowNoValueWithSubtitle(
-    text = "Notification not Working?",
-    subtitle = "Click here and we will reset the settings",
-    onSettingsRowClick = {},
+    text = "Reset Notification",
+    subtitle = "Click here and we will reset notification settings",
+    onSettingsRowClick = {
+      ReminderReceiverUtil.setReminder(
+        reminderGap, context
+      )
+      Toast.makeText(context, "Notification is Reset", Toast.LENGTH_SHORT).show()
+    },
     enabled = isReminderOn
   )
+
+  SettingsRowNoValue(
+    text = "Notification not Working?",
+    onSettingsRowClick = { setShowNotificationNotWorkingDialog(true) },
+    enabled = isReminderOn
+  )
+
+  if(showNotificationNotWorkingDialog) {
+    NotificationNotWorkingDialog(setShowDialog = setShowNotificationNotWorkingDialog)
+  }
 }
