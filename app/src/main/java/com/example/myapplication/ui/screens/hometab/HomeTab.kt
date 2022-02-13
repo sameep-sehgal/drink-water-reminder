@@ -141,6 +141,8 @@ fun HomeTab(
         }
     )
 
+    Spacer(modifier = Modifier.size(16.dp))
+
     //Dialogs Code
     if(showBeverageDialog){
       BeverageDialog(
