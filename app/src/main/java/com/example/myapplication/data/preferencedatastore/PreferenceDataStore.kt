@@ -20,19 +20,26 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   private val dataStore = context.dataStore
 
   //preference keys
-  private object PreferencesKeys {
+  object PreferencesKeys {
     val IS_USER_INFO_COLLECTED = booleanPreferencesKey("is_user_info_collected")
     val FIRST_WATER_DATA_DATE = stringPreferencesKey("first_water_data_date")
+    val BEVERAGE = stringPreferencesKey("beverage")
 
     //Personal Settings
     val GENDER = stringPreferencesKey("gender")
     val WEIGHT = intPreferencesKey("weight")
+    val ACTIVITY_LEVEL = stringPreferencesKey("activity_level")
+    val WEATHER = stringPreferencesKey("weather")
     val WEIGHT_UNIT = stringPreferencesKey("weight_unit")
     val WATER_UNIT = stringPreferencesKey("water_unit")
+
+    //How much water to drink
+    val IS_DAILY_WATER_GOAL_TRACKING_RECOMMENDED_INTAKE = booleanPreferencesKey("is_daily_water_goal_tracking_recommended_intake")
     val RECOMMENDED_WATER_INTAKE = intPreferencesKey("recommended_water_intake")
     val DAILY_WATER_GOAL = intPreferencesKey("daily_water_goal")
 
     //Reminder Settings
+    val IS_REMINDER_ON = booleanPreferencesKey("is_reminder_on")
     val REMINDER_PERIOD_START = stringPreferencesKey("reminder_period_start")
     val REMINDER_PERIOD_END = stringPreferencesKey("reminder_period_end")
     val REMINDER_GAP = intPreferencesKey("reminder_gap")
@@ -79,6 +86,23 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     }
   }
 
+  override fun beverage(): Flow<String> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.BEVERAGE] ?: Beverages.DEFAULT
+    }
+
+  override suspend fun setBeverage(selectedBeverage: String) {
+    dataStore.edit {
+      it[PreferencesKeys.BEVERAGE] = selectedBeverage
+    }
+  }
+
   //Personal Settings
 
   override fun gender(): Flow<String> =
@@ -89,7 +113,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.GENDER] ?: Gender.NOT_SET
+      it[PreferencesKeys.GENDER] ?: Gender.MALE
     }
 
   override suspend fun setGender(gender: String) {
@@ -106,12 +130,46 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.WEIGHT] ?: Weight.NOT_SET
+      it[PreferencesKeys.WEIGHT] ?: Weight.DEFAULT_WEIGHT_KG
     }
 
-  override suspend fun setWeight(weight: Int) {
+  override suspend fun setWeight(amount: Int) {
     dataStore.edit {
-      it[PreferencesKeys.WEIGHT] = weight
+      it[PreferencesKeys.WEIGHT] = amount
+    }
+  }
+
+  override fun activityLevel(): Flow<String> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.ACTIVITY_LEVEL] ?: ActivityLevel.LIGHTLY_ACTIVE
+    }
+
+  override suspend fun setActivityLevel(activityLevel: String) {
+    dataStore.edit {
+      it[PreferencesKeys.ACTIVITY_LEVEL] = activityLevel
+    }
+  }
+
+  override fun weather(): Flow<String> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.WEATHER] ?: Weather.NORMAL
+    }
+
+  override suspend fun setWeather(weather: String) {
+    dataStore.edit {
+      it[PreferencesKeys.WEATHER] = weather
     }
   }
 
@@ -146,6 +204,25 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   override suspend fun setWaterUnit(unit: String)  {
     dataStore.edit {
       it[PreferencesKeys.WATER_UNIT] = unit
+    }
+  }
+
+  //Your Water Intake Settings
+
+  override fun isDailyWaterGoalTrackingRecommendedIntake(): Flow<Boolean> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.IS_DAILY_WATER_GOAL_TRACKING_RECOMMENDED_INTAKE] ?: true
+    }
+
+  override suspend fun setIsDailyWaterGoalTrackingRecommendedIntake(value: Boolean) {
+    dataStore.edit {
+      it[PreferencesKeys.IS_DAILY_WATER_GOAL_TRACKING_RECOMMENDED_INTAKE] = value
     }
   }
 
@@ -185,6 +262,23 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
 
   //Reminder Settings
 
+  override fun isReminderOn(): Flow<Boolean> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.IS_REMINDER_ON] ?: true
+    }
+
+  override suspend fun setIsReminderOn(value: Boolean) {
+    dataStore.edit {
+      it[PreferencesKeys.IS_REMINDER_ON] = value
+    }
+  }
+
   override fun reminderPeriodStart(): Flow<String> =
     dataStore.data.catch {
       if (it is IOException) {
@@ -193,7 +287,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.REMINDER_PERIOD_START] ?: ReminderPeriod.NOT_SET
+      it[PreferencesKeys.REMINDER_PERIOD_START] ?: ReminderPeriod.DEFAULT_REMINDER_PERIOD_START
     }
 
   override suspend fun setReminderPeriodStart(time: String) {
@@ -210,7 +304,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.REMINDER_PERIOD_END] ?: ReminderPeriod.NOT_SET
+      it[PreferencesKeys.REMINDER_PERIOD_END] ?: ReminderPeriod.DEFAULT_REMINDER_PERIOD_END
     }
 
   override suspend fun setReminderPeriodEnd(time: String) {
@@ -227,7 +321,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.REMINDER_GAP] ?: ReminderGap.NOT_SET
+      it[PreferencesKeys.REMINDER_GAP] ?: ReminderGap.ONE_HOUR
     }
 
   override suspend fun setReminderGap(gapTime: Int) {
@@ -261,7 +355,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
         throw it
       }
     }.map {
-      it[PreferencesKeys.REMINDER_SOUND] ?: ReminderSound.POURING_WATER
+      it[PreferencesKeys.REMINDER_SOUND] ?: ""
     }
 
   override suspend fun setReminderSound(sound: String) {

@@ -6,29 +6,23 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
+import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
+import com.example.myapplication.ui.components.IconText
 import com.example.myapplication.ui.screens.hometab.components.buttons.CustomAddWaterButton
-import com.example.myapplication.ui.screens.hometab.components.buttons.FruitButton
 import com.example.myapplication.ui.screens.hometab.components.buttons.UndoButton
 import com.example.myapplication.utils.Container
 
@@ -39,7 +33,8 @@ fun AddWaterButtonsRow(
   dailyWaterRecord: DailyWaterRecord,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowCustomAddWaterDialog:(Boolean) -> Unit,
-  setShowFruitDialog:(Boolean) -> Unit
+  beverage: Beverage,
+  mostRecentDrinkLog: DrinkLogs?,
 ) {
   val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = Container.baseGlassCapacity(waterUnit))
   val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit))
@@ -66,7 +61,20 @@ fun AddWaterButtonsRow(
         modifier = Modifier.weight(1f),
         horizontalArrangement = Arrangement.Center
       ) {
-        UndoButton(onClick = { /* TODO */ })
+        UndoButton(
+          onClick = {
+            if(mostRecentDrinkLog != null) {
+              roomDatabaseViewModel.updateDailyWaterRecord(
+                DailyWaterRecord(
+                  date = dailyWaterRecord.date,
+                  goal = dailyWaterRecord.goal,
+                  currWaterAmount = dailyWaterRecord.currWaterAmount - mostRecentDrinkLog.amount
+                )
+              )
+              roomDatabaseViewModel.deleteDrinkLog(mostRecentDrinkLog)
+            }
+          }
+        )
       }
     }
 
@@ -95,7 +103,8 @@ fun AddWaterButtonsRow(
               waterUnit = waterUnit,
               fontSize = fontSize,
               dailyWaterRecord = dailyWaterRecord,
-              roomDatabaseViewModel = roomDatabaseViewModel
+              roomDatabaseViewModel = roomDatabaseViewModel,
+              beverage = beverage
             )
 
             AddWaterContainerButton(
@@ -104,7 +113,8 @@ fun AddWaterButtonsRow(
               waterUnit = waterUnit,
               fontSize = fontSize,
               dailyWaterRecord = dailyWaterRecord,
-              roomDatabaseViewModel = roomDatabaseViewModel
+              roomDatabaseViewModel = roomDatabaseViewModel,
+              beverage = beverage
             )
 
             Spacer(modifier = Modifier.width(addIconSize))
@@ -115,7 +125,8 @@ fun AddWaterButtonsRow(
               waterUnit = waterUnit,
               fontSize = fontSize,
               dailyWaterRecord = dailyWaterRecord,
-              roomDatabaseViewModel = roomDatabaseViewModel
+              roomDatabaseViewModel = roomDatabaseViewModel,
+              beverage = beverage
             )
 
             Row(
@@ -157,9 +168,7 @@ fun AddWaterButtonsRow(
         modifier = Modifier.weight(1f),
         horizontalArrangement = Arrangement.Center
       ) {
-        FruitButton(
-          setShowFruitDialog = setShowFruitDialog
-        )
+        Spacer(modifier = Modifier.size(20.dp))
       }
     }
   }
@@ -172,35 +181,9 @@ fun AddWaterContainerButton(
   waterUnit: String,
   fontSize:TextUnit = 12.sp,
   dailyWaterRecord: DailyWaterRecord,
-  roomDatabaseViewModel: RoomDatabaseViewModel
+  roomDatabaseViewModel: RoomDatabaseViewModel,
+  beverage: Beverage
 ) {
-
-  val myId = "inlineContent"
-  val text = buildAnnotatedString {
-    appendInlineContent(myId, "[icon]")
-    append("${waterAmount}${waterUnit}")
-  }
-
-  val inlineContent = mapOf(
-    Pair(
-      myId,
-      InlineTextContent(
-        Placeholder(
-          width = fontSize,
-          height = fontSize,
-          placeholderVerticalAlign = PlaceholderVerticalAlign.Center
-        )
-      ) {
-        Container.IMAGE_MAPPER[container]?.let { it1 -> painterResource(id = it1) }?.let { it2 ->
-          Icon(
-            painter = it2,
-            contentDescription = "ContainerIcon $container"
-          )
-        }
-      }
-    )
-  )
-
   Row(
     modifier = Modifier
       .clip(RoundedCornerShape(15.dp))
@@ -208,7 +191,8 @@ fun AddWaterContainerButton(
         roomDatabaseViewModel.insertDrinkLog(
           DrinkLogs(
             amount = waterAmount,
-            icon = container
+            icon = beverage.icon,
+            beverage = beverage.name
           ),
         )
         roomDatabaseViewModel.updateDailyWaterRecord(
@@ -221,10 +205,10 @@ fun AddWaterContainerButton(
       .fillMaxHeight(),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    Text(
-      text = text,
-      inlineContent = inlineContent,
+    IconText(
+      text = "${waterAmount}${waterUnit}",
       fontSize = fontSize,
+      icon = Container.IMAGE_MAPPER[container]
     )
   }
 }

@@ -1,11 +1,8 @@
 package com.example.myapplication.ui.components
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -13,7 +10,9 @@ fun ShowDialog(
   title:String,
   content:@Composable()()->Unit,
   setShowDialog:(Boolean)->Unit,
-  onConfirmButtonClick:() -> Unit
+  onConfirmButtonClick:() -> Unit,
+  showConfirmButton:Boolean = true,
+  showDismissButton:Boolean = true,
 ) {
 
   AlertDialog(
@@ -26,23 +25,27 @@ fun ShowDialog(
       )
     },
     confirmButton = {
-      Button(
-        onClick = {
-          onConfirmButtonClick()
-          setShowDialog(false)
-        },
-      ) {
-        Text("Confirm")
+      if(showConfirmButton){
+        Button(
+          onClick = {
+            onConfirmButtonClick()
+            setShowDialog(false)
+          },
+        ) {
+          Text("Confirm")
+        }
       }
     },
     dismissButton = {
-      Button(
-        onClick = {
-          // Change the state to close the dialog
-          setShowDialog(false)
-        },
-      ) {
-        Text("Dismiss")
+      if(showDismissButton){
+        Button(
+          onClick = {
+            // Change the state to close the dialog
+            setShowDialog(false)
+          },
+        ) {
+          Text("Dismiss")
+        }
       }
     },
     text = {

@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.screens.settingstab.components.settingsdialogcontent
 
-import android.content.Context
 import android.widget.NumberPicker
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,27 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.myapplication.PreferenceDataStoreViewModel
-import com.example.myapplication.remindernotification.ReminderReceiver
 import com.example.myapplication.ui.components.ShowDialog
 import com.example.myapplication.utils.Settings
 import com.example.myapplication.utils.TimeString
-import java.util.*
 
 @Composable
 fun SetReminderPeriodSettingDialog(
-  reminderGap: Int,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowDialog:(Boolean) -> Unit,
   reminderPeriodStart: String,
   reminderPeriodEnd: String,
-  glassCapacity: Int,
-  mugCapacity: Int,
-  bottleCapacity: Int,
-  reminderSound: String,
-  dailyWaterGoal: Int,
-  remindAfterGoalAchieved: Boolean,
-  waterUnit: String,
-  context: Context
 ) {
   var selectedReminderTimingStart by  remember { mutableStateOf(reminderPeriodStart) }
   val setSelectedReminderTimingStart = { time:String ->
@@ -43,25 +31,25 @@ fun SetReminderPeriodSettingDialog(
     selectedReminderTimingEnd = time
   }
 
-  val startHourChangeListener = NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
+  val startHourChangeListener = NumberPicker.OnValueChangeListener { _, _, newVal ->
     val newTime:String =
       TimeString.HHMMIntToString(newVal,selectedReminderTimingStart.split(":")[1].toInt())
     setSelectedReminderTimingStart(newTime)
   }
 
-  val startMinuteChangeListener = NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
+  val startMinuteChangeListener = NumberPicker.OnValueChangeListener { _, _, newVal ->
     val newTime:String =
       TimeString.HHMMIntToString(selectedReminderTimingStart.split(":")[0].toInt(),newVal)
     setSelectedReminderTimingStart(newTime)
   }
 
-  val endHourChangeListener = NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
+  val endHourChangeListener = NumberPicker.OnValueChangeListener { _, _, newVal ->
     val newTime:String =
       TimeString.HHMMIntToString(newVal,selectedReminderTimingEnd.split(":")[1].toInt())
     setSelectedReminderTimingEnd(newTime)
   }
 
-  val endMinuteChangeListener = NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
+  val endMinuteChangeListener = NumberPicker.OnValueChangeListener { _, _, newVal ->
     val newTime:String =
       TimeString.HHMMIntToString(selectedReminderTimingEnd.split(":")[0].toInt(),newVal)
     setSelectedReminderTimingEnd(newTime)
@@ -192,22 +180,6 @@ fun SetReminderPeriodSettingDialog(
     onConfirmButtonClick = {
       preferenceDataStoreViewModel.setReminderPeriodStart(selectedReminderTimingStart)
       preferenceDataStoreViewModel.setReminderPeriodEnd(selectedReminderTimingEnd)
-      val calendar = Calendar.getInstance()
-      calendar.add(Calendar.MILLISECOND, reminderGap)
-      ReminderReceiver.setReminder(
-        time = calendar.timeInMillis,
-        reminderPeriodStart = selectedReminderTimingStart,
-        reminderPeriodEnd = selectedReminderTimingEnd,
-        reminderGap = reminderGap,
-        context = context,
-        glassCapacity = glassCapacity,
-        mugCapacity = mugCapacity,
-        bottleCapacity = bottleCapacity,
-        channelId = reminderSound,
-        waterUnit = waterUnit,
-        dailyWaterGoal = dailyWaterGoal,
-        remindAfterGoalAchieved = remindAfterGoalAchieved
-      )
     }
   )
 

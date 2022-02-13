@@ -8,6 +8,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
+import com.example.myapplication.ui.components.IconText
 import com.example.myapplication.ui.screens.settingstab.horizontalPaddingSettings
 import com.example.myapplication.ui.theme.Typography
 import com.example.myapplication.ui.screens.settingstab.verticalPaddingSettings
@@ -16,25 +20,45 @@ import com.example.myapplication.ui.screens.settingstab.verticalPaddingSettings
 fun SettingsRowSelectValue(
   text: String,
   value:String,
-  onSettingsRowClick: () -> Unit
+  onSettingsRowClick: () -> Unit,
+  enabled:Boolean = true,
+  icon:Int? = null,
+  valueFontSize:TextUnit = 13.sp,
+  textFontSize:TextUnit = 15.sp
 ) {
+  val modifier:Modifier =
+    if(enabled)
+      Modifier.clickable { onSettingsRowClick() }
+    else Modifier.alpha(0.3f)
+
   Row(
-    modifier = Modifier
-      .clickable {
-        onSettingsRowClick()
-      },
+    modifier = modifier,
     verticalAlignment = Alignment.CenterVertically
   ) {
-    Text(
-      modifier = Modifier
-        .weight(1f)
-        .padding(
-        horizontal = horizontalPaddingSettings,
-        vertical = verticalPaddingSettings
-      ),
-      text = text,
-      style = Typography.subtitle1
-    )
+    if(icon == null) {
+      Text(
+        modifier = Modifier
+          .weight(1f)
+          .padding(
+            horizontal = horizontalPaddingSettings,
+            vertical = verticalPaddingSettings
+          ),
+        text = text,
+        fontSize = textFontSize
+      )
+    } else {
+      IconText(
+        text = text,
+        fontSize = textFontSize,
+        icon = icon,
+        modifier = Modifier
+          .weight(1f)
+          .padding(
+            horizontal = horizontalPaddingSettings,
+            vertical = verticalPaddingSettings
+          )
+      )
+    }
     Text(
       modifier = Modifier
         .padding(
@@ -42,8 +66,8 @@ fun SettingsRowSelectValue(
           vertical = verticalPaddingSettings
         ),
       text = value,
-      style = Typography.subtitle1,
-      color = MaterialTheme.colors.primary
+      color = MaterialTheme.colors.primary,
+      fontSize = valueFontSize
     )
   }
 }

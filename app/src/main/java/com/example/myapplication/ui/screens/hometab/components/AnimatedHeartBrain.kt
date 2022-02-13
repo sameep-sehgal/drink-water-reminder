@@ -76,7 +76,7 @@ fun AnimatedHeartBrain(
         .background(
           Brush.verticalGradient(
             colors = listOf(Color(0xFFd2f1fc), Color.Transparent),
-            startY = (cc.height + 45f) * (1 - currentPercentage.value + 0.01f),
+            startY = (cc.height + 1f) * (1 - currentPercentage.value + 0.01f),
             endY = cc.height * (1 - currentPercentage.value + 0.01f)
           )
         )
@@ -93,35 +93,3 @@ fun AnimatedHeartBrain(
     )
   }
 }
-
-
-
-//                Box(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .clip(shape = RoundedCornerShape(size = 12.dp))
-//                        .onGloballyPositioned {
-//                            cc = it.size
-//                        }
-//                        .background(
-////                            Brush.verticalGradient(
-////                                (1f-currentPercentage.value) to Color.Transparent,
-////                                currentPercentage.value to Color.Cyan,
-////                            )
-//                            Brush.verticalGradient(
-//                                colors = listOf(Color.Cyan, Color.Transparent),
-//                                startY = (cc.height+60f)*(1-currentPercentage.value +0.01f),
-//                                endY = cc.height*(1-currentPercentage.value+0.01f)
-//                            )
-//                        )
-//                        .border(width = 8.dp, color = Color(0xFF565656)),
-//                    contentAlignment = Alignment.Center
-//                ){
-//                    Row() {
-//                        Button(onClick = {
-//                            if(percentage < 0.95f)percentage += 0.1f
-//                        }) {
-//                            Text(text = (100*currentPercentage.value).toInt().toString())
-//                        }
-//                    }
-//                }

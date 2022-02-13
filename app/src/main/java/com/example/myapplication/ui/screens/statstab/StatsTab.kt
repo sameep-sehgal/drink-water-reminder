@@ -16,15 +16,19 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.EditHistoryActivity
 import com.example.myapplication.PreferenceDataStoreViewModel
 import com.example.myapplication.RoomDatabaseViewModel
-import com.example.myapplication.ui.screens.statstab.components.*
 import com.example.myapplication.ui.screens.statstab.components.buttons.EditHistoryButton
 import com.example.myapplication.ui.screens.statstab.components.charts.barchart.BarChartData
-import com.example.myapplication.ui.screens.statstab.components.selectors.TimeLineSelector
+import com.example.myapplication.ui.screens.statstab.components.renderbarchart.RenderBarChart
+import com.example.myapplication.ui.screens.statstab.components.renderotherstats.RenderOtherStats
+import com.example.myapplication.ui.screens.statstab.components.renderpiechart.RenderPieChart
+import com.example.myapplication.ui.screens.statstab.components.topstatstabbar.selectors.TimeLineSelector
+import com.example.myapplication.ui.screens.statstab.components.topstatstabbar.TopStatsTabBar
 import com.example.myapplication.ui.theme.SettingsSubheadingLight
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.Statistics
 import com.example.myapplication.utils.Statistics.createBarChartData
 import com.example.myapplication.utils.Statistics.createWaterRecordHashMap
+import com.example.myapplication.utils.Units
 
 @Composable
 fun StatsTab(
@@ -59,6 +63,7 @@ fun StatsTab(
   val waterRecordsList = roomDatabaseViewModel.waterRecordsList.collectAsState()
   val drinkLogsCount = roomDatabaseViewModel.drinkLogsCount.collectAsState()
   val firstWaterRecordDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
+  val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
 
   LaunchedEffect(
     key1 = selectedStatsTimeLine
@@ -108,7 +113,9 @@ fun StatsTab(
       endDate = endDate,
       dateRecordMapper = dateRecordMapper,
       selectedStatsTimeLine = selectedStatsTimeLine,
-      incrementDailyWaterRecordsCount = incrementWaterRecordsCount
+      incrementDailyWaterRecordsCount = incrementWaterRecordsCount,
+      todaysDate = todaysDate,
+      firstWaterDataDate = firstWaterRecordDate.value
     )
   }
 
@@ -147,13 +154,19 @@ fun StatsTab(
 
       RenderBarChart(bars = bars)
 
-      RenderPieChart()
+      RenderPieChart(
+        roomDatabaseViewModel = roomDatabaseViewModel,
+        startDate = startDate,
+        endDate = endDate,
+        waterUnit = waterUnit.value
+      )
 
       RenderOtherStats(
         drinkLogsCount = drinkLogsCount.value,
         waterRecordsCount = waterRecordsCount,
         goalCompletedDaysCount = goalCompletedDaysCount,
-        waterRecordsList = waterRecordsList.value
+        waterRecordsList = waterRecordsList.value,
+        waterUnit = waterUnit.value
       )
 
       Spacer(modifier = Modifier.size(72.dp))

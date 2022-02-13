@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.repository.WaterDataRepository
+import com.example.myapplication.utils.Beverages
 import com.example.myapplication.utils.DateString
 import com.example.myapplication.utils.RecommendedWaterIntake
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,16 +28,17 @@ class RoomDatabaseViewModel @Inject constructor(
 
   fun refreshData() {
     getTodaysWaterRecord()
-    getTodaysDrinkLogs()
-    getSelectedHistoryDrinkLogs(DateString.getTodaysDate())
-    getSelectedHistoryWaterRecord(DateString.getTodaysDate())
+    getDrinkLogs()
   }
 
   private val _drinkLogs = MutableStateFlow<List<DrinkLogs>>(emptyList())
   val drinkLogs : StateFlow<List<DrinkLogs>> =  _drinkLogs.asStateFlow()
-  private fun getTodaysDrinkLogs(){
+  fun getDrinkLogs(
+    startDate: String = DateString.getTodaysDate(),
+    endDate: String = DateString.getTodaysDate()
+  ){
     viewModelScope.launch(Dispatchers.IO) {
-      waterDataRepository.getDrinkLogs().distinctUntilChanged()
+      waterDataRepository.getDrinkLogs(startDate, endDate).distinctUntilChanged()
         .catch { e->
           Log.e("getTodaysDrinkLogs", "error before collecting from Flow", )
         }
@@ -45,12 +48,29 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
+  private val _statsDrinkLogsList = MutableStateFlow<List<DrinkLogs>>(emptyList())
+  val statsDrinkLogsList : StateFlow<List<DrinkLogs>> =  _statsDrinkLogsList.asStateFlow()
+  fun getStatsDrinkLogsList(
+    startDate: String = DateString.getTodaysDate(),
+    endDate: String = DateString.getTodaysDate()
+  ){
+    viewModelScope.launch(Dispatchers.IO) {
+      waterDataRepository.getDrinkLogs(startDate, endDate).distinctUntilChanged()
+        .catch { e->
+          Log.e("getTodaysDrinkLogs", "error before collecting from Flow", )
+        }
+        .collect { it1 ->
+          _statsDrinkLogsList.value = it1.sortedByDescending { it.time }
+        }
+    }
+  }
+
   private val _selectedHistoryDrinkLogs = MutableStateFlow<List<DrinkLogs>>(emptyList())
-  val selectedHistoryDrinkLogs : StateFlow<List<DrinkLogs>> =  _selectedHistoryDrinkLogs.asStateFlow()
+  val selectedHistoryDrinkLogs : StateFlow<List<DrinkLogs>?> =  _selectedHistoryDrinkLogs.asStateFlow()
 
   fun getSelectedHistoryDrinkLogs(date:String){
     viewModelScope.launch(Dispatchers.IO) {
-      waterDataRepository.getDrinkLogs(date).distinctUntilChanged()
+      waterDataRepository.getDrinkLogs(startDate = date, endDate = date).distinctUntilChanged()
         .catch { e->
           Log.e("getSelectedHistoryDLogs", "error before collecting from Flow")
         }
@@ -78,8 +98,76 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
+  private val _beverage = MutableStateFlow(Beverage(Beverages.DEFAULT, 0))
+  val beverage : StateFlow<Beverage> = _beverage.asStateFlow()
+  fun getBeverage(beverageName: String){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.getBeverage(beverageName).collect {
+        _beverage.value = it
+      }
+    }
+  }
+
+  private val _beverageList = MutableStateFlow<List<Beverage>>(emptyList())
+  val beverageList : StateFlow<List<Beverage>> =  _beverageList.asStateFlow()
+  fun getAllBeverages(){
+    viewModelScope.launch(Dispatchers.IO) {
+      waterDataRepository.getAllBeverages().distinctUntilChanged()
+        .collect { it1 ->
+          _beverageList.value = it1.sortedBy { it2 -> it2.importance }
+        }
+    }
+  }
+
+  fun updateBeverageImportance(
+    beverageList:List<Beverage>,
+    importance:Int
+  ) {
+    viewModelScope.launch(Dispatchers.IO) {
+      for(beverage in beverageList) {
+        if(beverage.importance < importance){
+          insertBeverage(
+            Beverage(
+              name = beverage.name,
+              icon = beverage.icon,
+              importance = beverage.importance + 1
+            )
+          )
+        }
+        if(beverage.importance == importance) {
+          insertBeverage(
+            Beverage(
+              name = beverage.name,
+              icon = beverage.icon,
+              importance = 0
+            )
+          )
+        }
+      }
+    }
+  }
+
+  fun updateBeverageImportanceOnDelete(
+    beverageList:List<Beverage>,
+    importance:Int
+  ) {
+    viewModelScope.launch(Dispatchers.IO) {
+      for(beverage in beverageList) {
+        if(beverage.importance > importance){
+          insertBeverage(
+            Beverage(
+              name = beverage.name,
+              icon = beverage.icon,
+              importance = beverage.importance - 1
+            )
+          )
+        }
+      }
+    }
+  }
+
   private val _selectedHistoryWaterRecord = MutableStateFlow(DailyWaterRecord(goal = 0, currWaterAmount = 0))
-  val selectedHistoryWaterRecord : StateFlow<DailyWaterRecord> = _selectedHistoryWaterRecord.asStateFlow()
+  val selectedHistoryWaterRecord : StateFlow<DailyWaterRecord?> = _selectedHistoryWaterRecord.asStateFlow()
   fun getSelectedHistoryWaterRecord(date:String = DateString.getTodaysDate()){
     viewModelScope.launch (Dispatchers.IO){
       waterDataRepository.getDailyWaterRecord(date).collect {
@@ -168,6 +256,12 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
+  fun insertBeverage(beverage: Beverage){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.insertBeverage(beverage)
+    }
+  }
+
   fun insertDrinkLog(
     drinkLog: DrinkLogs
   ){
@@ -188,11 +282,15 @@ class RoomDatabaseViewModel @Inject constructor(
     }
   }
 
-  fun deleteDrinkLog(
-    drinkLog: DrinkLogs
-  ){
+  fun deleteDrinkLog(drinkLog: DrinkLogs){
     viewModelScope.launch (Dispatchers.IO){
-      waterDataRepository.deleteDrinkLog(drinkLog = drinkLog)
+      waterDataRepository.deleteDrinkLog(drinkLog)
+    }
+  }
+
+  fun deleteBeverage(beverage: Beverage){
+    viewModelScope.launch (Dispatchers.IO){
+      waterDataRepository.deleteBeverage(beverage)
     }
   }
 

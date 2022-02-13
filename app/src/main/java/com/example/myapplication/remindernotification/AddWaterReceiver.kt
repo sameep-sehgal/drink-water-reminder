@@ -8,16 +8,17 @@ import androidx.core.app.NotificationManagerCompat
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
 import com.example.myapplication.data.roomdatabase.WaterDatabase
+import com.example.myapplication.utils.Beverages
 import kotlinx.coroutines.*
 
 class AddWaterReceiver: BroadcastReceiver() {
 
-  private val TAG = ReminderReceiver::class.java.simpleName
+  private val TAG = AddWaterReceiver::class.java.simpleName
 
   @DelicateCoroutinesApi
   override fun onReceive(context: Context?, intent: Intent?) {
     if (context != null) {
-      NotificationManagerCompat.from(context).cancel(TEST_NOTIFICATION_ID)
+      NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
     }
     GlobalScope.launch (Dispatchers.Main){
       if (context != null) {
@@ -35,7 +36,7 @@ class AddWaterReceiver: BroadcastReceiver() {
             todaysWaterRecord = withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
           }
           //TODO("Handle date change here")
-          container?.let { DrinkLogs(amount = amount, icon = it) }?.let { db.insertDrinkLog(it) }
+          container?.let { DrinkLogs(amount = amount, icon = Beverages.DEFAULT_ICON, beverage = Beverages.DEFAULT) }?.let { db.insertDrinkLog(it) }
           db.updateDailyWaterRecord(DailyWaterRecord(
             date = todaysWaterRecord.date,
             goal = todaysWaterRecord.goal,

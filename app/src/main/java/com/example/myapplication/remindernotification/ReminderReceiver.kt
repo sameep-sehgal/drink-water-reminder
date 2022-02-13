@@ -1,288 +1,93 @@
 package com.example.myapplication.remindernotification
 
-import android.annotation.SuppressLint
-import android.app.ActivityManager
-import android.app.AlarmManager
-import android.app.Notification
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.util.Log
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.myapplication.MainActivity
-import com.example.myapplication.R
 import com.example.myapplication.data.models.DailyWaterRecord
+import com.example.myapplication.data.preferencedatastore.PreferenceDataStore
+import com.example.myapplication.data.preferencedatastore.dataStore
 import com.example.myapplication.data.roomdatabase.WaterDatabase
-import com.example.myapplication.ui.theme.AppColorPrimary
-import com.example.myapplication.utils.*
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.myapplication.utils.ReminderReceiverUtil
 import kotlinx.coroutines.*
-import java.util.*
+import kotlinx.coroutines.flow.first
 
-//Use broadcast Receiver since app wont run when we have to show notifications
-//It will automatically show notification at desired time without running the app
-@AndroidEntryPoint
 class ReminderReceiver: BroadcastReceiver() {
-
-  private val TAG = ReminderReceiver::class.java.simpleName
-
   @DelicateCoroutinesApi
   override fun onReceive(context: Context?, intent: Intent?) {
-    if(context?.let { isAppRunning(it) } == true) return
+    Log.d("TAG", "onReceive: Notification Received Before GlobalScope")
+    var reminderPeriodStart:String? = null
+    var reminderPeriodEnd:String? = null
+    var glassCapacity: Int? = null
+    var mugCapacity: Int? = null
+    var bottleCapacity: Int? = null
+    var waterUnit: String? = null
+    var remindAfterGoalAchieved: Boolean? = null
+    var dailyWaterGoal: Int? = null
+    Log.d("TAG", "onReceive: $context ${context?.dataStore?.data} outside datastore")
 
-    val reminderPeriodStart = intent?.getStringExtra("reminder_period_start")
-    val reminderPeriodEnd = intent?.getStringExtra("reminder_period_end")
-    val reminderGap = intent?.getIntExtra("reminder_gap",ReminderGap.NOT_SET)
-    val glassCapacity = intent?.getIntExtra("glass_capacity", 0)
-    val mugCapacity = intent?.getIntExtra("mug_capacity",0)
-    val bottleCapacity = intent?.getIntExtra("bottle_capacity",0)
-    val waterUnit = intent?.getStringExtra("water_unit")
-    val remindAfterGoalAchieved = intent?.getBooleanExtra("remind_after_goal_achieved", true)
-    val dailyWaterGoal = intent?.getIntExtra("daily_water_goal",RecommendedWaterIntake.NOT_SET)
-    val channelId = intent?.getStringExtra("channel_id")
+    GlobalScope.launch {
+      Log.d("TAG", "onReceive: Notification Received Inside GlobalScope")
 
-    //Todo(""Will Need to pass Boolean dontRemindToday through intent extras"")
-    //Todo(""Will Need to pass Reminder Sound to support devices < 8.0 through intent extras"")
+      context?.dataStore?.data?.first {
+        Log.d("TAG", "onReceive: $it ${it[PreferenceDataStore.PreferencesKeys.REMINDER_PERIOD_START]} inside datastore")
 
-    var reminderPeriodStartTime: Calendar = Calendar.getInstance()
-    var reminderPeriodEndTime: Calendar = Calendar.getInstance()
-    if(reminderPeriodStart != null) {
-      reminderPeriodStartTime = TimeString.getCalendarInstance(reminderPeriodStart)
-    }
-    if(reminderPeriodEnd != null) {
-      reminderPeriodEndTime = TimeString.getCalendarInstance(reminderPeriodEnd)
-    }
+        reminderPeriodStart = it[PreferenceDataStore.PreferencesKeys.REMINDER_PERIOD_START]
+        reminderPeriodEnd = it[PreferenceDataStore.PreferencesKeys.REMINDER_PERIOD_END]
+        glassCapacity = it[PreferenceDataStore.PreferencesKeys.GLASS_CAPACITY]
+        mugCapacity = it[PreferenceDataStore.PreferencesKeys.MUG_CAPACITY]
+        bottleCapacity = it[PreferenceDataStore.PreferencesKeys.BOTTLE_CAPACITY]
+        waterUnit = it[PreferenceDataStore.PreferencesKeys.WATER_UNIT]
+        remindAfterGoalAchieved = it[PreferenceDataStore.PreferencesKeys.REMINDER_AFTER_GOAL_ACHIEVED]
+        dailyWaterGoal = it[PreferenceDataStore.PreferencesKeys.DAILY_WATER_GOAL]
+        Log.d("TAG", "onReceive: ${bottleCapacity} inside datastore")
+        true
+      }
 
-    if(reminderPeriodStartTime > reminderPeriodEndTime){
-      //Case -- reminderPeriodEnd = "02:00" and reminderPeriodStart = "10:00"
-      reminderPeriodEndTime.add(Calendar.DAY_OF_MONTH,1)
-    }
+      Log.d("TAG", "onReceive: Values $reminderPeriodStart - $reminderPeriodEnd,, $waterUnit")
+      if(context!=null) {
+        val db = WaterDatabase.getInstance(context).waterDatabaseDao()
+        var todaysWaterRecord: DailyWaterRecord? =
+          withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
+        if (todaysWaterRecord == null) {
+          dailyWaterGoal?.let { DailyWaterRecord(goal = it) }
+            ?.let { db.insertDailyWaterRecord(it) }
+          todaysWaterRecord =
+            withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
+        }
 
-    val currTime = Calendar.getInstance()
-    var nextReminderTime = Calendar.getInstance()
+        Log.d("TAG", "onReceive: TodaysWaterRecord = $todaysWaterRecord")
 
-    if(currTime < reminderPeriodEndTime && currTime > reminderPeriodStartTime){
-      //Build notification only when we need to show.
-      val builder = buildBasicNotification(
-        context,
-        glassCapacity,
-        mugCapacity,
-        bottleCapacity,
-        waterUnit,
-        dailyWaterGoal,
-        channelId
-      )
-
-      GlobalScope.launch(Dispatchers.Main) {
-        if(context!=null) {
-          val db = WaterDatabase.getInstance(context).waterDatabaseDao()
-          var todaysWaterRecord = withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
-          if(todaysWaterRecord == null){
-            //Day changes when new notification is to be shown
-            dailyWaterGoal?.let { DailyWaterRecord(goal = it) }
-              ?.let { db.insertDailyWaterRecord(it) }
-            todaysWaterRecord = withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
-          }
-          if (builder != null && !(!remindAfterGoalAchieved!! && todaysWaterRecord.isGoalAchieved)) {
+        if(ReminderReceiverUtil.shallNotify(
+          reminderPeriodEnd = reminderPeriodEnd,
+          reminderPeriodStart = reminderPeriodStart,
+          remindAfterGoalAchieved = remindAfterGoalAchieved,
+          todaysWaterRecord = todaysWaterRecord
+        )) {
+          Log.d("TAG", "onReceive: Shall Notify == true")
+          val builder = ReminderReceiverUtil.buildBasicNotification(
+            context = context,
+            glassCapacity = glassCapacity,
+            mugCapacity = mugCapacity,
+            bottleCapacity = bottleCapacity,
+            waterUnit = waterUnit,
+            dailyWaterGoal = dailyWaterGoal
+          )
+          Log.d("TAG", "onReceive: Builder $builder")
+          if(builder != null) {
             builder
               .setProgress(todaysWaterRecord.goal,todaysWaterRecord.currWaterAmount, false)
-              .setContentText("${todaysWaterRecord.currWaterAmount}/${todaysWaterRecord.goal}")
+              .setContentText("${todaysWaterRecord.currWaterAmount}/${todaysWaterRecord.goal}$waterUnit")
             with(context.let { NotificationManagerCompat.from(it) }) {
-              // notificationId is a unique int for each notification that you must define
-              this.notify(TEST_NOTIFICATION_ID, builder.build())
+              this.notify(NOTIFICATION_ID, builder.build())
             }
+            Log.d("TAG", "onReceive: Notification Set")
           }
+        } else {
+          Log.d("TAG", "onReceive: Shall Notify == false")
         }
       }
-      Log.d(TAG, "onReceive: $reminderGap $reminderPeriodStart $reminderPeriodEnd $glassCapacity")
-
-      nextReminderTime.add(Calendar.MILLISECOND, reminderGap!!)
-    }else{
-      Log.d(TAG, "onReceive: Set next day repeating reminder")
-      //Set Next Day Repeating Reminder
-      reminderPeriodStartTime.add(Calendar.MILLISECOND,24*60*60*1000)
-      nextReminderTime = reminderPeriodStartTime
-      Log.d(TAG, "onReceive: ${reminderPeriodStartTime.get(Calendar.DATE)}")
     }
-
-    if (
-      reminderPeriodStart != null &&
-      reminderPeriodEnd != null &&
-      reminderGap != null &&
-      context != null &&
-      glassCapacity != null &&
-      mugCapacity != null &&
-      bottleCapacity != null &&
-      channelId != null &&
-      waterUnit != null &&
-      dailyWaterGoal != null &&
-      remindAfterGoalAchieved != null
-    ) {
-      setReminder(
-        nextReminderTime.timeInMillis,
-        reminderPeriodStart,
-        reminderPeriodEnd,
-        reminderGap,
-        glassCapacity,
-        mugCapacity,
-        bottleCapacity,
-        channelId,
-        waterUnit,
-        dailyWaterGoal,
-        remindAfterGoalAchieved,
-        context
-      )
-      Log.d(TAG, "onReceive: Reminder is Set")
-    } else {
-      Log.e(TAG, "Failed to build Notification")
-    }
-  }
-
-  companion object {
-    @SuppressLint("UnspecifiedImmutableFlag")
-    fun setReminder(
-      time:Long,
-      reminderPeriodStart:String,
-      reminderPeriodEnd:String,
-      reminderGap:Int,
-      glassCapacity:Int,
-      mugCapacity:Int,
-      bottleCapacity:Int,
-      channelId:String,
-      waterUnit:String,
-      dailyWaterGoal:Int,
-      remindAfterGoalAchieved:Boolean,
-      context: Context
-    ) {
-      if(reminderGap == ReminderGap.DONT_REMIND) {
-        cancelReminder(context)
-        return
-      }
-      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-      val intent = Intent(context, ReminderReceiver::class.java)
-      //pass data to broadcast receiver using intent extras
-      //As broadcast receiver only survives for a short time reading app data from datastore is not feasable
-      //Could have used workmanager but that does not guarantee task completion at exact time
-      intent.putExtra("reminder_period_start",reminderPeriodStart)
-      intent.putExtra("reminder_period_end",reminderPeriodEnd)
-      intent.putExtra("reminder_gap",reminderGap)
-      intent.putExtra("glass_capacity",glassCapacity)
-      intent.putExtra("mug_capacity",mugCapacity)
-      intent.putExtra("bottle_capacity",bottleCapacity)
-      intent.putExtra("channel_id",channelId)
-      intent.putExtra("water_unit",waterUnit)
-      intent.putExtra("dail_water_goal",dailyWaterGoal)
-      intent.putExtra("remind_after_goal_achieved",remindAfterGoalAchieved)
-      val pendingIntent =
-        PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-      Log.d("TAG", "onReceive: ${TimeString.longToString(time)} inside setReminder")
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        alarmManager.setExactAndAllowWhileIdle(
-          AlarmManager.RTC_WAKEUP,
-          time,
-          pendingIntent
-        )
-      }else{
-        alarmManager.setExact(
-          AlarmManager.RTC_WAKEUP,
-          time,
-          pendingIntent
-        )
-      }
-    }
-
-    @SuppressLint("UnspecifiedImmutableFlag")
-    private fun cancelReminder(
-      context: Context
-    ) {
-      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-      val intent = Intent(context, ReminderReceiver::class.java)
-      val pendingIntent =
-        PendingIntent.getBroadcast(context, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
-      alarmManager.cancel(pendingIntent)
-      Log.d("TAG", "cancelReminder: Reminder Cancelled")
-    }
-  }
-
-  private fun isAppRunning(context: Context): Boolean {
-    val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-    // The first in the list of RunningTasks is always the foreground task.
-    val appProcess = am.runningAppProcesses[0] ?: return false
-    var res = false
-    if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName.equals(context.packageName)) {
-      res = true
-    }
-    Log.d(TAG, "isAppRunning: $res Check Before launching notification")
-    return res
-  }
-
-  @SuppressLint("UnspecifiedImmutableFlag")
-  private fun buildBasicNotification(
-    context: Context?,
-    glassCapacity: Int?,
-    mugCapacity: Int?,
-    bottleCapacity: Int?,
-    waterUnit:String?,
-    dailyWaterGoal: Int?,
-    channelId: String?
-  ): NotificationCompat.Builder? {
-    val mainActivityIntent = Intent(context, MainActivity::class.java).apply {
-      flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-    }
-    //Request codes are used to uniquely identify intents. They must not be the same for different intents
-    val pendingIntent = PendingIntent.getActivity(context,0,mainActivityIntent,PendingIntent.FLAG_UPDATE_CURRENT)
-
-    //Build notification only when we need to show.
-    val builder = context?.let {
-      NotificationCompat.Builder(it, CHANNEL_ID_4)
-        //TODO(Surround setSound with if condition to handle device default sound)
-        .setSound(
-          Uri.parse("android.resource://"
-                  + context.packageName + "/" + ReminderSound.NAME_VALUE_MAPPER[channelId]))
-        .setSmallIcon(R.drawable.home_icon_glass_white)
-        .setContentTitle("It's Time To Drink Water!")
-        .setAutoCancel(true)
-        .setPriority(NotificationCompat.PRIORITY_MAX)
-        .setDefaults(Notification.DEFAULT_VIBRATE)
-        .setContentIntent(pendingIntent)
-        .setColor(AppColorPrimary.hashCode())
-        .setFullScreenIntent(pendingIntent, true)
-    }
-
-    //Add Action Buttons
-    if(glassCapacity != null && glassCapacity != 0) {
-      val addWaterIntentGlass = Intent(context, AddWaterReceiver::class.java).apply {
-        putExtra("value", glassCapacity)
-        putExtra("container", Container.GLASS)
-        putExtra("daily_water_goal", dailyWaterGoal)
-      }
-      val pendingActionIntentGlass = PendingIntent.getBroadcast(context,1, addWaterIntentGlass, PendingIntent.FLAG_UPDATE_CURRENT)
-      builder?.addAction(R.drawable.glass_2, "${glassCapacity}${waterUnit}", pendingActionIntentGlass)
-    }
-    if(mugCapacity != null && mugCapacity != 0) {
-      val addWaterIntentMug = Intent(context, AddWaterReceiver::class.java).apply {
-        putExtra("value", mugCapacity)
-        putExtra("container", Container.MUG)
-        putExtra("daily_water_goal", dailyWaterGoal)
-      }
-      val pendingActionIntentMug = PendingIntent.getBroadcast(context,2, addWaterIntentMug, PendingIntent.FLAG_UPDATE_CURRENT)
-      builder?.addAction(R.drawable.mug_3, "${mugCapacity}${waterUnit}", pendingActionIntentMug)
-    }
-    if(bottleCapacity != null && bottleCapacity != 0) {
-      val addWaterIntentBottle = Intent(context, AddWaterReceiver::class.java).apply {
-        putExtra("value", bottleCapacity)
-        putExtra("container", Container.BOTTLE)
-        putExtra("daily_water_goal", dailyWaterGoal)
-      }
-      val pendingActionIntentBottle = PendingIntent.getBroadcast(context,3, addWaterIntentBottle, PendingIntent.FLAG_UPDATE_CURRENT)
-      builder?.addAction(R.drawable.bottle_4, "${bottleCapacity}${waterUnit}", pendingActionIntentBottle)
-    }
-
-    return builder
   }
 }

@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.example.myapplication.data.models.ReminderTimings
 import com.example.myapplication.utils.TimeString
 
 @Composable

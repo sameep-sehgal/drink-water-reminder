@@ -1,19 +1,19 @@
 package com.example.myapplication.data.roomdatabase
 
 import android.content.Context
-import androidx.room.AutoMigration
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import com.example.myapplication.data.models.Beverage
 import com.example.myapplication.data.models.DailyWaterRecord
 import com.example.myapplication.data.models.DrinkLogs
-import com.example.myapplication.data.models.ReminderTimings
 
 @Database(
-    entities = [DrinkLogs::class, DailyWaterRecord::class, ReminderTimings::class],
-    version = 2,
+    entities = [DrinkLogs::class, DailyWaterRecord::class, Beverage::class],
+    version = 5,
     autoMigrations = [
-        AutoMigration (from = 1, to = 2)
+        AutoMigration (
+            from = 4,
+            to = 5
+        )
     ]
 )
 abstract class WaterDatabase: RoomDatabase() {

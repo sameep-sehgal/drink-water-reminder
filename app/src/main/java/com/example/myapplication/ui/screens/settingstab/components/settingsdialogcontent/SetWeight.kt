@@ -19,7 +19,9 @@ fun SetWeightSettingDialog(
   setShowDialog:(Boolean) -> Unit,
   weight:Int,
   weightUnit:String,
-  waterUnit:String
+  waterUnit:String,
+  activityLevel:String,
+  weather:String,
 ) {
   var selectedWeight by  remember { mutableStateOf(weight) }
   fun setSelectedWeight(weight:Int) {
@@ -30,7 +32,7 @@ fun SetWeightSettingDialog(
     selectedWeightUnit = unit
   }
 
-  val unitPickerChangeListener = NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
+  val unitPickerChangeListener = NumberPicker.OnValueChangeListener { _, _, newVal ->
     if (newVal == 0) {
       setSelectedWeightUnit(Units.KG)
       setSelectedWeight(Weight.lbToKg(selectedWeight))
@@ -41,7 +43,7 @@ fun SetWeightSettingDialog(
     }
     Log.d("TAG", "GetWeight: Before -> $selectedWeight $selectedWeightUnit")
   }
-  val weightPickerChangeListener = NumberPicker.OnValueChangeListener { picker, oldVal, newVal ->
+  val weightPickerChangeListener = NumberPicker.OnValueChangeListener { _, _, newVal ->
     setSelectedWeight(newVal)
   }
 
@@ -90,11 +92,13 @@ fun SetWeightSettingDialog(
     onConfirmButtonClick = {
       preferenceDataStoreViewModel.setWeight(selectedWeight)
       preferenceDataStoreViewModel.setWeightUnit(selectedWeightUnit)
-      val newIntake = RecommendedWaterIntake.calculateBaseWaterIntake(
+      val newIntake = RecommendedWaterIntake.calculateRecommendedWaterIntake(
         gender = gender,
         weight = selectedWeight,
         weightUnit = selectedWeightUnit,
-        waterUnit = waterUnit
+        waterUnit = waterUnit,
+        activityLevel = activityLevel,
+        weather = weather
       )
       preferenceDataStoreViewModel.setRecommendedWaterIntake(newIntake)
     }

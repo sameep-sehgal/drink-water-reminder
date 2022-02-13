@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.screens.settingstab.horizontalPaddingSettings
@@ -19,14 +20,17 @@ import com.example.myapplication.ui.theme.Typography
 fun SettingsRowNoValueWithSubtitle(
   text:String,
   subtitle:String,
-  onSettingsRowClick:() -> Unit
+  onSettingsRowClick:() -> Unit,
+  enabled: Boolean = true
 ) {
+  val modifier:Modifier =
+    if(enabled)
+      Modifier.clickable { onSettingsRowClick() }
+    else Modifier.alpha(0.3f)
   Column(
-    modifier = Modifier
+    modifier = modifier
       .fillMaxWidth()
-      .clickable {
-        onSettingsRowClick()
-      }.padding(
+      .padding(
         horizontal = horizontalPaddingSettings,
         vertical = verticalPaddingSettings
       )
