@@ -2,6 +2,7 @@ package com.example.myapplication.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +18,7 @@ fun OptionRow(
   Row(
     modifier = Modifier.clickable {
       onClick()
-    },
+    }.fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
     Checkbox(

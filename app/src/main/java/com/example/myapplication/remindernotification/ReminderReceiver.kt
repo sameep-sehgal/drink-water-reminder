@@ -80,7 +80,7 @@ class ReminderReceiver: BroadcastReceiver() {
               .setProgress(todaysWaterRecord.goal,todaysWaterRecord.currWaterAmount, false)
               .setContentText("${todaysWaterRecord.currWaterAmount}/${todaysWaterRecord.goal}$waterUnit")
             with(context.let { NotificationManagerCompat.from(it) }) {
-              this.notify(TEST_NOTIFICATION_ID, builder.build())
+              this.notify(NOTIFICATION_ID, builder.build())
             }
             Log.d("TAG", "onReceive: Notification Set")
           }

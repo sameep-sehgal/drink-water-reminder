@@ -1,4 +1,4 @@
 package com.example.myapplication.remindernotification
 
-const val NOTIFICATION_CHANNEL = "drink_water_reminder_6"
-const val TEST_NOTIFICATION_ID = 100
+const val NOTIFICATION_CHANNEL = "drink_water_reminder_7"
+const val NOTIFICATION_ID = 100
