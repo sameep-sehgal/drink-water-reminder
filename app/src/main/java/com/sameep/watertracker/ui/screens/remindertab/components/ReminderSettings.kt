@@ -82,20 +82,23 @@ fun ReminderSettings(
   }
 
   SettingsRowNoValueWithSubtitle(
-    text = "Reset Notification",
-    subtitle = "Click here if notifications have stopped working.",
+    text = "Reset Reminder",
+    subtitle = "Click here if reminders have stopped working.",
     onSettingsRowClick = {
       ReminderReceiverUtil.setReminder(
         reminderGap, context
       )
-      Toast.makeText(context, "Notification is Reset", Toast.LENGTH_SHORT).show()
+      Toast.makeText(context, "Reminder is Reset", Toast.LENGTH_SHORT).show()
     },
     enabled = isReminderOn
   )
 
   SettingsRowNoValue(
-    text = "Notification not Working?",
-    onSettingsRowClick = { setShowNotificationNotWorkingDialog(true) },
+    text = "Reminder not Working?",
+    onSettingsRowClick = {
+      ReminderReceiverUtil.setReminder(reminderGap, context)
+      setShowNotificationNotWorkingDialog(true)
+                         },
     enabled = isReminderOn
   )
 

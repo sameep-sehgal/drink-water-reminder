@@ -13,7 +13,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import com.sameep.watertracker.R
 import dagger.hilt.android.AndroidEntryPoint
 import com.sameep.watertracker.remindernotification.NOTIFICATION_CHANNEL
 import com.sameep.watertracker.ui.CollectUserData

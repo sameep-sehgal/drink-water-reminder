@@ -13,7 +13,7 @@ fun DozeModeFixDialog(
   setShowDozeModeFixDialog: (Boolean) -> Unit
 ) {
   ShowDialog(
-    title = "Doze Mode Fix",
+    title = "Battery Optimization Fix",
     content = {
       Column {
         Text(

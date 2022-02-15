@@ -64,16 +64,17 @@ object ReminderReceiverUtil {
     } else {
       PendingIntent.getBroadcast(context, 5, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
+    val millisecondsToFirstAlarm = Calendar.getInstance()
+    millisecondsToFirstAlarm.add(Calendar.HOUR, 1)
+    millisecondsToFirstAlarm.set(Calendar.MINUTE, 0)
+    millisecondsToFirstAlarm.set(Calendar.SECOND, 0)
+    millisecondsToFirstAlarm.set(Calendar.MILLISECOND, 0)
     val currTime = Calendar.getInstance()
-    val millisecondsToFirstAlarm =
-      if(reminderGap == ReminderGap.FIFTEEN_MINUTES)
-        (15-(currTime.get(Calendar.MINUTE)%15))*60*100
-      else
-        (60-currTime.get(Calendar.MINUTE))*60*1000
 
     alarmManager.setInexactRepeating(
       AlarmManager.ELAPSED_REALTIME_WAKEUP,
-      SystemClock.elapsedRealtime() + millisecondsToFirstAlarm, //TODO
+      SystemClock.elapsedRealtime() ,
+//              (millisecondsToFirstAlarm.timeInMillis - currTime.timeInMillis), //TODO
       reminderGap.toLong(),
       pendingIntent
     )
@@ -180,7 +181,7 @@ object ReminderReceiverUtil {
   }
 
   @SuppressLint("UnspecifiedImmutableFlag")
-  private fun checkAlarm(context: Context): Boolean {
+  fun checkAlarm(context: Context): Boolean {
 
     val alarmIntent = Intent(context, ReminderReceiver::class.java)
 
