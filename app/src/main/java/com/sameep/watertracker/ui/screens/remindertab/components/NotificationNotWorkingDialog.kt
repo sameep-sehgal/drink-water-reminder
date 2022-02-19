@@ -1,7 +1,5 @@
 package com.sameep.watertracker.ui.screens.remindertab.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +18,6 @@ import androidx.compose.ui.unit.sp
 import com.sameep.watertracker.R
 import com.sameep.watertracker.ui.components.ShowDialog
 
-@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun NotificationNotWorkingDialog(
   setShowDialog: (Boolean) -> Unit

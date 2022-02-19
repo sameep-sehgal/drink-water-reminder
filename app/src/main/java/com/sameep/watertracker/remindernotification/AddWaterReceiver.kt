@@ -27,7 +27,7 @@ class AddWaterReceiver: BroadcastReceiver() {
         val container = intent?.getIntExtra("container", 0)
         if(amount != null && amount != 0) {
           val db = WaterDatabase.getInstance(context).waterDatabaseDao()
-          var todaysWaterRecord = withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
+          var todaysWaterRecord: DailyWaterRecord? = withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
           Log.d(TAG, "onAddWaterReceiver: $todaysWaterRecord")
           if(todaysWaterRecord === null){
             //Day changes after notification is shown

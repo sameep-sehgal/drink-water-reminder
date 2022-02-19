@@ -73,8 +73,8 @@ object ReminderReceiverUtil {
 
     alarmManager.setInexactRepeating(
       AlarmManager.ELAPSED_REALTIME_WAKEUP,
-      SystemClock.elapsedRealtime() ,
-//              (millisecondsToFirstAlarm.timeInMillis - currTime.timeInMillis), //TODO
+      SystemClock.elapsedRealtime() +
+              (millisecondsToFirstAlarm.timeInMillis - currTime.timeInMillis), //TODO
       reminderGap.toLong(),
       pendingIntent
     )

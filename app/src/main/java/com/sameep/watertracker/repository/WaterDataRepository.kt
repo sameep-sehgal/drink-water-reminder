@@ -17,7 +17,7 @@ class WaterDataRepository @Inject constructor(
   private val waterDatabaseDao: WaterDatabaseDao
 ) {
   //Database Queries
-  fun getDailyWaterRecord(date:String = DateString.getTodaysDate()): Flow<DailyWaterRecord>{
+  fun getDailyWaterRecord(date:String = DateString.getTodaysDate()): Flow<DailyWaterRecord?>{
     return waterDatabaseDao.getDailyWaterRecord(date)
   }
 
@@ -76,13 +76,5 @@ class WaterDataRepository @Inject constructor(
       startDate = startDate,
       endDate = endDate
     )
-  }
-
-  suspend fun getWaterRecordsCount(): Int {
-    return waterDatabaseDao.getWaterRecordsCount()
-  }
-
-  suspend fun getCompletedWaterRecordsCount(): Int {
-    return waterDatabaseDao.getCompletedWaterRecordsCount()
   }
 }
