@@ -10,7 +10,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.sameep.watertracker.MainActivity
@@ -40,7 +39,7 @@ object ReminderReceiverUtil {
       reminderPeriodEndTime = TimeString.getCalendarInstance(reminderPeriodEnd)
     }
 
-    if(reminderPeriodStartTime > reminderPeriodEndTime){
+    if(reminderPeriodStartTime > reminderPeriodEndTime && currTime > reminderPeriodStartTime){
       //Case -- reminderPeriodEnd = "02:00" and reminderPeriodStart = "10:00"
       reminderPeriodEndTime.add(Calendar.DAY_OF_MONTH,1)
     }
@@ -64,18 +63,14 @@ object ReminderReceiverUtil {
     } else {
       PendingIntent.getBroadcast(context, 5, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
-    val millisecondsToFirstAlarm = Calendar.getInstance()
-    millisecondsToFirstAlarm.add(Calendar.HOUR, 1)
-    millisecondsToFirstAlarm.set(Calendar.MINUTE, 0)
-    millisecondsToFirstAlarm.set(Calendar.SECOND, 0)
-    millisecondsToFirstAlarm.set(Calendar.MILLISECOND, 0)
+
     val currTime = Calendar.getInstance()
 
-    alarmManager.setInexactRepeating(
-      AlarmManager.ELAPSED_REALTIME_WAKEUP,
-      SystemClock.elapsedRealtime() +
-              (millisecondsToFirstAlarm.timeInMillis - currTime.timeInMillis), //TODO
-      reminderGap.toLong(),
+    alarmManager.setAlarmClock(
+      AlarmManager.AlarmClockInfo(
+        currTime.timeInMillis + reminderGap,//TODO
+        pendingIntent
+      ),
       pendingIntent
     )
     Log.d("TAG", "onReceive: reminder set")

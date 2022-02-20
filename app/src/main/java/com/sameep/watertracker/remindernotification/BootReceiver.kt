@@ -3,6 +3,7 @@ package com.sameep.watertracker.remindernotification
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.sameep.watertracker.data.preferencedatastore.PreferenceDataStore
 import com.sameep.watertracker.data.preferencedatastore.dataStore
 import com.sameep.watertracker.utils.ReminderReceiverUtil
@@ -14,9 +15,11 @@ import kotlinx.coroutines.launch
 class BootReceiver: BroadcastReceiver() {
   @DelicateCoroutinesApi
   override fun onReceive(context: Context?, intent: Intent?) {
+    Log.d("TAG", "onReceive: Inside Boot Receiver")
     if (intent != null && intent.action != null && context!=null) {
+      Log.d("TAG", "onReceive: Inside Boot Receiver $context")
       if (
-        intent.action == "android.intent.action.BOOT_COMPLETED" ||
+        Intent.ACTION_BOOT_COMPLETED == intent.action ||
                 intent.action == "android.intent.action.QUICKBOOT_POWERON"
       ) {
         var reminderGap:Int? = null
@@ -29,6 +32,7 @@ class BootReceiver: BroadcastReceiver() {
           }
           ReminderReceiverUtil.cancelReminder(context)
           if (isReminderOn!!) {
+            Log.d("TAG", "onReceive: Inside Boot Receiver Set Reminder")
             ReminderReceiverUtil.setReminder(
               context = context,
               reminderGap = reminderGap!!

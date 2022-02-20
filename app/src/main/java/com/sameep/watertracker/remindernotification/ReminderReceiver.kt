@@ -25,6 +25,7 @@ class ReminderReceiver: BroadcastReceiver() {
     var waterUnit: String? = null
     var remindAfterGoalAchieved: Boolean? = null
     var dailyWaterGoal: Int? = null
+    var reminderGap: Int? = null
     Log.d("TAG", "onReceive: $context ${context?.dataStore?.data} outside datastore")
 
     GlobalScope.launch {
@@ -41,12 +42,17 @@ class ReminderReceiver: BroadcastReceiver() {
         waterUnit = it[PreferenceDataStore.PreferencesKeys.WATER_UNIT]
         remindAfterGoalAchieved = it[PreferenceDataStore.PreferencesKeys.REMINDER_AFTER_GOAL_ACHIEVED]
         dailyWaterGoal = it[PreferenceDataStore.PreferencesKeys.DAILY_WATER_GOAL]
-        Log.d("TAG", "onReceive: ${bottleCapacity} inside datastore")
+        reminderGap = it[PreferenceDataStore.PreferencesKeys.REMINDER_GAP]
+        Log.d("TAG", "onReceive: $bottleCapacity inside datastore")
         true
       }
 
       Log.d("TAG", "onReceive: Values $reminderPeriodStart - $reminderPeriodEnd,, $waterUnit")
       if(context!=null) {
+        ReminderReceiverUtil.setReminder(
+          reminderGap = reminderGap!!,
+          context = context
+        )
         val db = WaterDatabase.getInstance(context).waterDatabaseDao()
         var todaysWaterRecord: DailyWaterRecord? =
           withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
