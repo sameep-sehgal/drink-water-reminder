@@ -9,17 +9,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
+import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.sameep.watertracker.MainActivity
 import com.sameep.watertracker.R
 import com.sameep.watertracker.data.models.DailyWaterRecord
-import com.sameep.watertracker.remindernotification.AddWaterReceiver
-import com.sameep.watertracker.remindernotification.BootReceiver
-import com.sameep.watertracker.remindernotification.NOTIFICATION_CHANNEL
+import com.sameep.watertracker.remindernotification.*
 import com.sameep.watertracker.ui.theme.AppColorPrimary
-import com.sameep.watertracker.remindernotification.ReminderReceiver
 import java.util.*
 
 object ReminderReceiverUtil {
@@ -51,26 +48,30 @@ object ReminderReceiverUtil {
     return false
   }
 
-  @SuppressLint("UnspecifiedImmutableFlag")
   fun setReminder(
     reminderGap:Int,
-    context: Context
+    context: Context,
+    time:Calendar? = null
   ) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, ReminderReceiver::class.java)
-    val pendingIntent = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-      PendingIntent.getBroadcast(context, 5, intent, PendingIntent.FLAG_IMMUTABLE)
-    } else {
-      PendingIntent.getBroadcast(context, 5, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingIntent = PendingIntent.getBroadcast(
+      context,
+      5,
+      intent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    var triggerAtMillis = SystemClock.elapsedRealtime() + reminderGap
+    if(time!=null) {
+      val currTime = Calendar.getInstance()
+      val timeDiff = time.timeInMillis - currTime.timeInMillis
+      triggerAtMillis = SystemClock.elapsedRealtime() + timeDiff
     }
 
-    val currTime = Calendar.getInstance()
-
-    alarmManager.setAlarmClock(
-      AlarmManager.AlarmClockInfo(
-        currTime.timeInMillis + reminderGap,//TODO
-        pendingIntent
-      ),
+    alarmManager.setExactAndAllowWhileIdle(
+      AlarmManager.ELAPSED_REALTIME_WAKEUP,
+      triggerAtMillis,
       pendingIntent
     )
     Log.d("TAG", "onReceive: reminder set")
@@ -84,18 +85,45 @@ object ReminderReceiverUtil {
     )
   }
 
-  @SuppressLint("UnspecifiedImmutableFlag")
+  fun setMorningFirstAlarm(
+    context: Context,
+    reminderPeriodStartTime: String
+  ) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val morningAlarmIntent = Intent(context, MorningAlarmReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(
+      context,
+      6,
+      morningAlarmIntent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    val calendar = TimeString.getCalendarInstance(reminderPeriodStartTime)
+    val currTime = Calendar.getInstance()
+    if(calendar < currTime)
+      calendar.add(Calendar.DAY_OF_MONTH,1)
+
+    alarmManager.setAlarmClock(
+      AlarmManager.AlarmClockInfo(
+        calendar.timeInMillis,
+        pendingIntent
+      ),
+      pendingIntent
+    )
+  }
+
   fun cancelReminder(
     context: Context
   ) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, ReminderReceiver::class.java)
 
-    val pendingIntent = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-      PendingIntent.getBroadcast(context, 5, intent, PendingIntent.FLAG_MUTABLE)
-    } else {
-      PendingIntent.getBroadcast(context, 5, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-    }
+    val pendingIntent = PendingIntent.getBroadcast(
+      context,
+      5,
+      intent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
     Log.d("TAG", "onReceive: cancelReminder: ${checkAlarm(context)}")
 
     alarmManager.cancel(pendingIntent)
@@ -112,7 +140,6 @@ object ReminderReceiverUtil {
     Log.i("AlarmHelper", "Cancelling alarms")
   }
 
-  @SuppressLint("UnspecifiedImmutableFlag")
   fun buildBasicNotification(
     context: Context?,
     glassCapacity: Int?,
@@ -125,7 +152,12 @@ object ReminderReceiverUtil {
       flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
     //Request codes are used to uniquely identify intents. They must not be the same for different intents
-    val pendingIntent = PendingIntent.getActivity(context,0,mainActivityIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingIntent = PendingIntent.getActivity(
+      context,
+      0,
+      mainActivityIntent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
 
     //Build notification only when we need to show.
     val builder = context?.let {
@@ -150,7 +182,12 @@ object ReminderReceiverUtil {
         putExtra("container", Container.GLASS)
         putExtra("daily_water_goal", dailyWaterGoal)
       }
-      val pendingActionIntentGlass = PendingIntent.getBroadcast(context,1, addWaterIntentGlass, PendingIntent.FLAG_UPDATE_CURRENT)
+      val pendingActionIntentGlass = PendingIntent.getBroadcast(
+        context,
+        1,
+        addWaterIntentGlass,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+      )
       builder?.addAction(R.drawable.glass_2, "${glassCapacity}${waterUnit}", pendingActionIntentGlass)
     }
     if(mugCapacity != null && mugCapacity != 0) {
@@ -159,7 +196,12 @@ object ReminderReceiverUtil {
         putExtra("container", Container.MUG)
         putExtra("daily_water_goal", dailyWaterGoal)
       }
-      val pendingActionIntentMug = PendingIntent.getBroadcast(context,2, addWaterIntentMug, PendingIntent.FLAG_UPDATE_CURRENT)
+      val pendingActionIntentMug = PendingIntent.getBroadcast(
+        context,
+        2,
+        addWaterIntentMug,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+      )
       builder?.addAction(R.drawable.mug_3, "${mugCapacity}${waterUnit}", pendingActionIntentMug)
     }
     if(bottleCapacity != null && bottleCapacity != 0) {
@@ -168,7 +210,11 @@ object ReminderReceiverUtil {
         putExtra("container", Container.BOTTLE)
         putExtra("daily_water_goal", dailyWaterGoal)
       }
-      val pendingActionIntentBottle = PendingIntent.getBroadcast(context,3, addWaterIntentBottle, PendingIntent.FLAG_UPDATE_CURRENT)
+      val pendingActionIntentBottle = PendingIntent.getBroadcast(
+        context,3,
+        addWaterIntentBottle,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+      )
       builder?.addAction(R.drawable.bottle_4, "${bottleCapacity}${waterUnit}", pendingActionIntentBottle)
     }
 

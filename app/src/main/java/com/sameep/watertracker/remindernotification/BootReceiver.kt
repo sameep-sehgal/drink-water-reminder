@@ -24,10 +24,12 @@ class BootReceiver: BroadcastReceiver() {
       ) {
         var reminderGap:Int? = null
         var isReminderOn:Boolean? = null
+        var reminderPeriodStart: String? = null
         GlobalScope.launch {
           context.dataStore.data.first {
             reminderGap = it[PreferenceDataStore.PreferencesKeys.REMINDER_GAP]
             isReminderOn = it[PreferenceDataStore.PreferencesKeys.IS_REMINDER_ON]
+            reminderPeriodStart = it[PreferenceDataStore.PreferencesKeys.REMINDER_PERIOD_START]
             true
           }
           ReminderReceiverUtil.cancelReminder(context)
@@ -36,6 +38,10 @@ class BootReceiver: BroadcastReceiver() {
             ReminderReceiverUtil.setReminder(
               context = context,
               reminderGap = reminderGap!!
+            )
+            ReminderReceiverUtil.setMorningFirstAlarm(
+              context = context,
+              reminderPeriodStartTime = reminderPeriodStart!!
             )
           }
         }

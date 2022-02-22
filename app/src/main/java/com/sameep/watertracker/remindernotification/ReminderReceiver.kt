@@ -10,8 +10,10 @@ import com.sameep.watertracker.data.preferencedatastore.PreferenceDataStore
 import com.sameep.watertracker.data.preferencedatastore.dataStore
 import com.sameep.watertracker.data.roomdatabase.WaterDatabase
 import com.sameep.watertracker.utils.ReminderReceiverUtil
+import com.sameep.watertracker.utils.TimeString
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
+import java.util.*
 
 class ReminderReceiver: BroadcastReceiver() {
   @DelicateCoroutinesApi
@@ -91,6 +93,15 @@ class ReminderReceiver: BroadcastReceiver() {
             Log.d("TAG", "onReceive: Notification Set")
           }
         } else {
+          val nextReminderTime = TimeString.getCalendarInstance(reminderPeriodStart!!)
+          val currTime = Calendar.getInstance()
+          if(nextReminderTime < currTime)
+            nextReminderTime.add(Calendar.DAY_OF_MONTH,1)
+          ReminderReceiverUtil.setReminder(
+            reminderGap = reminderGap!!,
+            context = context,
+            time = nextReminderTime
+          )
           Log.d("TAG", "onReceive: Shall Notify == false")
         }
       }
