@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.sameep.watertracker.PreferenceDataStoreViewModel
 import com.sameep.watertracker.remindernotification.NOTIFICATION_CHANNEL
+import com.sameep.watertracker.ui.screens.remindertab.components.dialogs.NotificationNotWorkingDialog
 import com.sameep.watertracker.utils.ReminderGap
 import com.sameep.watertracker.utils.ReminderReceiverUtil
 import com.sameep.watertracker.ui.screens.settingstab.components.*

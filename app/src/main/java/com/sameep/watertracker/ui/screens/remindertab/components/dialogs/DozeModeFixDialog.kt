@@ -1,4 +1,4 @@
-package com.sameep.watertracker.ui.screens.remindertab.components
+package com.sameep.watertracker.ui.screens.remindertab.components.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text

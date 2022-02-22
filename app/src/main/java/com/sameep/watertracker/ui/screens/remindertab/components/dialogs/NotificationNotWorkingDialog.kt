@@ -1,4 +1,4 @@
-package com.sameep.watertracker.ui.screens.remindertab.components
+package com.sameep.watertracker.ui.screens.remindertab.components.dialogs
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sameep.watertracker.R
 import com.sameep.watertracker.ui.components.ShowDialog
+import com.sameep.watertracker.ui.screens.remindertab.components.dialogs.DozeModeFixDialog
+import com.sameep.watertracker.ui.screens.remindertab.components.dialogs.DozeModeLearnMoreDialog
 
 @Composable
 fun NotificationNotWorkingDialog(
