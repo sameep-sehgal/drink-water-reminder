@@ -44,7 +44,11 @@ fun ReminderTab(
     onCheckedChange = {
       preferenceDataStoreViewModel.setIsReminderOn(it)
       if(it) {
-        ReminderReceiverUtil.setReminder(reminderGap = reminderGap.value, context = context)
+        ReminderReceiverUtil.setBothReminderAndAlarm(
+          reminderGap = reminderGap.value,
+          context = context,
+          reminderPeriodStartTime = reminderPeriodStart.value
+        )
       } else {
         ReminderReceiverUtil.cancelReminder(context = context)
       }

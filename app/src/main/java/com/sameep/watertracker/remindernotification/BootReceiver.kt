@@ -35,12 +35,9 @@ class BootReceiver: BroadcastReceiver() {
           ReminderReceiverUtil.cancelReminder(context)
           if (isReminderOn!!) {
             Log.d("TAG", "onReceive: Inside Boot Receiver Set Reminder")
-            ReminderReceiverUtil.setReminder(
+            ReminderReceiverUtil.setBothReminderAndAlarm(
               context = context,
-              reminderGap = reminderGap!!
-            )
-            ReminderReceiverUtil.setMorningFirstAlarm(
-              context = context,
+              reminderGap = reminderGap!!,
               reminderPeriodStartTime = reminderPeriodStart!!
             )
           }

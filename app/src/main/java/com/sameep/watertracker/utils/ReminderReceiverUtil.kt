@@ -1,6 +1,5 @@
 package com.sameep.watertracker.utils
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.Notification
 import android.app.PendingIntent
@@ -86,6 +85,16 @@ object ReminderReceiverUtil {
     )
   }
 
+  fun setBothReminderAndAlarm(
+    reminderGap:Int,
+    context: Context,
+    time:Calendar? = null,
+    reminderPeriodStartTime: String
+  ) {
+    setMorningFirstAlarm(context = context, reminderPeriodStartTime = reminderPeriodStartTime)
+    setReminder(reminderGap = reminderGap, context = context, time = time)
+  }
+
   fun setMorningFirstAlarm(
     context: Context,
     reminderPeriodStartTime: String
@@ -125,9 +134,18 @@ object ReminderReceiverUtil {
       intent,
       PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
-    Log.d("TAG", "onReceive: cancelReminder: ${checkAlarm(context)}")
+
+    val morningAlarmIntent = Intent(context, MorningAlarmReceiver::class.java)
+
+    val pendingAlarmIntent = PendingIntent.getBroadcast(
+      context,
+      6,
+      morningAlarmIntent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
 
     alarmManager.cancel(pendingIntent)
+    alarmManager.cancel(pendingAlarmIntent)
     Log.d("TAG", "onReceive: cancelReminder: Reminder Cancelled")
 
     /* Alarm won't start again if device is rebooted */
@@ -220,17 +238,5 @@ object ReminderReceiverUtil {
     }
 
     return builder
-  }
-
-  @SuppressLint("UnspecifiedImmutableFlag")
-  fun checkAlarm(context: Context): Boolean {
-
-    val alarmIntent = Intent(context, ReminderReceiver::class.java)
-
-    return PendingIntent.getBroadcast(
-      context, 5,
-      alarmIntent,
-      PendingIntent.FLAG_NO_CREATE
-    ) != null
   }
 }

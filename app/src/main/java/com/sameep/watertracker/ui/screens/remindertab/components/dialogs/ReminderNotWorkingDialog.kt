@@ -17,17 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sameep.watertracker.R
 import com.sameep.watertracker.ui.components.ShowDialog
-import com.sameep.watertracker.ui.screens.remindertab.components.dialogs.DozeModeFixDialog
-import com.sameep.watertracker.ui.screens.remindertab.components.dialogs.DozeModeLearnMoreDialog
 
 @Composable
-fun NotificationNotWorkingDialog(
+fun ReminderNotWorkingDialog(
   setShowDialog: (Boolean) -> Unit
 ) {
   val (showDozeModeFixDialog, setShowDozeModeFixDialog) =  remember { mutableStateOf(false) }
   val (showDozeModeLearnMoreDialog, setShowDozeModeLearnMoreDialog) =  remember { mutableStateOf(false) }
   ShowDialog(
-    title = "Notification Not Working?",
+    title = "Reminder Not Working?",
     content = {
       Column {
         Text(
