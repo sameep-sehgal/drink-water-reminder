@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import com.sameep.watertracker.BuildConfig
 import com.sameep.watertracker.PreferenceDataStoreViewModel
 import com.sameep.watertracker.ui.screens.settingstab.components.SettingsRowBooleanValue
 import com.sameep.watertracker.ui.screens.settingstab.components.SettingsRowNoValue
@@ -335,23 +336,26 @@ fun OtherSettings(){
   val context = LocalContext.current
   SettingsSubheading(text = "Other Settings")
   SettingsRowNoValue(
-    text = Settings.PRIVACY_POLICY,
+    text = Settings.RATE_US+" \uD83D\uDC96",
     onSettingsRowClick = {
-      val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://pages.flycricket.io/drink-water-reminder-4/privacy.html"))
-      context.startActivity(browserIntent)
+      val intent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID)
+      )
+      context.startActivity(intent)
     }
-  )
-  SettingsRowNoValue(
-    text = Settings.RATE_US,
-    onSettingsRowClick = {/*TODO()*/}
   )
   SettingsRowNoValue(
     text = Settings.SHARE,
     onSettingsRowClick = {
       val sharingIntent = Intent(Intent.ACTION_SEND)
       sharingIntent.type = "text/plain"
-      sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
-      sharingIntent.putExtra(Intent.EXTRA_TEXT, "Isko Edit karna hai")//TODO
+      sharingIntent.putExtra(
+        Intent.EXTRA_TEXT,
+        "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +
+        "\nHey! Check out this awesome app that will remind you to Drink Water and " +
+                "will Track your Water Intake."
+      )
       val bundleOptions = Bundle()
       startActivity(
         context,
@@ -361,21 +365,13 @@ fun OtherSettings(){
     }
   )
   SettingsRowNoValue(
-    text = Settings.CONTACT_DEVELOPERS,
+    text = Settings.PRIVACY_POLICY,
     onSettingsRowClick = {
-      val contactIntent = Intent(Intent.ACTION_SEND)
-      contactIntent.data = Uri.parse("test@gmail.com")
-      contactIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail")
-      contactIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-      contactIntent.type = "text/plain"
-      contactIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
-      contactIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("test@gmail.com"))
-      val bundleOptions = Bundle()
-      startActivity(
-        context,
-        Intent.createChooser(contactIntent, "Send Email via"),
-        bundleOptions
+      val browserIntent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://pages.flycricket.io/drink-water-reminder-4/privacy.html")
       )
+      context.startActivity(browserIntent)
     }
   )
 }
