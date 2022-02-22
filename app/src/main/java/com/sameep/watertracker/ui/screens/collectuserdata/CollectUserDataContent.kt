@@ -59,6 +59,10 @@ fun CollectUserDataContent(
         reminderGap = reminderGap.value,
         context = context
       )
+      ReminderReceiverUtil.setMorningFirstAlarm(
+        context = context,
+        reminderPeriodStartTime = reminderPeriodStart.value
+      )
     }
 
     preferenceDataStoreViewModel.setGlassCapacity(baseGlassCapacity)

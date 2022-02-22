@@ -14,7 +14,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.sameep.watertracker.MainActivity
 import com.sameep.watertracker.R
-import com.sameep.watertracker.data.models.DailyWaterRecord
 import com.sameep.watertracker.remindernotification.*
 import com.sameep.watertracker.ui.theme.AppColorPrimary
 import java.util.*
@@ -23,8 +22,6 @@ object ReminderReceiverUtil {
   fun shallNotify(
     reminderPeriodStart:String?,
     reminderPeriodEnd:String?,
-    remindAfterGoalAchieved:Boolean?,
-    todaysWaterRecord: DailyWaterRecord,
     currTime:Calendar = Calendar.getInstance()
   ): Boolean {
     var reminderPeriodStartTime: Calendar = Calendar.getInstance()
@@ -36,14 +33,18 @@ object ReminderReceiverUtil {
       reminderPeriodEndTime = TimeString.getCalendarInstance(reminderPeriodEnd)
     }
 
-    if(reminderPeriodStartTime > reminderPeriodEndTime && currTime > reminderPeriodStartTime){
-      //Case -- reminderPeriodEnd = "02:00" and reminderPeriodStart = "10:00"
+    if(reminderPeriodStartTime > reminderPeriodEndTime && currTime >= reminderPeriodStartTime){
+      //Case -- reminderPeriodEnd = "02:00" and reminderPeriodStart = "10:00" and currTime = "11:00"
       reminderPeriodEndTime.add(Calendar.DAY_OF_MONTH,1)
     }
 
-    if(currTime < reminderPeriodEndTime && currTime > reminderPeriodStartTime)
-      if (!(!remindAfterGoalAchieved!! && todaysWaterRecord.isGoalAchieved))
-        return true
+    if(reminderPeriodStartTime > reminderPeriodEndTime && currTime < reminderPeriodEndTime) {
+      //Case -- reminderPeriodEnd = "02:00" and reminderPeriodStart = "10:00" and currTime = "01:00"
+      reminderPeriodStartTime.add(Calendar.DAY_OF_MONTH, -1)
+    }
+
+    if(currTime < reminderPeriodEndTime && currTime >= reminderPeriodStartTime)
+      return true
 
     return false
   }

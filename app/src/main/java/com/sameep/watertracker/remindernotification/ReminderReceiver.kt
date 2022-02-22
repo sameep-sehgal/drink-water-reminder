@@ -70,27 +70,27 @@ class ReminderReceiver: BroadcastReceiver() {
         if(ReminderReceiverUtil.shallNotify(
           reminderPeriodEnd = reminderPeriodEnd,
           reminderPeriodStart = reminderPeriodStart,
-          remindAfterGoalAchieved = remindAfterGoalAchieved,
-          todaysWaterRecord = todaysWaterRecord
         )) {
           Log.d("TAG", "onReceive: Shall Notify == true")
-          val builder = ReminderReceiverUtil.buildBasicNotification(
-            context = context,
-            glassCapacity = glassCapacity,
-            mugCapacity = mugCapacity,
-            bottleCapacity = bottleCapacity,
-            waterUnit = waterUnit,
-            dailyWaterGoal = dailyWaterGoal
-          )
-          Log.d("TAG", "onReceive: Builder $builder")
-          if(builder != null) {
-            builder
-              .setProgress(todaysWaterRecord.goal,todaysWaterRecord.currWaterAmount, false)
-              .setContentText("${todaysWaterRecord.currWaterAmount}/${todaysWaterRecord.goal}$waterUnit")
-            with(context.let { NotificationManagerCompat.from(it) }) {
-              this.notify(NOTIFICATION_ID, builder.build())
+          if(!(!remindAfterGoalAchieved!! && todaysWaterRecord.isGoalAchieved)) {
+            val builder = ReminderReceiverUtil.buildBasicNotification(
+              context = context,
+              glassCapacity = glassCapacity,
+              mugCapacity = mugCapacity,
+              bottleCapacity = bottleCapacity,
+              waterUnit = waterUnit,
+              dailyWaterGoal = dailyWaterGoal
+            )
+            Log.d("TAG", "onReceive: Builder $builder")
+            if(builder != null) {
+              builder
+                .setProgress(todaysWaterRecord.goal,todaysWaterRecord.currWaterAmount, false)
+                .setContentText("${todaysWaterRecord.currWaterAmount}/${todaysWaterRecord.goal}$waterUnit")
+              with(context.let { NotificationManagerCompat.from(it) }) {
+                this.notify(NOTIFICATION_ID, builder.build())
+              }
+              Log.d("TAG", "onReceive: Notification Set")
             }
-            Log.d("TAG", "onReceive: Notification Set")
           }
         } else {
           val nextReminderTime = TimeString.getCalendarInstance(reminderPeriodStart!!)

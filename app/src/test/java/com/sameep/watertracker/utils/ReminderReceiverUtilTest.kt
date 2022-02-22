@@ -1,6 +1,5 @@
 package com.sameep.watertracker.utils
 
-import com.sameep.watertracker.data.models.DailyWaterRecord
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.After
@@ -12,16 +11,12 @@ class ReminderReceiverUtilTest {
   private lateinit var currTime: Calendar
   private lateinit var startTime: String
   private lateinit var endTime: String
-  private var remindAfterGoalAchieved: Boolean = false
-  private lateinit var todaysWaterRecord: DailyWaterRecord
 
   @Before
   fun setUp() {
     currTime = Calendar.getInstance()
     startTime = ReminderPeriod.DEFAULT_REMINDER_PERIOD_START
     endTime = ReminderPeriod.DEFAULT_REMINDER_PERIOD_END
-    remindAfterGoalAchieved = false
-    todaysWaterRecord = DailyWaterRecord(goal = 2500)
   }
 
   @After
@@ -41,8 +36,6 @@ class ReminderReceiverUtilTest {
     val res = ReminderReceiverUtil.shallNotify(
       reminderPeriodStart = startTime,
       reminderPeriodEnd = endTime,
-      remindAfterGoalAchieved = remindAfterGoalAchieved,
-      todaysWaterRecord = todaysWaterRecord,
       currTime = currTime
     )
 
@@ -62,8 +55,6 @@ class ReminderReceiverUtilTest {
     val res = ReminderReceiverUtil.shallNotify(
       reminderPeriodStart = startTime,
       reminderPeriodEnd = endTime,
-      remindAfterGoalAchieved = remindAfterGoalAchieved,
-      todaysWaterRecord = todaysWaterRecord,
       currTime = currTime
     )
 
@@ -83,8 +74,6 @@ class ReminderReceiverUtilTest {
     val res = ReminderReceiverUtil.shallNotify(
       reminderPeriodStart = startTime,
       reminderPeriodEnd = endTime,
-      remindAfterGoalAchieved = remindAfterGoalAchieved,
-      todaysWaterRecord = todaysWaterRecord,
       currTime = currTime
     )
 
@@ -105,8 +94,6 @@ class ReminderReceiverUtilTest {
     val res = ReminderReceiverUtil.shallNotify(
       reminderPeriodStart = startTime,
       reminderPeriodEnd = endTime,
-      remindAfterGoalAchieved = remindAfterGoalAchieved,
-      todaysWaterRecord = todaysWaterRecord,
       currTime = currTime
     )
 
@@ -127,8 +114,6 @@ class ReminderReceiverUtilTest {
     val res = ReminderReceiverUtil.shallNotify(
       reminderPeriodStart = startTime,
       reminderPeriodEnd = endTime,
-      remindAfterGoalAchieved = remindAfterGoalAchieved,
-      todaysWaterRecord = todaysWaterRecord,
       currTime = currTime
     )
 
@@ -149,8 +134,6 @@ class ReminderReceiverUtilTest {
     val res = ReminderReceiverUtil.shallNotify(
       reminderPeriodStart = startTime,
       reminderPeriodEnd = endTime,
-      remindAfterGoalAchieved = remindAfterGoalAchieved,
-      todaysWaterRecord = todaysWaterRecord,
       currTime = currTime
     )
 
