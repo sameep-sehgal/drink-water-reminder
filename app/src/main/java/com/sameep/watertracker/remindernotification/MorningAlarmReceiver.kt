@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import com.sameep.watertracker.data.preferencedatastore.PreferenceDataStore
 import com.sameep.watertracker.data.preferencedatastore.dataStore
-import com.sameep.watertracker.ui.screens.remindertab.components.ReminderPeriodSetting
 import com.sameep.watertracker.utils.ReminderReceiverUtil
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
@@ -44,11 +43,8 @@ class MorningAlarmReceiver: BroadcastReceiver() {
       }
 
       if (context != null) {
-        ReminderReceiverUtil.setReminder(
+        ReminderReceiverUtil.setBothReminderAndAlarm(
           reminderGap = reminderGap!!,
-          context = context
-        )
-        ReminderReceiverUtil.setMorningFirstAlarm(
           context = context,
           reminderPeriodStartTime = reminderPeriodStartTime!!
         )

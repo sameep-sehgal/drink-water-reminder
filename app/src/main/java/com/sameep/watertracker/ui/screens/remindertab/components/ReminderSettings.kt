@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.sameep.watertracker.PreferenceDataStoreViewModel
 import com.sameep.watertracker.remindernotification.NOTIFICATION_CHANNEL
+import com.sameep.watertracker.ui.screens.remindertab.components.dialogs.ReminderNotWorkingDialog
 import com.sameep.watertracker.utils.ReminderGap
 import com.sameep.watertracker.utils.ReminderReceiverUtil
 import com.sameep.watertracker.ui.screens.settingstab.components.*
@@ -27,7 +28,7 @@ fun ReminderSettings(
   isReminderOn:Boolean
 ){
   val context = LocalContext.current
-  val (showNotificationNotWorkingDialog, setShowNotificationNotWorkingDialog) =  remember { mutableStateOf(false) }
+  val (showReminderNotWorkingDialog, setShowReminderNotWorkingDialog) =  remember { mutableStateOf(false) }
 
   Column {
     SettingsRowSelectValue(
@@ -85,8 +86,10 @@ fun ReminderSettings(
     text = "Reset Reminder",
     subtitle = "Click here if reminders have stopped working.",
     onSettingsRowClick = {
-      ReminderReceiverUtil.setReminder(
-        reminderGap, context
+      ReminderReceiverUtil.setBothReminderAndAlarm(
+        reminderGap =  reminderGap,
+        context = context,
+        reminderPeriodStartTime = reminderPeriodStart
       )
       Toast.makeText(context, "Reminder is Reset", Toast.LENGTH_SHORT).show()
     },
@@ -97,12 +100,12 @@ fun ReminderSettings(
     text = "Reminder not Working?",
     onSettingsRowClick = {
       ReminderReceiverUtil.setReminder(reminderGap, context)
-      setShowNotificationNotWorkingDialog(true)
-                         },
+      setShowReminderNotWorkingDialog(true)
+    },
     enabled = isReminderOn
   )
 
-  if(showNotificationNotWorkingDialog) {
-    NotificationNotWorkingDialog(setShowDialog = setShowNotificationNotWorkingDialog)
+  if(showReminderNotWorkingDialog) {
+    ReminderNotWorkingDialog(setShowDialog = setShowReminderNotWorkingDialog)
   }
 }

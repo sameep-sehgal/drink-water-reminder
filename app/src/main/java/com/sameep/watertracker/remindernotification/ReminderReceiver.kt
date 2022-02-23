@@ -97,10 +97,11 @@ class ReminderReceiver: BroadcastReceiver() {
           val currTime = Calendar.getInstance()
           if(nextReminderTime < currTime)
             nextReminderTime.add(Calendar.DAY_OF_MONTH,1)
-          ReminderReceiverUtil.setReminder(
+          ReminderReceiverUtil.setBothReminderAndAlarm(
             reminderGap = reminderGap!!,
             context = context,
-            time = nextReminderTime
+            time = nextReminderTime,
+            reminderPeriodStartTime = reminderPeriodStart!!
           )
           Log.d("TAG", "onReceive: Shall Notify == false")
         }

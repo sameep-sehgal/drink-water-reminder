@@ -43,6 +43,7 @@ fun CollectUserDataContent(
   var recommendedWaterIntake by remember {
     mutableStateOf(RecommendedWaterIntake.DEFAULT_WATER_GOAL_IN_ML)
   }
+
   val onLetsGoButtonClick = {
     preferenceDataStoreViewModel.setRecommendedWaterIntake(recommendedWaterIntake)
     preferenceDataStoreViewModel.setDailyWaterGoal(recommendedWaterIntake)
@@ -55,11 +56,8 @@ fun CollectUserDataContent(
     preferenceDataStoreViewModel.setReminderGap(ReminderGap.ONE_HOUR)
     preferenceDataStoreViewModel.setReminderAfterGoalAchieved(false)
     if(isReminderOn.value) {
-      ReminderReceiverUtil.setReminder(
+      ReminderReceiverUtil.setBothReminderAndAlarm(
         reminderGap = reminderGap.value,
-        context = context
-      )
-      ReminderReceiverUtil.setMorningFirstAlarm(
         context = context,
         reminderPeriodStartTime = reminderPeriodStart.value
       )
