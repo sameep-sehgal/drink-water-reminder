@@ -113,11 +113,9 @@ object ReminderReceiverUtil {
     if(calendar < currTime)
       calendar.add(Calendar.DAY_OF_MONTH,1)
 
-    alarmManager.setAlarmClock(
-      AlarmManager.AlarmClockInfo(
-        calendar.timeInMillis,
-        pendingIntent
-      ),
+    alarmManager.setExactAndAllowWhileIdle(
+      AlarmManager.RTC_WAKEUP,
+      calendar.timeInMillis,
       pendingIntent
     )
   }
