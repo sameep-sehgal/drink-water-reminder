@@ -1,4 +1,4 @@
-package com.sameep.watertracker.ui.screens.statstab.components.renderpiechart
+package com.sameep.watertracker.ui.screens.statstab.components.renderpiechart.components
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*

@@ -1,4 +1,4 @@
-package com.sameep.watertracker.ui.screens.statstab.components.renderpiechart
+package com.sameep.watertracker.ui.screens.statstab.components.renderpiechart.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text

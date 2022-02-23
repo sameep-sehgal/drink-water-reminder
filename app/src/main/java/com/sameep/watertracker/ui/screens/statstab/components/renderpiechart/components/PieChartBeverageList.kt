@@ -1,4 +1,4 @@
-package com.sameep.watertracker.ui.screens.statstab.components.renderpiechart
+package com.sameep.watertracker.ui.screens.statstab.components.renderpiechart.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -32,7 +32,11 @@ fun PieChartBeverageList(
   ) {
     PreviousButton(
       onClick = {
-        scope.launch { listState.animateScrollToItem(listState.firstVisibleItemIndex-1) }
+        scope.launch {
+          if(listState.firstVisibleItemIndex > 0)
+            listState.animateScrollToItem(listState.firstVisibleItemIndex-1)
+          else listState.animateScrollToItem(0)
+        }
       },
       fontSize = 10.sp
     )

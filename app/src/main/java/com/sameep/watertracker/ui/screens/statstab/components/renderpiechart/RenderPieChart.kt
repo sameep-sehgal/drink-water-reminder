@@ -13,6 +13,8 @@ import com.sameep.watertracker.RoomDatabaseViewModel
 import com.sameep.watertracker.ui.screens.statstab.components.charts.piechart.PieChart
 import com.sameep.watertracker.ui.screens.statstab.components.charts.piechart.PieChartData
 import com.sameep.watertracker.ui.screens.statstab.components.charts.piechart.PieChartUtils
+import com.sameep.watertracker.ui.screens.statstab.components.renderpiechart.components.PieChartBeverageList
+import com.sameep.watertracker.ui.screens.statstab.components.renderpiechart.components.PieChartTotalAmountDrunk
 
 @Composable
 fun RenderPieChart(
