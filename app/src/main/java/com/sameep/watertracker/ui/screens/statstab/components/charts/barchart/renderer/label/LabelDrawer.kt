@@ -10,20 +10,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.sameep.watertracker.ui.screens.statstab.components.charts.barchart.BarChartData
 import com.sameep.watertracker.utils.toLegacyInt
-import android.graphics.Bitmap
 import android.graphics.Paint
-
-import android.graphics.drawable.BitmapDrawable
-
-import android.graphics.drawable.Drawable
-
-
-
 
 class LabelDrawer(
   private val drawLocation: DrawLocation = DrawLocation.Inside,
   private val labelTextSize: TextUnit = 12.sp,
-  private val labelTextColor: Color = Color.Black
+  private val labelTextColor: Color = Color.Black,
 ): LabelDrawerInterface {
   private val _labelTextArea: Float? = null
   private val paint = Paint().apply {
@@ -60,12 +52,14 @@ class LabelDrawer(
     }
 
     if(bar.value >= 100f){
-      canvas.nativeCanvas.drawCircle(
-        xCenter,
-        (barArea.top) - labelTextSize.toPx() / 2,
-        barArea.width/2,
+      val textSize = (barArea.right - barArea.left).coerceAtMost(20f)
+      canvas.nativeCanvas.drawText(
+        "\uD83D\uDC99",
+        xCenter - textSize/2 - 1f,
+        (barArea.top) - labelTextSize.toPx() / 2 + textSize/4,
         Paint().apply {
           this.color = android.graphics.Color.rgb(227,227,0)
+          this.textSize = textSize
         }
       )
     }
@@ -86,17 +80,5 @@ class LabelDrawer(
     Inside,
     Outside,
     XAxis
-  }
-
-  fun drawableToBitmap(drawable: Drawable) : Bitmap{
-    if (drawable is BitmapDrawable) {
-      return drawable.bitmap
-    }
-    val bitmap =
-      Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-    val canvas = android.graphics.Canvas()
-    drawable.setBounds(0, 0, canvas.width, canvas.height)
-    drawable.draw(canvas)
-    return bitmap
   }
 }
