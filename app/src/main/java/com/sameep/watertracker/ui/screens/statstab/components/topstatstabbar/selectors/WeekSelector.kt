@@ -1,5 +1,7 @@
 package com.sameep.watertracker.ui.screens.statstab.components.topstatstabbar.selectors
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +19,8 @@ fun WeekSelector(
   endDate:String,
   setStartDate:(String) -> Unit,
   setEndDate:(String) -> Unit,
-  firstWaterRecordDate: String
+  firstWaterRecordDate: String,
+  context: Context
 ) {
   val todaysDate = DateString.getTodaysDate()
   Row(
@@ -28,15 +31,19 @@ fun WeekSelector(
       modifier = Modifier.weight(1f),
       horizontalArrangement = Arrangement.End
     ) {
-      if(startDate>firstWaterRecordDate) {
-        PreviousButton(onClick = {
+      PreviousButton(onClick = {
+        if(startDate>firstWaterRecordDate) {
           val newEndDate = DateString.getPrevDate(startDate)
           setStartDate(DateString.getWeekStartDate(newEndDate))
           setEndDate(newEndDate)
-        })
-      }else{
-        Spacer(modifier = Modifier.size(4.dp))
-      }
+        } else {
+          Toast.makeText(
+            context,
+            "App was installed on ${DateString.convertToReadableString(firstWaterRecordDate)}",
+            Toast.LENGTH_SHORT
+          ).show()
+        }
+      })
     }
 
     Spacer(modifier = Modifier.size(16.dp))

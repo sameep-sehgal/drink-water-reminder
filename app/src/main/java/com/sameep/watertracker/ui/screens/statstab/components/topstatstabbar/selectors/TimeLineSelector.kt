@@ -1,5 +1,6 @@
 package com.sameep.watertracker.ui.screens.statstab.components.topstatstabbar.selectors
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import com.sameep.watertracker.utils.Statistics
 
@@ -10,7 +11,8 @@ fun TimeLineSelector(
   endDate:String,
   setStartDate:(String) -> Unit,
   setEndDate:(String) -> Unit,
-  firstWaterRecordDate:String
+  firstWaterRecordDate:String,
+  context:Context
 ) {
   if(selectedStatsTimeLine == Statistics.WEEKLY){
     WeekSelector(
@@ -18,7 +20,8 @@ fun TimeLineSelector(
       endDate = endDate,
       setStartDate = setStartDate,
       setEndDate = setEndDate,
-      firstWaterRecordDate = firstWaterRecordDate
+      firstWaterRecordDate = firstWaterRecordDate,
+      context = context
     )
   }
   if(selectedStatsTimeLine == Statistics.MONTHLY){
@@ -27,7 +30,8 @@ fun TimeLineSelector(
       endDate = endDate,
       setStartDate = setStartDate,
       setEndDate = setEndDate,
-      firstWaterRecordDate = firstWaterRecordDate
+      firstWaterRecordDate = firstWaterRecordDate,
+      context = context
     )
   }
 }

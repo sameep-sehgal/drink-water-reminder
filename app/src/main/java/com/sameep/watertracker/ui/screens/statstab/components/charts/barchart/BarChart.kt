@@ -95,7 +95,7 @@ fun BarChart(
     }
   ) {
     drawIntoCanvas { canvas ->
-      val (xAxisArea, yAxisArea) = axisAreas(
+      val (xAxisArea, _) = axisAreas(
         drawScope = this,
         totalSize = size,
         xAxisDrawer = xAxisDrawer,

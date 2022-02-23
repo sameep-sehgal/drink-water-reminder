@@ -149,7 +149,8 @@ fun StatsTab(
         endDate = endDate,
         setStartDate = setStartDate,
         setEndDate = setEndDate,
-        firstWaterRecordDate = firstWaterRecordDate.value
+        firstWaterRecordDate = firstWaterRecordDate.value,
+        context = context
       )
 
       RenderBarChart(bars = bars)
