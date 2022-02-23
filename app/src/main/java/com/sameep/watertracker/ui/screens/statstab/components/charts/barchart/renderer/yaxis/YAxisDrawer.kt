@@ -67,6 +67,14 @@ class YAxisDrawer(
       textSize = labelTextSize.toPx()
       textAlign = android.graphics.Paint.Align.RIGHT
     }
+    val chartBgLinesPaint = android.graphics.Paint().apply {
+      isAntiAlias = true
+      color = labelTextColor.toLegacyInt()
+      textSize = labelTextSize.toPx()
+      textAlign = android.graphics.Paint.Align.RIGHT
+      alpha = 50
+    }
+
     val totalHeight = drawableArea.height
     val labelCount = 5
 
@@ -91,7 +99,7 @@ class YAxisDrawer(
           y - (labelTextSize.toPx() / 2.5f),
           barDrawableArea.right,
           y - (labelTextSize.toPx() / 2.5f),
-          labelPaint
+          chartBgLinesPaint
         )
       }
     }
