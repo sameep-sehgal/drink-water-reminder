@@ -18,8 +18,6 @@ import com.sameep.watertracker.ui.theme.AppColorPrimary
 import java.util.*
 
 object ReminderReceiverUtil {
-  const val REMINDER_NOT_SET: Long = -1
-
   fun shallNotify(
     reminderPeriodStart:String?,
     reminderPeriodEnd:String?,
@@ -146,7 +144,8 @@ object ReminderReceiverUtil {
 
     alarmManager.cancel(pendingIntent)
     alarmManager.cancel(pendingAlarmIntent)
-    Log.d("TAG", "onReceive: cancelReminder: Reminder Cancelled")
+
+    setRemindUserToTurnReminderOn(context)
 
     /* Alarm won't start again if device is rebooted */
     val receiver = ComponentName(context, BootReceiver::class.java)
@@ -157,6 +156,27 @@ object ReminderReceiverUtil {
       PackageManager.DONT_KILL_APP
     )
     Log.i("AlarmHelper", "Cancelling alarms")
+  }
+
+  fun setRemindUserToTurnReminderOn(
+    context: Context
+  ) {
+    Log.d("TAG", "onReceive: setRemindUserToTurnReminderOn: ")
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val remindUserIntent = Intent(context, RemindUserToTurnReminderOnReceiver::class.java)
+
+    val pendingRemindUserIntent = PendingIntent.getBroadcast(
+      context,
+      7,
+      remindUserIntent,
+      PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    alarmManager.setExactAndAllowWhileIdle(
+      AlarmManager.ELAPSED_REALTIME_WAKEUP,
+      SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_DAY*4,
+      pendingRemindUserIntent
+    )
   }
 
   fun buildBasicNotification(

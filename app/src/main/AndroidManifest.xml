@@ -46,6 +46,8 @@
 
         <receiver android:name=".remindernotification.ReminderReceiver" />
         <receiver android:name=".remindernotification.MorningAlarmReceiver" />
+        <receiver android:name=".remindernotification.RemindUserToTurnReminderOnReceiver" />
+        <receiver android:name=".remindernotification.TurnReminderOnReceiver" />
 
         <receiver android:name=".remindernotification.BootReceiver"
             android:exported="true"
