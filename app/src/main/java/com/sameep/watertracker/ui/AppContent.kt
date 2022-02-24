@@ -21,6 +21,7 @@ import com.sameep.watertracker.ui.theme.ApplicationTheme
 import com.sameep.watertracker.utils.RecommendedWaterIntake
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.sameep.watertracker.ui.components.dialogs.RateAppDialog
 import com.sameep.watertracker.ui.components.dialogs.SwitchNotificationOnDialog
 import com.sameep.watertracker.utils.DateString
 import kotlinx.coroutines.delay
@@ -34,8 +35,11 @@ fun MainAppContent(
   val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
   val switchNotificationOnDialogLastShownDate = preferenceDataStoreViewModel.switchNotificationOnDialogLastShownDate.collectAsState(initial = DateString.getTodaysDate())
+  val isRatingDialogShown = preferenceDataStoreViewModel.isRatingDialogShown.collectAsState(initial = true)
+  val firstWaterDataDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
   var selectedTab by remember { mutableStateOf(0) }
   val (showSwitchNotificationOnDialog, setShowSwitchNotificationOnDialog) =  remember { mutableStateOf(false) }
+  val (showRateAppDialog, setShowRateAppDialog) =  remember { mutableStateOf(false) }
   val setSelectedTab = { it:Int -> selectedTab = it }
   val darkTheme = isSystemInDarkTheme()
   val scope = rememberCoroutineScope()
@@ -95,7 +99,7 @@ fun MainAppContent(
       }
 
       LaunchedEffect(
-        key1 = switchNotificationOnDialogLastShownDate.value
+        key1 = true,
       ) {
         scope.launch {
           if(
@@ -108,6 +112,15 @@ fun MainAppContent(
               .setSwitchNotificationOnDialogLastShownDate(
                 todaysDate
               )
+          } else {
+            if(
+              !isRatingDialogShown.value &&
+              DateString.calculateDaysDifference(todaysDate, firstWaterDataDate.value) >= 4
+            ) {
+              delay(3000)
+              setShowRateAppDialog(true)
+              preferenceDataStoreViewModel.setIsRatingDialogShown(true)
+            }
           }
         }
       }
@@ -115,6 +128,12 @@ fun MainAppContent(
       if(showSwitchNotificationOnDialog) {
         SwitchNotificationOnDialog(
           setShowDialog = setShowSwitchNotificationOnDialog,
+          context = context
+        )
+      }
+      if(showRateAppDialog) {
+        RateAppDialog(
+          setShowDialog = setShowRateAppDialog,
           context = context
         )
       }
