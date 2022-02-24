@@ -27,9 +27,6 @@ class MainActivity : ComponentActivity() {
   @RequiresApi(Build.VERSION_CODES.O)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-//    notificationManager?.notificationChannels?.forEach {
-//      notificationManager?.deleteNotificationChannel(it.id)
-//    }
     createNotificationChannel()
     preferenceDataStoreViewModel.isUserInfoCollected.observe(this){
       if(it == true) {
