@@ -1,4 +1,4 @@
-package com.sameep.watertracker.ui.components
+package com.sameep.watertracker.ui.components.dialogs
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable

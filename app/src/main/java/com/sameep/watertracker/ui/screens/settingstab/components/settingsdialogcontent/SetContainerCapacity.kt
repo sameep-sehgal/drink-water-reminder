@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sameep.watertracker.PreferenceDataStoreViewModel
-import com.sameep.watertracker.ui.components.ShowDialog
-import com.sameep.watertracker.ui.components.WaterQuantityPicker
+import com.sameep.watertracker.ui.components.dialogs.ShowDialog
+import com.sameep.watertracker.ui.components.selectors.WaterQuantityPicker
 import com.sameep.watertracker.utils.Container
 import com.sameep.watertracker.utils.Settings
 

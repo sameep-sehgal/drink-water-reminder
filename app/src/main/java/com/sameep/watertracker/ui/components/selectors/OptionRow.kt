@@ -1,6 +1,7 @@
-package com.sameep.watertracker.ui.components
+package com.sameep.watertracker.ui.components.selectors
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
@@ -19,7 +20,8 @@ fun OptionRow(
     modifier = Modifier.clickable {
       onClick()
     }.fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.Center
   ) {
     Checkbox(
       checked = selected,

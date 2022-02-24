@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sameep.watertracker.R
-import com.sameep.watertracker.ui.components.ShowDialog
+import com.sameep.watertracker.ui.components.dialogs.ShowDialog
 
 @Composable
 fun ReminderNotWorkingDialog(

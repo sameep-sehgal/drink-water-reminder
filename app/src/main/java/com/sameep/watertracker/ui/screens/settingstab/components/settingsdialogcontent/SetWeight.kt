@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.sameep.watertracker.PreferenceDataStoreViewModel
-import com.sameep.watertracker.ui.components.ShowDialog
+import com.sameep.watertracker.ui.components.dialogs.ShowDialog
 import com.sameep.watertracker.utils.RecommendedWaterIntake
 import com.sameep.watertracker.utils.Settings
 import com.sameep.watertracker.utils.Units

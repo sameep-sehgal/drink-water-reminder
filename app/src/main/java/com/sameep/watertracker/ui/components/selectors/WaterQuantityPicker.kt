@@ -1,4 +1,4 @@
-package com.sameep.watertracker.ui.components
+package com.sameep.watertracker.ui.components.selectors
 
 import android.widget.NumberPicker
 import androidx.compose.runtime.Composable

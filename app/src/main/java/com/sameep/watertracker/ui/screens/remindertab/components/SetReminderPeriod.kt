@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.sameep.watertracker.PreferenceDataStoreViewModel
-import com.sameep.watertracker.ui.components.ShowDialog
+import com.sameep.watertracker.ui.components.dialogs.ShowDialog
 import com.sameep.watertracker.utils.ReminderReceiverUtil
 import com.sameep.watertracker.utils.Settings
 import com.sameep.watertracker.utils.TimeString

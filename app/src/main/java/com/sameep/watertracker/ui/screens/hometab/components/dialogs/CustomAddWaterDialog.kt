@@ -9,7 +9,7 @@ import com.sameep.watertracker.RoomDatabaseViewModel
 import com.sameep.watertracker.data.models.Beverage
 import com.sameep.watertracker.data.models.DailyWaterRecord
 import com.sameep.watertracker.data.models.DrinkLogs
-import com.sameep.watertracker.ui.components.ShowDialog
+import com.sameep.watertracker.ui.components.dialogs.ShowDialog
 import com.sameep.watertracker.utils.RecommendedWaterIntake
 import com.sameep.watertracker.utils.TimeString
 import java.util.*

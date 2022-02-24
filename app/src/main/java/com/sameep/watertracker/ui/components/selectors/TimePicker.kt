@@ -1,4 +1,4 @@
-package com.sameep.watertracker.ui.components
+package com.sameep.watertracker.ui.components.selectors
 
 import android.app.TimePickerDialog
 import android.content.DialogInterface

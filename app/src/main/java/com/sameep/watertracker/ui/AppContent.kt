@@ -21,7 +21,7 @@ import com.sameep.watertracker.ui.theme.ApplicationTheme
 import com.sameep.watertracker.utils.RecommendedWaterIntake
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.sameep.watertracker.ui.components.SwitchNotificationOnDialog
+import com.sameep.watertracker.ui.components.dialogs.SwitchNotificationOnDialog
 import com.sameep.watertracker.utils.DateString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

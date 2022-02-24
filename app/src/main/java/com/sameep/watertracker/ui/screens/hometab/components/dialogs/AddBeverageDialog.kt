@@ -16,8 +16,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sameep.watertracker.RoomDatabaseViewModel
 import com.sameep.watertracker.data.models.Beverage
-import com.sameep.watertracker.ui.components.IconSelector
-import com.sameep.watertracker.ui.components.ShowDialog
+import com.sameep.watertracker.ui.components.selectors.IconSelector
+import com.sameep.watertracker.ui.components.dialogs.ShowDialog
 import com.sameep.watertracker.utils.Beverages
 
 @Composable

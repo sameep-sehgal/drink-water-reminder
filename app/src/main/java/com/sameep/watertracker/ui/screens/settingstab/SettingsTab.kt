@@ -28,6 +28,7 @@ import com.sameep.watertracker.ui.screens.settingstab.components.SettingsSubhead
 import com.sameep.watertracker.R
 import com.sameep.watertracker.RoomDatabaseViewModel
 import com.sameep.watertracker.data.models.DailyWaterRecord
+import com.sameep.watertracker.ui.components.dialogs.RateAppDialog
 import com.sameep.watertracker.ui.screens.settingstab.components.settingsdialogcontent.*
 import com.sameep.watertracker.utils.*
 
@@ -40,6 +41,7 @@ fun SettingsTab(
   roomDatabaseViewModel: RoomDatabaseViewModel,
   todaysWaterRecord: DailyWaterRecord
 ){
+  val context = LocalContext.current
   val scrollState = rememberScrollState()
   val columnAlpha by remember {
     mutableStateOf(Animatable(0f))
@@ -87,7 +89,9 @@ fun SettingsTab(
   }
 
   Column(
-    modifier = Modifier.verticalScroll(scrollState).alpha(columnAlpha.value)
+    modifier = Modifier
+      .verticalScroll(scrollState)
+      .alpha(columnAlpha.value)
   ) {
     PersonalSettings(
       gender = gender.value,
@@ -115,7 +119,10 @@ fun SettingsTab(
       setShowDialog = setShowDialog,
       setDialogToShow = setDialogToShow
     )
-    OtherSettings()
+    OtherSettings(
+     setShowDialog =  setShowDialog,
+     setDialogToShow = setDialogToShow
+    )
 
     if(showDialog && dialogToShow == Settings.GENDER){
       SetGenderSettingDialog(
@@ -200,6 +207,12 @@ fun SettingsTab(
         waterUnit = waterUnit.value,
         preferenceDataStoreViewModel = preferenceDataStoreViewModel,
         setShowDialog = setShowDialog,
+      )
+    }
+    if(showDialog && dialogToShow == Settings.RATE_US){
+      RateAppDialog(
+        setShowDialog = setShowDialog,
+        context = context
       )
     }
   }
@@ -332,17 +345,17 @@ fun ContainerSettings(
 }
 
 @Composable
-fun OtherSettings(){
+fun OtherSettings(
+  setShowDialog :(Boolean) -> Unit,
+  setDialogToShow: (String) -> Unit
+){
   val context = LocalContext.current
   SettingsSubheading(text = "Other Settings")
   SettingsRowNoValue(
     text = Settings.RATE_US+" \uD83D\uDC96",
     onSettingsRowClick = {
-      val intent = Intent(
-        Intent.ACTION_VIEW,
-        Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID)
-      )
-      context.startActivity(intent)
+      setDialogToShow(Settings.RATE_US)
+      setShowDialog(true)
     }
   )
   SettingsRowNoValue(

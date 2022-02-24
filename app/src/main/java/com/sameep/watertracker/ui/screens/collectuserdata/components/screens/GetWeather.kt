@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sameep.watertracker.PreferenceDataStoreViewModel
-import com.sameep.watertracker.ui.components.OptionRow
+import com.sameep.watertracker.ui.components.selectors.OptionRow
 import com.sameep.watertracker.utils.Weather
 
 @Composable

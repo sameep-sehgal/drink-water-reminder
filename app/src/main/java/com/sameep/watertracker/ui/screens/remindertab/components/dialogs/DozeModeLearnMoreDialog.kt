@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.sp
-import com.sameep.watertracker.ui.components.ShowDialog
+import com.sameep.watertracker.ui.components.dialogs.ShowDialog
 
 @Composable
 fun DozeModeLearnMoreDialog(

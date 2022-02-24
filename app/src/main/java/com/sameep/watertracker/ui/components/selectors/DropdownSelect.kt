@@ -1,4 +1,4 @@
-package com.sameep.watertracker.ui.components
+package com.sameep.watertracker.ui.components.selectors
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
