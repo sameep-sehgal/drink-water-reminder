@@ -45,14 +45,6 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
-  val nextReminderTime = preferenceDataStore.nextReminderTime()
-
-  fun setNextReminderTime(value: Long) {
-    viewModelScope.launch {
-      preferenceDataStore.setNextReminderTime(value)
-    }
-  }
-
   val isRatingDialogShown = preferenceDataStore.isRatingDialogShown()
 
   fun setIsRatingDialogShown(value: Boolean) {

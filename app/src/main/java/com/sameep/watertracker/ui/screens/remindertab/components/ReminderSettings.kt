@@ -50,7 +50,7 @@ fun ReminderSettings(
       enabled = isReminderOn
     )
     SettingsRowBooleanValue(
-      text = com.sameep.watertracker.utils.Settings.REMINDER_AFTER_GOAL_ACHEIVED,
+      text = com.sameep.watertracker.utils.Settings.REMINDER_AFTER_GOAL_ACHIEVED,
       value = reminderAfterGoalAchieved,
       onCheckedChange = {
         preferenceDataStoreViewModel.setReminderAfterGoalAchieved(it)

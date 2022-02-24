@@ -13,8 +13,6 @@ interface PreferenceDataStoreInterface {
   suspend fun setBeverage(selectedBeverage:String)
   fun switchNotificationOnDialogLastShownDate() :Flow<String>
   suspend fun setSwitchNotificationOnDialogLastShownDate(value:String)
-  fun nextReminderTime() :Flow<Long>
-  suspend fun setNextReminderTime(value:Long)
   fun isRatingDialogShown() :Flow<Boolean>
   suspend fun setIsRatingDialogShown(value:Boolean)
 

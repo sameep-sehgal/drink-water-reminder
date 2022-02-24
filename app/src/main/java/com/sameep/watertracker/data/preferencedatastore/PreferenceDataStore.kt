@@ -25,7 +25,6 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     val FIRST_WATER_DATA_DATE = stringPreferencesKey("first_water_data_date")
     val BEVERAGE = stringPreferencesKey("beverage")
     val SWITCH_NOTIFICATION_ON_DIALOG_LAST_SHOWN_DATE = stringPreferencesKey("switch_notification_on_dialog_last_shown_date")
-    val NEXT_REMINDER_TIME = longPreferencesKey("next_reminder_time")
     val IS_RATING_DIALOG_SHOWN = booleanPreferencesKey("is_rating_dialog_shown")
 
     //Personal Settings
@@ -120,23 +119,6 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   override suspend fun setSwitchNotificationOnDialogLastShownDate(value: String) {
     dataStore.edit {
       it[PreferencesKeys.SWITCH_NOTIFICATION_ON_DIALOG_LAST_SHOWN_DATE] = value
-    }
-  }
-
-  override fun nextReminderTime(): Flow<Long> =
-    dataStore.data.catch {
-      if (it is IOException) {
-        emit(emptyPreferences())
-      } else {
-        throw it
-      }
-    }.map {
-      it[PreferencesKeys.NEXT_REMINDER_TIME] ?: ReminderReceiverUtil.REMINDER_NOT_SET
-    }
-
-  override suspend fun setNextReminderTime(value: Long) {
-    dataStore.edit {
-      it[PreferencesKeys.NEXT_REMINDER_TIME] = value
     }
   }
 
