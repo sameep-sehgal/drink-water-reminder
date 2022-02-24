@@ -22,6 +22,7 @@ import com.sameep.watertracker.utils.RecommendedWaterIntake
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.sameep.watertracker.ui.components.SwitchNotificationOnDialog
+import com.sameep.watertracker.utils.DateString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -32,12 +33,14 @@ fun MainAppContent(
 ) {
   val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
+  val switchNotificationOnDialogLastShownDate = preferenceDataStoreViewModel.switchNotificationOnDialogLastShownDate.collectAsState(initial = DateString.getTodaysDate())
   var selectedTab by remember { mutableStateOf(0) }
   val (showSwitchNotificationOnDialog, setShowSwitchNotificationOnDialog) =  remember { mutableStateOf(false) }
   val setSelectedTab = { it:Int -> selectedTab = it }
   val darkTheme = isSystemInDarkTheme()
   val scope = rememberCoroutineScope()
   val context = LocalContext.current
+  val todaysDate = DateString.getTodaysDate()
   val swipeRefreshState = rememberSwipeRefreshState(false)
   if(todaysWaterRecord.value.goal == RecommendedWaterIntake.NOT_SET && goal.value!=0){
     roomDatabaseViewModel.updateDailyWaterRecord(
@@ -91,11 +94,20 @@ fun MainAppContent(
         )
       }
 
-      LaunchedEffect(key1 = true) {
+      LaunchedEffect(
+        key1 = switchNotificationOnDialogLastShownDate.value
+      ) {
         scope.launch {
-          if(!NotificationManagerCompat.from(context).areNotificationsEnabled()){
+          if(
+            !NotificationManagerCompat.from(context).areNotificationsEnabled() &&
+               switchNotificationOnDialogLastShownDate.value != todaysDate
+          ){
             delay(3000)
             setShowSwitchNotificationOnDialog(true)
+            preferenceDataStoreViewModel
+              .setSwitchNotificationOnDialogLastShownDate(
+                todaysDate
+              )
           }
         }
       }

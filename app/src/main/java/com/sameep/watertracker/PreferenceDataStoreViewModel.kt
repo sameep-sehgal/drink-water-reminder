@@ -37,6 +37,30 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
+  val switchNotificationOnDialogLastShownDate = preferenceDataStore.switchNotificationOnDialogLastShownDate()
+
+  fun setSwitchNotificationOnDialogLastShownDate(value: String) {
+    viewModelScope.launch {
+      preferenceDataStore.setSwitchNotificationOnDialogLastShownDate(value)
+    }
+  }
+
+  val nextReminderTime = preferenceDataStore.nextReminderTime()
+
+  fun setNextReminderTime(value: Long) {
+    viewModelScope.launch {
+      preferenceDataStore.setNextReminderTime(value)
+    }
+  }
+
+  val isRatingDialogShown = preferenceDataStore.isRatingDialogShown()
+
+  fun setIsRatingDialogShown(value: Boolean) {
+    viewModelScope.launch {
+      preferenceDataStore.setIsRatingDialogShown(value)
+    }
+  }
+
   //Personal Settings
 
   val gender = preferenceDataStore.gender()
@@ -152,14 +176,6 @@ class PreferenceDataStoreViewModel @Inject constructor(
   fun setReminderAfterGoalAchieved(value: Boolean) {
     viewModelScope.launch {
       preferenceDataStore.setReminderAfterGoalAchieved(value)
-    }
-  }
-
-  val reminderSound = preferenceDataStore.reminderSound()
-
-  fun setReminderSound(sound: String) {
-    viewModelScope.launch {
-      preferenceDataStore.setReminderSound(sound)
     }
   }
 

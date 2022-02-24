@@ -18,6 +18,8 @@ import com.sameep.watertracker.ui.theme.AppColorPrimary
 import java.util.*
 
 object ReminderReceiverUtil {
+  const val REMINDER_NOT_SET: Long = -1
+
   fun shallNotify(
     reminderPeriodStart:String?,
     reminderPeriodEnd:String?,
