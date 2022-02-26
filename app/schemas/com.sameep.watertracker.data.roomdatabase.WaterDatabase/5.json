@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "ba06ec4652956604a5d659e470856d8c",
+    "identityHash": "3844296bf2db02c06bcdcf47879f1662",
     "entities": [
       {
         "tableName": "drink_logs",
@@ -52,17 +52,7 @@
           ],
           "autoGenerate": true
         },
-        "indices": [
-          {
-            "name": "index_drink_logs_date",
-            "unique": false,
-            "columnNames": [
-              "date"
-            ],
-            "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_drink_logs_date` ON `${TABLE_NAME}` (`date`)"
-          }
-        ],
+        "indices": [],
         "foreignKeys": [
           {
             "table": "daily_water_record",
@@ -152,7 +142,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ba06ec4652956604a5d659e470856d8c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3844296bf2db02c06bcdcf47879f1662')"
     ]
   }
 }

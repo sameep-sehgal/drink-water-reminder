@@ -21,7 +21,6 @@ data class DrinkLogs(
   var time:Long = Date().time,
   var amount:Int,
   var icon:Int,
-  @ColumnInfo(index = true)
   var date:String = DateString.getTodaysDate(),
   @ColumnInfo(defaultValue = Beverages.DEFAULT)
     var beverage:String
