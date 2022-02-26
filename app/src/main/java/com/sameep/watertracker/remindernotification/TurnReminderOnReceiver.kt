@@ -3,6 +3,7 @@ package com.sameep.watertracker.remindernotification
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import kotlinx.coroutines.flow.first
 import androidx.core.app.NotificationManagerCompat
 import androidx.datastore.preferences.core.edit
@@ -32,6 +33,7 @@ class TurnReminderOnReceiver: BroadcastReceiver() {
         context.dataStore.edit {
           it[PreferenceDataStore.PreferencesKeys.IS_REMINDER_ON] = true
         }
+        Toast.makeText(context, "Water Tracker: Reminder Turned Back On", Toast.LENGTH_SHORT).show()
       }
     }
   }
