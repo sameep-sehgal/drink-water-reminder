@@ -22,6 +22,7 @@ import com.sameep.watertracker.utils.RecommendedWaterIntake
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.sameep.watertracker.ui.components.dialogs.RateAppDialog
+import com.sameep.watertracker.ui.components.dialogs.SwitchAutoStartAppOnDialog
 import com.sameep.watertracker.ui.components.dialogs.SwitchNotificationOnDialog
 import com.sameep.watertracker.utils.DateString
 import kotlinx.coroutines.delay
@@ -124,6 +125,7 @@ fun MainAppContent(
           }
         }
       }
+      SwitchAutoStartAppOnDialog(setShowDialog = {})
 
       if(showSwitchNotificationOnDialog) {
         SwitchNotificationOnDialog(
