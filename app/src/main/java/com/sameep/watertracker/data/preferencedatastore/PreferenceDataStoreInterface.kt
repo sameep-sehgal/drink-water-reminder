@@ -15,6 +15,8 @@ interface PreferenceDataStoreInterface {
   suspend fun setSwitchNotificationOnDialogLastShownDate(value:String)
   fun isRatingDialogShown() :Flow<Boolean>
   suspend fun setIsRatingDialogShown(value:Boolean)
+  fun isAutoStartAppDialogShown() :Flow<Boolean>
+  suspend fun setIsAutoStartAppDialogShown(value:Boolean)
 
   //Personal Settings
   fun weightUnit() :Flow<String>

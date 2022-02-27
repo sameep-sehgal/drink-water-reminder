@@ -53,6 +53,14 @@ class PreferenceDataStoreViewModel @Inject constructor(
     }
   }
 
+  val isAutoStartAppDialogShown = preferenceDataStore.isRatingDialogShown()
+
+  fun setIsAutoStartAppDialogShown(value: Boolean) {
+    viewModelScope.launch {
+      preferenceDataStore.setIsRatingDialogShown(value)
+    }
+  }
+
   //Personal Settings
 
   val gender = preferenceDataStore.gender()

@@ -37,6 +37,7 @@ fun MainAppContent(
   val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
   val switchNotificationOnDialogLastShownDate = preferenceDataStoreViewModel.switchNotificationOnDialogLastShownDate.collectAsState(initial = DateString.getTodaysDate())
   val isRatingDialogShown = preferenceDataStoreViewModel.isRatingDialogShown.collectAsState(initial = true)
+  val isAutoStartAppDialogShown = preferenceDataStoreViewModel.isAutoStartAppDialogShown.collectAsState(initial = true)
   val firstWaterDataDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
   var selectedTab by remember { mutableStateOf(0) }
   val (showSwitchNotificationOnDialog, setShowSwitchNotificationOnDialog) =  remember { mutableStateOf(false) }
@@ -125,7 +126,12 @@ fun MainAppContent(
           }
         }
       }
-      SwitchAutoStartAppOnDialog(setShowDialog = {})
+
+      if(!isAutoStartAppDialogShown.value) {
+        SwitchAutoStartAppOnDialog(
+          preferenceDataStoreViewModel = preferenceDataStoreViewModel
+        )
+      }
 
       if(showSwitchNotificationOnDialog) {
         SwitchNotificationOnDialog(

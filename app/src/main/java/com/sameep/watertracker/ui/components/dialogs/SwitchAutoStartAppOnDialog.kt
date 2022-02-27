@@ -19,12 +19,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.sameep.watertracker.PreferenceDataStoreViewModel
 import com.sameep.watertracker.R
 
 
 @Composable
 fun SwitchAutoStartAppOnDialog(
-  setShowDialog: (Boolean) -> Unit
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
 ) {
   val context = LocalContext.current
   val isIntentAvailable = AutoStartHelper.getInstance().isAutoStartPermissionAvailable(context = context)
@@ -42,13 +43,13 @@ fun SwitchAutoStartAppOnDialog(
       horizontalAlignment = Alignment.CenterHorizontally
     ){
       Text(
-        text = "Please Allow App to Auto-Start ⚠",
+        text = "Please Allow App to Auto-Start",
         fontSize = 17.sp,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold
       )
       Text(
-        text = "\nThis is required for the reminder service to function properly, else the service will stop when device restarts\n",
+        text = "\nThis is required for the Water Reminder service to function properly, else the service will stop when device restarts\n",
         fontSize = 13.sp,
         textAlign = TextAlign.Center
       )
@@ -66,6 +67,14 @@ fun SwitchAutoStartAppOnDialog(
         fontSize = 13.sp,
         textAlign = TextAlign.Center
       )
+
+      if(!isIntentAvailable) {
+        Text(
+          text = "(If not visible directly, click on 'Battery' settings and search there)",
+          fontSize = 11.sp,
+          textAlign = TextAlign.Center
+        )
+      }
 
       Button(
         onClick = {
@@ -87,14 +96,7 @@ fun SwitchAutoStartAppOnDialog(
         )
       }
 
-
       if(!isIntentAvailable) {
-        Text(
-          text = "NOTE: If not visible directly, Please search in 'Battery' related settings of the app. Ignore if no such setting exists for your device.",
-          fontSize = 11.sp,
-          textAlign = TextAlign.Center
-        )
-      }else {
         Text(
           text = "NOTE: Ignore if no such setting exists for your device.",
           fontSize = 11.sp,
@@ -103,24 +105,29 @@ fun SwitchAutoStartAppOnDialog(
       }
 
       Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
           .fillMaxWidth()
           .padding(8.dp)
       ){
         Button(
-          onClick = { setShowDialog(false) },
+          onClick = {
+            preferenceDataStoreViewModel.setIsAutoStartAppDialogShown(true)
+          },
           colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Red,
             contentColor = MaterialTheme.colors.onPrimary
-          )
+          ),
+          modifier = Modifier.weight(1f).padding(4.dp)
         ) {
           Text(text = "Dismiss")
         }
         Button(
-          onClick = { setShowDialog(false) },
-          enabled = doneButtonEnabled
+          onClick = {
+            preferenceDataStoreViewModel.setIsAutoStartAppDialogShown(true)
+          },
+          enabled = doneButtonEnabled,
+          modifier = Modifier.weight(1f).padding(4.dp)
         ) {
           Text(text = "Done")
         }

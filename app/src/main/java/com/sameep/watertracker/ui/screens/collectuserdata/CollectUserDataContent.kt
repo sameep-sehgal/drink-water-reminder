@@ -69,6 +69,7 @@ fun CollectUserDataContent(
     preferenceDataStoreViewModel.setFirstWaterDataDate(DateString.getTodaysDate())
     preferenceDataStoreViewModel.setBeverage(Beverages.DEFAULT)
     preferenceDataStoreViewModel.setIsRatingDialogShown(false)
+    preferenceDataStoreViewModel.setIsAutoStartAppDialogShown(false)
     preferenceDataStoreViewModel.setSwitchNotificationOnDialogLastShownDate(DateString.getYesterdaysDate())
 
     //Insert Default Beverages in Database

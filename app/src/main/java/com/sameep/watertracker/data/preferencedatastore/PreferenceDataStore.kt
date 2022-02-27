@@ -26,6 +26,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
     val BEVERAGE = stringPreferencesKey("beverage")
     val SWITCH_NOTIFICATION_ON_DIALOG_LAST_SHOWN_DATE = stringPreferencesKey("switch_notification_on_dialog_last_shown_date")
     val IS_RATING_DIALOG_SHOWN = booleanPreferencesKey("is_rating_dialog_shown")
+    val IS_AUTO_START_APP_DIALOG_SHOWN = booleanPreferencesKey("is_rating_dialog_shown")
 
     //Personal Settings
     val GENDER = stringPreferencesKey("gender")
@@ -136,6 +137,23 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext context:Contex
   override suspend fun setIsRatingDialogShown(value: Boolean) {
     dataStore.edit {
       it[PreferencesKeys.IS_RATING_DIALOG_SHOWN] = value
+    }
+  }
+
+  override fun isAutoStartAppDialogShown(): Flow<Boolean> =
+    dataStore.data.catch {
+      if (it is IOException) {
+        emit(emptyPreferences())
+      } else {
+        throw it
+      }
+    }.map {
+      it[PreferencesKeys.IS_AUTO_START_APP_DIALOG_SHOWN] ?: false
+    }
+
+  override suspend fun setIsAutoStartAppDialogShown(value: Boolean) {
+    dataStore.edit {
+      it[PreferencesKeys.IS_AUTO_START_APP_DIALOG_SHOWN] = value
     }
   }
 
