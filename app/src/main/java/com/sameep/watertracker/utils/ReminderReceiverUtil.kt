@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.sameep.watertracker.MainActivity
 import com.sameep.watertracker.R
 import com.sameep.watertracker.remindernotification.*
@@ -91,15 +90,21 @@ object ReminderReceiverUtil {
     reminderGap:Int,
     context: Context,
     time:Calendar? = null,
-    reminderPeriodStartTime: String
+    reminderPeriodStartTime: String,
+    addDay:Boolean = false
   ) {
-    setMorningFirstAlarm(context = context, reminderPeriodStartTime = reminderPeriodStartTime)
+    setMorningFirstAlarm(
+      context = context,
+      reminderPeriodStartTime = reminderPeriodStartTime,
+      addDay = addDay
+    )
     setReminder(reminderGap = reminderGap, context = context, time = time)
   }
 
   fun setMorningFirstAlarm(
     context: Context,
-    reminderPeriodStartTime: String
+    reminderPeriodStartTime: String,
+    addDay:Boolean = false
   ) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val morningAlarmIntent = Intent(context, MorningAlarmReceiver::class.java)
@@ -112,12 +117,19 @@ object ReminderReceiverUtil {
 
     val calendar = TimeString.getCalendarInstance(reminderPeriodStartTime)
     val currTime = Calendar.getInstance()
-    if(calendar < currTime)
-      calendar.add(Calendar.DAY_OF_MONTH,1)
+    if(calendar < currTime) {
+      calendar.add(Calendar.DAY_OF_MONTH, 1)
+    }else {
+      if(addDay)
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+    }
+
+    val timeDiff = calendar.timeInMillis - currTime.timeInMillis
+    val triggerAtMillis = SystemClock.elapsedRealtime() + timeDiff - ReminderGap.FIFTEEN_MINUTES
 
     alarmManager.setExactAndAllowWhileIdle(
-      AlarmManager.RTC_WAKEUP,
-      calendar.timeInMillis,
+      AlarmManager.ELAPSED_REALTIME_WAKEUP,
+      triggerAtMillis,
       pendingIntent
     )
   }

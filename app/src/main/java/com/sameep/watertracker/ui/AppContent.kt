@@ -25,6 +25,7 @@ import com.sameep.watertracker.ui.components.dialogs.RateAppDialog
 import com.sameep.watertracker.ui.components.dialogs.SwitchAutoStartAppOnDialog
 import com.sameep.watertracker.ui.components.dialogs.SwitchNotificationOnDialog
 import com.sameep.watertracker.utils.DateString
+import com.sameep.watertracker.utils.ReminderReceiverUtil
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -39,6 +40,7 @@ fun MainAppContent(
   val isRatingDialogShown = preferenceDataStoreViewModel.isRatingDialogShown.collectAsState(initial = true)
   val isAutoStartAppDialogShown = preferenceDataStoreViewModel.isAutoStartAppDialogShown.collectAsState(initial = true)
   val firstWaterDataDate = preferenceDataStoreViewModel.firstWaterDataDate.collectAsState(initial = DateString.NOT_SET)
+  val reminderPeriodStart = preferenceDataStoreViewModel.reminderPeriodStart.collectAsState(initial = DateString.NOT_SET)
   var selectedTab by remember { mutableStateOf(0) }
   val (showSwitchNotificationOnDialog, setShowSwitchNotificationOnDialog) =  remember { mutableStateOf(false) }
   val (showRateAppDialog, setShowRateAppDialog) =  remember { mutableStateOf(false) }
@@ -125,6 +127,13 @@ fun MainAppContent(
             }
           }
         }
+      }
+
+      LaunchedEffect(key1 = reminderPeriodStart.value) {
+        ReminderReceiverUtil.setMorningFirstAlarm(
+          context = context,
+          reminderPeriodStartTime = reminderPeriodStart.value
+        )
       }
 
       if(!isAutoStartAppDialogShown.value) {
