@@ -14,14 +14,15 @@ import com.sameep.watertracker.ui.theme.Typography
 fun OptionRow(
   selected: Boolean,
   onClick: () -> Unit,
-  text: String
+  text: String,
+  center:Boolean = false
 ) {
   Row(
     modifier = Modifier.clickable {
       onClick()
     }.fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.Center
+    horizontalArrangement = if(center) Arrangement.Center else Arrangement.Start
   ) {
     Checkbox(
       checked = selected,

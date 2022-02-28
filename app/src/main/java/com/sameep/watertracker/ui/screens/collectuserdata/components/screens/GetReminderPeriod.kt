@@ -230,6 +230,7 @@ fun GetReminderPeriod(
     onClick = {
       preferenceDataStoreViewModel.setIsReminderOn(!isReminderOn)
     },
-    text = "Don't Remind"
+    text = "Don't Remind",
+    center = true
   )
 }
