@@ -25,14 +25,15 @@ import com.sameep.watertracker.R
 
 @Composable
 fun SwitchAutoStartAppOnDialog(
-  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
+  setShowDialog:(Boolean) -> Unit = {}
 ) {
   val context = LocalContext.current
   val isIntentAvailable = AutoStartHelper.getInstance().isAutoStartPermissionAvailable(context = context)
   val (doneButtonEnabled, setDoneButtonEnabled) =  remember { mutableStateOf(false) }
 
   Dialog(
-    onDismissRequest = {}
+    onDismissRequest = { setShowDialog(false) }
   ) {
     Column(
       modifier = Modifier
@@ -113,6 +114,7 @@ fun SwitchAutoStartAppOnDialog(
         Button(
           onClick = {
             preferenceDataStoreViewModel.setIsAutoStartAppDialogShown(true)
+            setShowDialog(false)
           },
           colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Red,
@@ -125,6 +127,7 @@ fun SwitchAutoStartAppOnDialog(
         Button(
           onClick = {
             preferenceDataStoreViewModel.setIsAutoStartAppDialogShown(true)
+            setShowDialog(false)
           },
           enabled = doneButtonEnabled,
           modifier = Modifier.weight(1f).padding(4.dp)

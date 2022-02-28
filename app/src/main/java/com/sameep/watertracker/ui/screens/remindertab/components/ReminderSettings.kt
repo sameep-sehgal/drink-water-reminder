@@ -82,20 +82,6 @@ fun ReminderSettings(
     )
   }
 
-  SettingsRowNoValueWithSubtitle(
-    text = "Reset Reminder",
-    subtitle = "Click here if reminders have stopped working.",
-    onSettingsRowClick = {
-      ReminderReceiverUtil.setBothReminderAndAlarm(
-        reminderGap =  reminderGap,
-        context = context,
-        reminderPeriodStartTime = reminderPeriodStart
-      )
-      Toast.makeText(context, "Reminder is Reset", Toast.LENGTH_SHORT).show()
-    },
-    enabled = isReminderOn
-  )
-
   SettingsRowNoValue(
     text = "Reminder not Working?",
     onSettingsRowClick = {
@@ -106,6 +92,12 @@ fun ReminderSettings(
   )
 
   if(showReminderNotWorkingDialog) {
-    ReminderNotWorkingDialog(setShowDialog = setShowReminderNotWorkingDialog)
+    ReminderNotWorkingDialog(
+      setShowDialog = setShowReminderNotWorkingDialog,
+      preferenceDataStoreViewModel = preferenceDataStoreViewModel,
+      reminderGap = reminderGap,
+      context = context,
+      reminderPeriodStart = reminderPeriodStart
+    )
   }
 }
