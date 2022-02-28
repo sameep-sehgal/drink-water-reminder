@@ -1,16 +1,18 @@
 package com.sameep.watertracker.utils
 
-import android.app.AlarmManager
-import android.app.Notification
-import android.app.PendingIntent
+import android.app.*
 import android.content.ComponentName
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
 import android.net.Uri
+import android.os.Build
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.sameep.watertracker.MainActivity
 import com.sameep.watertracker.R
 import com.sameep.watertracker.remindernotification.*
@@ -258,5 +260,28 @@ object ReminderReceiverUtil {
     }
 
     return builder
+  }
+
+  fun createNotificationChannel(context:Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+      val name = "Drink Water Reminder"
+      val descriptionText = "Drink Water Reminder"
+      val importance = NotificationManager.IMPORTANCE_HIGH
+      val channel = NotificationChannel(NOTIFICATION_CHANNEL, name, importance).apply {
+        description = descriptionText
+        lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+        val sound =
+          Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.packageName + "/" + R.raw.water)
+        val attributes = AudioAttributes.Builder()
+          .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+          .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+          .build()
+        setSound(sound, attributes)
+      }
+
+      notificationManager.createNotificationChannel(channel)
+    }
   }
 }
