@@ -7,9 +7,11 @@ import android.util.Log
 import com.sameep.watertracker.data.preferencedatastore.PreferenceDataStore
 import com.sameep.watertracker.data.preferencedatastore.dataStore
 import com.sameep.watertracker.utils.ReminderReceiverUtil
+import com.sameep.watertracker.utils.TimeString
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.*
 
 class MorningAlarmReceiver: BroadcastReceiver() {
   override fun onReceive(context: Context?, intent: Intent?) {
@@ -30,11 +32,16 @@ class MorningAlarmReceiver: BroadcastReceiver() {
       }
 
       if (context != null) {
+        val nextReminderTime = TimeString.getCalendarInstance(reminderPeriodStartTime!!)
+        val currTime = Calendar.getInstance()
+        if(nextReminderTime < currTime)
+          nextReminderTime.add(Calendar.DAY_OF_MONTH,1)
         ReminderReceiverUtil.setBothReminderAndAlarm(
           reminderGap = reminderGap!!,
           context = context,
           reminderPeriodStartTime = reminderPeriodStartTime!!,
-          addDay = true
+          addDay = true,
+          time = nextReminderTime
         )
       }
     }

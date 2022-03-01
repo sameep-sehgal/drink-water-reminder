@@ -16,9 +16,8 @@ import kotlinx.coroutines.flow.first
 import java.util.*
 
 class ReminderReceiver: BroadcastReceiver() {
-  @DelicateCoroutinesApi
   override fun onReceive(context: Context?, intent: Intent?) {
-    Log.d("TAG", "onReceive: Notification Received Before GlobalScope")
+    Log.d("TAG", "onReceive: Reminder Receiver Received Before GlobalScope")
     var reminderPeriodStart:String? = null
     var reminderPeriodEnd:String? = null
     var glassCapacity: Int? = null
@@ -28,14 +27,10 @@ class ReminderReceiver: BroadcastReceiver() {
     var remindAfterGoalAchieved: Boolean? = null
     var dailyWaterGoal: Int? = null
     var reminderGap: Int? = null
-    Log.d("TAG", "onReceive: $context ${context?.dataStore?.data} outside datastore")
 
     GlobalScope.launch {
-      Log.d("TAG", "onReceive: Notification Received Inside GlobalScope")
 
       context?.dataStore?.data?.first {
-        Log.d("TAG", "onReceive: $it ${it[PreferenceDataStore.PreferencesKeys.REMINDER_PERIOD_START]} inside datastore")
-
         reminderPeriodStart = it[PreferenceDataStore.PreferencesKeys.REMINDER_PERIOD_START]
         reminderPeriodEnd = it[PreferenceDataStore.PreferencesKeys.REMINDER_PERIOD_END]
         glassCapacity = it[PreferenceDataStore.PreferencesKeys.GLASS_CAPACITY]
@@ -49,7 +44,6 @@ class ReminderReceiver: BroadcastReceiver() {
         true
       }
 
-      Log.d("TAG", "onReceive: Values $reminderPeriodStart - $reminderPeriodEnd,, $waterUnit")
       if(context!=null) {
         ReminderReceiverUtil.setReminder(
           reminderGap = reminderGap!!,
@@ -65,8 +59,6 @@ class ReminderReceiver: BroadcastReceiver() {
             withContext(Dispatchers.Default) { db.getDailyWaterRecordWithoutFlow() }
         }
 
-        Log.d("TAG", "onReceive: TodaysWaterRecord = $todaysWaterRecord")
-
         if(ReminderReceiverUtil.shallNotify(
           reminderPeriodEnd = reminderPeriodEnd,
           reminderPeriodStart = reminderPeriodStart,
@@ -81,7 +73,7 @@ class ReminderReceiver: BroadcastReceiver() {
               waterUnit = waterUnit,
               dailyWaterGoal = dailyWaterGoal
             )
-            Log.d("TAG", "onReceive: Builder $builder")
+
             if(builder != null) {
               builder
                 .setProgress(todaysWaterRecord.goal,todaysWaterRecord.currWaterAmount, false)
@@ -89,7 +81,6 @@ class ReminderReceiver: BroadcastReceiver() {
               with(context.let { NotificationManagerCompat.from(it) }) {
                 this.notify(NOTIFICATION_ID, builder.build())
               }
-              Log.d("TAG", "onReceive: Notification Set")
             }
           }
         } else {

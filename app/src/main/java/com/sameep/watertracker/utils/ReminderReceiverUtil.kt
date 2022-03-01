@@ -98,7 +98,11 @@ object ReminderReceiverUtil {
       reminderPeriodStartTime = reminderPeriodStartTime,
       addDay = addDay
     )
-    setReminder(reminderGap = reminderGap, context = context, time = time)
+    setReminder(
+      reminderGap = reminderGap,
+      context = context,
+      time = time
+    )
   }
 
   fun setMorningFirstAlarm(

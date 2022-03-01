@@ -130,10 +130,11 @@ fun MainAppContent(
       }
 
       LaunchedEffect(key1 = reminderPeriodStart.value) {
-        ReminderReceiverUtil.setMorningFirstAlarm(
-          context = context,
-          reminderPeriodStartTime = reminderPeriodStart.value
-        )
+        if(reminderPeriodStart.value != DateString.NOT_SET)
+          ReminderReceiverUtil.setMorningFirstAlarm(
+            context = context,
+            reminderPeriodStartTime = reminderPeriodStart.value
+          )
       }
 
       if(!isAutoStartAppDialogShown.value) {
