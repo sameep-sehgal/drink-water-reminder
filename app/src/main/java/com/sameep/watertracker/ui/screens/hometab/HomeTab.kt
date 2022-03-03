@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,6 +22,7 @@ import com.sameep.watertracker.ui.screens.hometab.components.AddWaterButtonsRow
 import com.sameep.watertracker.ui.screens.hometab.components.AnimatedHeartBrain
 import com.sameep.watertracker.ui.screens.hometab.components.DrinkLogsList
 import com.sameep.watertracker.ui.screens.hometab.components.TodaysWaterRecord
+import com.sameep.watertracker.ui.screens.hometab.components.dialogs.AppUpdateDialog
 import com.sameep.watertracker.ui.screens.hometab.components.dialogs.BeverageDialog
 import com.sameep.watertracker.ui.screens.hometab.components.dialogs.CustomAddWaterDialog
 import com.sameep.watertracker.ui.screens.hometab.components.dialogs.SetWaterGoalDialog
@@ -31,11 +33,13 @@ fun HomeTab(
   roomDatabaseViewModel: RoomDatabaseViewModel,
   todaysWaterRecord: State<DailyWaterRecord>
 ){
+  val context = LocalContext.current
   val drinkLogsList = roomDatabaseViewModel.drinkLogs.collectAsState()
   val waterUnit = preferenceDataStoreViewModel.waterUnit.collectAsState(initial = Units.ML)
   val recommendedWaterIntake = preferenceDataStoreViewModel.recommendedWaterIntake.collectAsState(initial = RecommendedWaterIntake.NOT_SET)
   val beverageName = preferenceDataStoreViewModel.beverage.collectAsState(initial = Beverages.DEFAULT)
   val (showBeverageDialog, setShowBeverageDialog) =  remember { mutableStateOf(false) }
+  val (showAppUpdateDialog, setShowAppUpdateDialog) =  remember { mutableStateOf(false) }
   val (showSetTodaysGoalDialog, setShowSetTodaysGoalDialog) =  remember { mutableStateOf(false) }
   val (showCustomAddWaterDialog, setShowCustomAddWaterDialog) =  remember { mutableStateOf(false) }
   val scrollState = rememberScrollState()
@@ -93,7 +97,9 @@ fun HomeTab(
         preferenceDataStoreViewModel = preferenceDataStoreViewModel,
         setShowCustomAddWaterDialog = setShowCustomAddWaterDialog,
         beverage = beverage.value,
-        mostRecentDrinkLog = if(drinkLogsList.value.isNotEmpty()) drinkLogsList.value[0] else null
+        mostRecentDrinkLog = if(drinkLogsList.value.isNotEmpty()) drinkLogsList.value[0] else null,
+        setShowAppUpdateDialog = setShowAppUpdateDialog,
+        context = context
       )
 
       Spacer(modifier = Modifier.size(12.dp))
@@ -173,6 +179,13 @@ fun HomeTab(
         dailyWaterRecord = todaysWaterRecord.value,
         roomDatabaseViewModel = roomDatabaseViewModel,
         beverage = beverage.value
+      )
+    }
+
+    if(showAppUpdateDialog) {
+      AppUpdateDialog(
+        setShowDialog = setShowAppUpdateDialog,
+        context = context
       )
     }
   }

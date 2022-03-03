@@ -1,5 +1,6 @@
 package com.sameep.watertracker.ui.screens.hometab.components
 
+import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -16,6 +17,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.sameep.watertracker.PreferenceDataStoreViewModel
 import com.sameep.watertracker.RoomDatabaseViewModel
 import com.sameep.watertracker.data.models.Beverage
@@ -23,8 +26,10 @@ import com.sameep.watertracker.data.models.DailyWaterRecord
 import com.sameep.watertracker.data.models.DrinkLogs
 import com.sameep.watertracker.ui.components.IconText
 import com.sameep.watertracker.ui.screens.hometab.components.buttons.CustomAddWaterButton
+import com.sameep.watertracker.ui.screens.hometab.components.buttons.AppUpdateButton
 import com.sameep.watertracker.ui.screens.hometab.components.buttons.UndoButton
 import com.sameep.watertracker.utils.Container
+import com.sameep.watertracker.utils.DateString
 
 @Composable
 fun AddWaterButtonsRow(
@@ -33,15 +38,32 @@ fun AddWaterButtonsRow(
   dailyWaterRecord: DailyWaterRecord,
   preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
   setShowCustomAddWaterDialog:(Boolean) -> Unit,
+  setShowAppUpdateDialog:(Boolean) -> Unit,
   beverage: Beverage,
   mostRecentDrinkLog: DrinkLogs?,
+  context: Context
 ) {
   val glassCapacity = preferenceDataStoreViewModel.glassCapacity.collectAsState(initial = Container.baseGlassCapacity(waterUnit))
   val mugCapacity = preferenceDataStoreViewModel.mugCapacity.collectAsState(initial = Container.baseMugCapacity(waterUnit))
   val bottleCapacity = preferenceDataStoreViewModel.bottleCapacity.collectAsState(initial = Container.baseBottleCapacity(waterUnit))
   var showAddWaterButtons by remember{ mutableStateOf(false) }
+  var showAppUpdateButton by remember{ mutableStateOf(false) }
   val currentPercentage = remember { Animatable(0f) }
   val addIconSize = 48.dp
+  val todaysDate = DateString.getTodaysDate()
+
+  LaunchedEffect(key1 = true) {
+    val appUpdateManager = AppUpdateManagerFactory.create(context)
+
+    val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+    appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+      if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+        showAppUpdateButton = true
+      }
+    }
+  }
+
   LaunchedEffect(showAddWaterButtons) {
     currentPercentage.animateTo(
       if(showAddWaterButtons) 1f else 0f,
@@ -64,14 +86,18 @@ fun AddWaterButtonsRow(
         UndoButton(
           onClick = {
             if(mostRecentDrinkLog != null) {
-              roomDatabaseViewModel.updateDailyWaterRecord(
-                DailyWaterRecord(
-                  date = dailyWaterRecord.date,
-                  goal = dailyWaterRecord.goal,
-                  currWaterAmount = dailyWaterRecord.currWaterAmount - mostRecentDrinkLog.amount
+              if(todaysDate > dailyWaterRecord.date){
+                roomDatabaseViewModel.refreshData()
+              }else {
+                roomDatabaseViewModel.updateDailyWaterRecord(
+                  DailyWaterRecord(
+                    date = dailyWaterRecord.date,
+                    goal = dailyWaterRecord.goal,
+                    currWaterAmount = dailyWaterRecord.currWaterAmount - mostRecentDrinkLog.amount
+                  )
                 )
-              )
-              roomDatabaseViewModel.deleteDrinkLog(mostRecentDrinkLog)
+                roomDatabaseViewModel.deleteDrinkLog(mostRecentDrinkLog)
+              }
             }
           }
         )
@@ -133,7 +159,11 @@ fun AddWaterButtonsRow(
               modifier = Modifier
                 .clip(CircleShape)
                 .clickable {
-                  setShowCustomAddWaterDialog(true)
+                  if (todaysDate > dailyWaterRecord.date) {
+                    roomDatabaseViewModel.refreshData()
+                  } else {
+                    setShowCustomAddWaterDialog(true)
+                  }
                 }
                 .fillMaxHeight(),
               verticalAlignment = Alignment.CenterVertically
@@ -168,7 +198,13 @@ fun AddWaterButtonsRow(
         modifier = Modifier.weight(1f),
         horizontalArrangement = Arrangement.Center
       ) {
-        Spacer(modifier = Modifier.size(20.dp))
+        if(showAppUpdateButton) {
+          AppUpdateButton(
+            setShowAppUpdateDialog = setShowAppUpdateDialog
+          )
+        } else {
+          Spacer(modifier = Modifier.size(20.dp))
+        }
       }
     }
   }
@@ -184,23 +220,30 @@ fun AddWaterContainerButton(
   roomDatabaseViewModel: RoomDatabaseViewModel,
   beverage: Beverage
 ) {
+  val todaysDate = DateString.getTodaysDate()
   Row(
     modifier = Modifier
       .clip(RoundedCornerShape(15.dp))
       .clickable {
-        roomDatabaseViewModel.insertDrinkLog(
-          DrinkLogs(
-            amount = waterAmount,
-            icon = beverage.icon,
-            beverage = beverage.name
-          ),
-        )
-        roomDatabaseViewModel.updateDailyWaterRecord(
-          DailyWaterRecord(
-            goal = dailyWaterRecord.goal,
-            currWaterAmount = dailyWaterRecord.currWaterAmount + waterAmount
+        if (todaysDate > dailyWaterRecord.date) {
+          roomDatabaseViewModel.refreshData()
+        } else {
+          roomDatabaseViewModel.insertDrinkLog(
+            DrinkLogs(
+              amount = waterAmount,
+              icon = beverage.icon,
+              beverage = beverage.name,
+              date = dailyWaterRecord.date
+            ),
           )
-        )
+          roomDatabaseViewModel.updateDailyWaterRecord(
+            DailyWaterRecord(
+              goal = dailyWaterRecord.goal,
+              currWaterAmount = dailyWaterRecord.currWaterAmount + waterAmount,
+              date = dailyWaterRecord.date
+            )
+          )
+        }
       }
       .fillMaxHeight(),
     verticalAlignment = Alignment.CenterVertically

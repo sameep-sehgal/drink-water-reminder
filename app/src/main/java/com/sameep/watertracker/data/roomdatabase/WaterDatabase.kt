@@ -8,13 +8,7 @@ import com.sameep.watertracker.data.models.DrinkLogs
 
 @Database(
     entities = [DrinkLogs::class, DailyWaterRecord::class, Beverage::class],
-    version = 5,
-    autoMigrations = [
-        AutoMigration (
-            from = 4,
-            to = 5
-        )
-    ]
+    version = 6,
 )
 abstract class WaterDatabase: RoomDatabase() {
     abstract fun waterDatabaseDao() : WaterDatabaseDao
