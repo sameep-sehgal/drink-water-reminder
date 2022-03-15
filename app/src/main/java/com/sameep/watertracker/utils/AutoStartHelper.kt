@@ -133,7 +133,7 @@ class AutoStartHelper private constructor() {
 
       BRAND_SAMSUNG -> return autoStartSamsung(context, open, newTask)
 
-      BRAND_ONE_PLUS -> return autoStartOnePlus(context, open, newTask)
+      BRAND_ONE_PLUS -> return autoStartOnePlus(context, open, newTask) || autoStartOppo(context, open, newTask)
 
       else -> {
         return false

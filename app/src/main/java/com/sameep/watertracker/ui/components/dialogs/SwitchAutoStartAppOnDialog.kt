@@ -44,7 +44,7 @@ fun SwitchAutoStartAppOnDialog(
       horizontalAlignment = Alignment.CenterHorizontally
     ){
       Text(
-        text = "Please Allow App to Auto-Start",
+        text = "Please Allow App to Auto-Start & Run in Background",
         fontSize = 17.sp,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold
@@ -55,16 +55,16 @@ fun SwitchAutoStartAppOnDialog(
         textAlign = TextAlign.Center
       )
       Text(
-        text = "Click on the button below &",
+        text = "Click on the 'Go To Settings' button &",
         fontSize = 13.sp,
         textAlign = TextAlign.Center
       )
       Text(
         text =
         if(isIntentAvailable)
-          "Search for ${context.getString(R.string.app_name)} in the list of apps and switch it on"
+          "Add ${context.getString(R.string.app_name)} in the list of apps shown"
         else
-          "Look for 'Auto-Start' or 'Auto-Launch' Setting and switch it on",
+          "Look for 'Auto-Start' or 'Auto-Launch' or 'Run In Background' Setting and switch it on",
         fontSize = 13.sp,
         textAlign = TextAlign.Center
       )
