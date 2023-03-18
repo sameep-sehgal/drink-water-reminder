@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="HomeWidgetTheme" parent="Theme.Material3.DynamicColors.DayNight">
+        <!-- Override default colorBackground attribute with custom color. -->
+        <item name="android:colorBackground">@color/app_color_bg_dark</item>
+        <item name="android:colorPrimary">@color/app_primary_color</item>
+
+    </style>
+</resources>
