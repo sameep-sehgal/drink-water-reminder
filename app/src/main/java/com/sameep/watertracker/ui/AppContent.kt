@@ -21,6 +21,7 @@ import com.sameep.watertracker.ui.theme.ApplicationTheme
 import com.sameep.watertracker.utils.RecommendedWaterIntake
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.sameep.watertracker.ui.components.dialogs.RateAppDialog
 import com.sameep.watertracker.ui.components.dialogs.SwitchAutoStartAppOnDialog
 import com.sameep.watertracker.ui.components.dialogs.SwitchNotificationOnDialog
@@ -32,7 +33,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainAppContent(
   roomDatabaseViewModel: RoomDatabaseViewModel,
-  preferenceDataStoreViewModel: PreferenceDataStoreViewModel
+  preferenceDataStoreViewModel: PreferenceDataStoreViewModel,
+  loadInterstitialAd: () -> Any?
 ) {
   val todaysWaterRecord = roomDatabaseViewModel.todaysWaterRecord.collectAsState()
   val goal = preferenceDataStoreViewModel.dailyWaterGoal.collectAsState(initial = 0)
@@ -98,7 +100,8 @@ fun MainAppContent(
         BottomNavBar(
           selectedTab = selectedTab,
           setSelectedTab = setSelectedTab,
-          darkTheme = darkTheme
+          darkTheme = darkTheme,
+          loadInterstitialAd = loadInterstitialAd
         )
       }
 

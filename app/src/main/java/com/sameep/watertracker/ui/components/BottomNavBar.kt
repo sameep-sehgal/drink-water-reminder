@@ -1,5 +1,7 @@
 package com.sameep.watertracker.ui.components
 
+import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -8,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,8 +21,10 @@ import com.sameep.watertracker.ui.components.ads.BannerAd
 fun BottomNavBar(
   selectedTab: Int,
   setSelectedTab: (Int) -> Unit,
-  darkTheme: Boolean
+  darkTheme: Boolean,
+  loadInterstitialAd: () -> Any?
 ) {
+  val context = LocalContext.current
   Column {
     BottomNavigation(
       modifier = Modifier.height(56.dp),
@@ -27,7 +32,12 @@ fun BottomNavBar(
       Tabs.values().forEachIndexed { i: Int, it: Tabs ->
         BottomNavigationItem(
           selected = selectedTab == i,
-          onClick = { setSelectedTab(i) },
+          onClick = {
+            if (selectedTab != i) {
+              loadInterstitialAd()
+            }
+            setSelectedTab(i)
+          },
           icon = {
             Icon(
               painter = painterResource(id = it.icon),
@@ -59,5 +69,5 @@ fun BottomNavBar(
 @Preview
 @Composable
 fun BottomNavBarPreview() {
-  BottomNavBar(selectedTab = 0, setSelectedTab = { it:Int -> {} } , darkTheme = true)
+  BottomNavBar(selectedTab = 0, setSelectedTab = { it:Int -> {} } , darkTheme = true, loadInterstitialAd = {})
 }
