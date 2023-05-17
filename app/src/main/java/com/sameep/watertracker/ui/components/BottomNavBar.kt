@@ -1,7 +1,5 @@
 package com.sameep.watertracker.ui.components
 
-import android.app.Activity
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,7 +20,6 @@ fun BottomNavBar(
   selectedTab: Int,
   setSelectedTab: (Int) -> Unit,
   darkTheme: Boolean,
-  loadInterstitialAd: () -> Any?
 ) {
   val context = LocalContext.current
   Column {
@@ -33,9 +30,6 @@ fun BottomNavBar(
         BottomNavigationItem(
           selected = selectedTab == i,
           onClick = {
-            if (selectedTab != i) {
-              loadInterstitialAd()
-            }
             setSelectedTab(i)
           },
           icon = {
@@ -69,5 +63,5 @@ fun BottomNavBar(
 @Preview
 @Composable
 fun BottomNavBarPreview() {
-  BottomNavBar(selectedTab = 0, setSelectedTab = { it:Int -> {} } , darkTheme = true, loadInterstitialAd = {})
+  BottomNavBar(selectedTab = 0, setSelectedTab = { it:Int -> {} } , darkTheme = true)
 }
